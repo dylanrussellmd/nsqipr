@@ -3,3 +3,5 @@ nsqip-data
 inst/doc
 .Rhistory
 .RData
+.Renviron
+.Rprofile
