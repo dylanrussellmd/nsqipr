@@ -22,3 +22,8 @@ VignetteBuilder: knitr
 URL: https://github.com/doctortickle/nsqipr
 BugReports: https://github.com/doctortickle/nsqipr/issues
 Language: en-US
+Imports: 
+    stringr,
+    DBI,
+    odbc,
+    readr
