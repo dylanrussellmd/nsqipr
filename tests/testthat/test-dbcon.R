@@ -1,0 +1,14 @@
+testthat::test_that("parseFilename correctly picks out the table name", {
+  testthat::expect_equal(parseFilename("puf_tar_cea_2015.txt"), "puf_tar_cea")
+  testthat::expect_equal(parseFilename('PUF_TAR_CEA_2015.txt'), "puf_tar_cea")
+  testthat::expect_equal(parseFilename('puf_tar_gyne_2015.txt'), "puf_tar_gyne")
+  testthat::expect_equal(parseFilename('PUF_TAR_GYNE_2015.txt'), "puf_tar_gyne")
+  testthat::expect_equal(parseFilename('puf_tar_hep_update_2015.txt'), "puf_tar_hep")
+  testthat::expect_equal(parseFilename('PUF_TAR_HEP_UPDATE_2015.TXT'), "puf_tar_hep")
+  testthat::expect_equal(parseFilename("acs_nsqip_puf_05_06_vr1.txt"), "acs_nsqip_puf")
+  testthat::expect_equal(parseFilename("ACS_NSQIP_PUF_05_06_vr1.txt"), "acs_nsqip_puf")
+  testthat::expect_equal(parseFilename("acs_nsqip_puf18.txt"), "acs_nsqip_puf")
+  testthat::expect_equal(parseFilename("ACS_NSQIP_PUF18.txt"), "acs_nsqip_puf")
+  testthat::expect_equal(parseFilename("ACS_NSQIP_PUF_05_06_vr1.txt"), "acs_nsqip_puf")
+})
+
