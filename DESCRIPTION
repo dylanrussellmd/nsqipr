@@ -26,4 +26,5 @@ Imports:
     stringr,
     DBI,
     odbc,
-    readr
+    readr,
+    magrittr
