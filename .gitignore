@@ -5,3 +5,5 @@ inst/doc
 .RData
 .Renviron
 .Rprofile
+gcloud-service-key.json
+logo/
