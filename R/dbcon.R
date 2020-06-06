@@ -7,17 +7,6 @@
 #                      Port     = nsqip_db_port
 #)
 
-#conn <- function(driver, ip, db, port, user, pw) {
-#  DBI::dbConnect(odbc::odbc(),
-#                 Driver = driver,
-#                 Server = ip,
-#                 Databse = db,
-#                 Port = port,
-#                 UID = user,
-#                 PWD = pw
-#                 )
-#}
-
 import_data_dir <- function(conn, dir) {
   if (file_test("-d", dir)) {
     files <- list.files(path = dir, pattern = "*.txt",
