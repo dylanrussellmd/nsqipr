@@ -1,11 +1,11 @@
-conn <- DBI::dbConnect(odbc::odbc(),
-                      Driver   = Sys.getenv("NSQIP_DB_DRIVER"),
-                      Server   = Sys.getenv("NSQIP_DB_HOST"),
-                      Database = Sys.getenv("NSQIP_DB"),
-                      UID      = Sys.getenv("NSQIP_DB_USER"),
-                      PWD      = Sys.getenv("NSQIP_DB_PW"),
-                      Port     = Sys.getenv("NSQIP_DB_PORT")
-)
+#conn <- DBI::dbConnect(odbc::odbc(),
+#                      Driver   = Sys.getenv("NSQIP_DB_DRIVER"),
+#                      Server   = Sys.getenv("NSQIP_DB_HOST"),
+#                     Database = Sys.getenv("NSQIP_DB"),
+#                      UID      = Sys.getenv("NSQIP_DB_USER"),
+#                      PWD      = Sys.getenv("NSQIP_DB_PW"),
+#                      Port     = Sys.getenv("NSQIP_DB_PORT")
+#)
 
 import_data_dir <- function(conn, dir) {
   if (file_test("-d", dir)) {
