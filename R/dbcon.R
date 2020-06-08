@@ -1,17 +1,17 @@
-#conn <- DBI::dbConnect(odbc::odbc(),
-#                      Driver   = nsqip_db_driver,
-#                      Server   = nsqip_db_ip,
-#                      Database = nsqip_db,
-#                      UID      = nsqip_db_user,
-#                      PWD      = nsqip_db_pw,
-#                      Port     = nsqip_db_port
-#)
+conn <- DBI::dbConnect(odbc::odbc(),
+                      Driver   = Sys.getenv("NSQIP_DB_DRIVER"),
+                      Server   = Sys.getenv("NSQIP_DB_HOST"),
+                      Database = Sys.getenv("NSQIP_DB"),
+                      UID      = Sys.getenv("NSQIP_DB_USER"),
+                      PWD      = Sys.getenv("NSQIP_DB_PW"),
+                      Port     = Sys.getenv("NSQIP_DB_PORT")
+)
 
 import_data_dir <- function(conn, dir) {
   if (file_test("-d", dir)) {
-    files <- list.files(path = dir, pattern = "*.txt",
+    files <- list.files(path = dir, pattern = "*.txt$",
                         full.names = TRUE, recursive = FALSE)
-    lapply(files, write_data, conn)
+    lapply(files, write_data, conn = conn)
   } else if (file_test("-f", dir)) {
     write_data(conn, dir)
   } else {
@@ -20,12 +20,29 @@ import_data_dir <- function(conn, dir) {
 }
 
 write_data <- function(conn, file) {
-  df <- create_df(file)
   tablename <- parse_filename(file)
+  df <- create_df(file)
+  check_table(conn, tablename, df)
+  write_to_table(tablename, df)
+}
+
+check_table <- function(conn, tablename, df) {
   if (!DBI::dbExistsTable(conn, tablename)) {
     DBI::dbCreateTable(conn, tablename, df)
   }
-  DBI::dbAppendTable(conn, tablename, df)
+}
+
+write_to_table <- function(tablename, df) {
+  tmp <- tempfile(fileext = '.csv')
+  data.table::fwrite(df, tmp)
+  URI <- sprintf("postgresql://%s:%s@%s:%s/%s", Sys.getenv('NSQIP_DB_USER'), Sys.getenv('NSQIP_DB_PW'),
+                 Sys.getenv('NSQIP_DB_HOST'), Sys.getenv('NSQIP_DB_PORT'), Sys.getenv('NSQIP_DB'))
+  system(
+    sprintf("psql -c \"\\copy %s (%s) from %s (FORMAT CSV, HEADER)\" %s",
+            tablename, paste(colnames(df), collapse = ","),
+            tmp, URI),
+  )
+  unlink(tmp)
 }
 
 parse_filename <- function(file) {

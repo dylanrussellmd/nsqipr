@@ -27,4 +27,5 @@ Imports:
     DBI,
     odbc,
     readr,
-    magrittr
+    magrittr,
+    data.table
