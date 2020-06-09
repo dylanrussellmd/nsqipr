@@ -1,12 +1,8 @@
-#conn <- DBI::dbConnect(odbc::odbc(),
-#                      Driver   = Sys.getenv("NSQIP_DB_DRIVER"),
-#                      Server   = Sys.getenv("NSQIP_DB_HOST"),
-#                     Database = Sys.getenv("NSQIP_DB"),
-#                      UID      = Sys.getenv("NSQIP_DB_USER"),
-#                      PWD      = Sys.getenv("NSQIP_DB_PW"),
-#                      Port     = Sys.getenv("NSQIP_DB_PORT")
-#)
 
+#' Accepts a directory containing ACS NSQIP files as downloaded from the NSQIP website.
+#' The directory \code{dir} should include
+#'
+#'
 nsqip <- function(dir, conn) {
   tmpdir <- build_tmp_dir()
   extract_exe_folder(dir, tmpdir)
