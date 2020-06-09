@@ -29,3 +29,6 @@ Imports:
     readr,
     magrittr,
     data.table
+SystemRequirements:
+    7zip,
+    psql
