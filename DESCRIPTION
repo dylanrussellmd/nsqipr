@@ -28,7 +28,9 @@ Imports:
     odbc,
     readr,
     magrittr,
-    data.table
+    data.table,
+    stringi,
+    usethis
 SystemRequirements:
     7zip,
     psql
