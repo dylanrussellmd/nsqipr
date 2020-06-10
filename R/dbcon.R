@@ -1,7 +1,29 @@
 
-#' Accepts a directory containing ACS NSQIP files as downloaded from the NSQIP website.
-#' The directory \code{dir} should include
+#' Write data from ACS NSQIP files into database.
 #'
+#' Accepts a directory containing ACS NSQIP files as downloaded from the ACS NSQIP website and uploads to a database.
+#' Will automatically format all strings in sentence case and correctly set the variable types.
+#' Table names will be either \code{acs_nsqip_puf} for all ACS NSQIP PUF files or
+#' \code{puf_tar_x} where \code{x} is a three- or four-letter abbreviation for the targeted procedure.
+#'
+#' @param dir A directory containing only \code{.exe} files downloaded directly from ACS NSQIP.
+#' @param conn An S4 object of class PostgreSQL
+#'
+#' @details # Warning
+#' \itemize{
+#' \item The directory should include \strong{only} those ".exe" executable files downloaded directly from ACS NSQIP.
+#' \item Do \strong{not} change the names of the downloaded files.
+#' \item Currently only functioning with a PostgreSQL 12 database server.
+#' \item Requires \code{7z} and \code{psql} installed on the host OS. Be sure \code{psql} is in the PATH.
+#' }
+#'
+#' @examples
+#' \dontrun{
+#' nsqip(dir, conn)
+#' DBI::dbGetQuery(conn, "select count(*) as n from acs_nsqip_puf")
+#' }
+#'
+#' @source <https://www.facs.org/quality-programs/acs-nsqip>
 #'
 nsqip <- function(dir, conn) {
   tmpdir <- build_tmp_dir()
