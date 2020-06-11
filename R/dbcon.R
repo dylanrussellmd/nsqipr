@@ -84,7 +84,6 @@ build_tmp_dir <- function() {
 #'
 extract_exe_folder <- function(dir, tmpdir) {
   usethis::ui_line("Unarchiving all files at {usethis::ui_path(dir)}")
-  extract_pb <- progress_bar$new(total = length(dir))
   lapply(get_file_or_dir(dir, pattern = "*.exe$"),
          extract_exe_file, tmpdir = tmpdir)
 }
@@ -134,8 +133,8 @@ get_file_or_dir <- function(path, pattern){
 #'
 extract_exe_file <- function(file, tmpdir) {
   system(
-    sprintf("7z e %s -o%s", file, tmpdir),
-    show.output.on.console = FALSE
+    sprintf("7z e %s -o%s -y", file, tmpdir),
+    ignore.stdout = TRUE
   )
   usethis::ui_done("{usethis::ui_path(basename(file))} successfully unarchived.")
 }
