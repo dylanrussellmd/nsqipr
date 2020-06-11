@@ -8,7 +8,7 @@ status](https://travis-ci.org/doctortickle/nsqipr.svg?branch=master)](https://tr
 <img src='man/figures/nsqipr_hex.png' align="right" height="60" />
 <!-- badges: end -->
 
-![NSQIPR Logo](man/figures/nsqipr_banner.png)
+![NSQIPR Logo](man/figures/nsqipr_banner_alpha.png)
 
 What would you like to see implemented in `nsqipr`? [Open an
 issue](https://github.com/doctortickle/nsqipr/issues)\! Are you
@@ -89,16 +89,19 @@ We are not (yet) available on CRAN.
 A local or remote database to which you have read/write privileges needs
 to be available. At the time, only a PostgreSQL server is compatible
 (recommend PostgreSQL 12). If you currently do not have one available,
-one can easily and cheaply procured with [Google
+one can be easily and cheaply procured with [Google
 Cloud](https://cloud.google.com/).
 
 ### .Renviron
 
-The `.Renviron` file should contain the following variables: \*
-`NSQIP_DB` - the name of the database \* `NSQIP_DB_USER` - the database
-user name \* `NSQIP_DB_PW` - the database password \* `NSQIP_DB_DRIVER`
-- the database driver (see ) \* `NSQIP_DB_PORT` - the database port \*
-`NSQIP_DB_HOST` - the host IP address
+The `.Renviron` file should contain the following variables:
+
+  - `NSQIP_DB` - the name of the database
+  - `NSQIP_DB_USER` - the database user name
+  - `NSQIP_DB_PW` - the database password
+  - `NSQIP_DB_DRIVER` - the database driver (see )
+  - `NSQIP_DB_PORT` - the database port
+  - `NSQIP_DB_HOST` - the host IP address
 
 ### External dependencies
 
