@@ -9,8 +9,10 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
-  out.width = "100%"
+  out.width = "100%",
+  echo = FALSE
 )
+library(magrittr)
 ```
 
 <!-- badges: start -->
@@ -74,7 +76,7 @@ The `.Renviron` file should contain the following variables:
   * `NSQIP_DB` - the name of the database
   * `NSQIP_DB_USER` - the database user name
   * `NSQIP_DB_PW` - the database password
-  * `NSQIP_DB_DRIVER` - the database driver (see \code{\link[odbc]{odbc}})
+  * `NSQIP_DB_DRIVER` - the database driver (see \code{\link[odbc](odbc)})
   * `NSQIP_DB_PORT` - the database port
   * `NSQIP_DB_HOST` - the host IP address
 
@@ -93,4 +95,3 @@ The `.Renviron` file should contain the following variables:
   3. Now simply run `nsqip(dir, conn)`.
   
 `nsqipr` will take care of the unzipping, data importing, and data cleaning. You're now ready to use the ACS NSQIP<sup>&copy;</sup> for data analysis!
-
