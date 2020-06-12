@@ -10,7 +10,8 @@ knitr::opts_chunk$set(
   comment = "#>",
   fig.path = "man/figures/README-",
   out.width = "100%",
-  echo = FALSE
+  echo = FALSE,
+  knitr.table.format = "markdown"
 )
 library(magrittr)
 ```
@@ -95,3 +96,17 @@ The `.Renviron` file should contain the following variables:
   3. Now simply run `nsqip(dir, conn)`.
   
 `nsqipr` will take care of the unzipping, data importing, and data cleaning. You're now ready to use the ACS NSQIP<sup>&copy;</sup> for data analysis!
+
+## Variables
+
+```{r}
+readr::read_csv("../nsqipr-misc/allvars.csv", # This function will show me which columns have non-matching rows.
+                      na = "",
+                      col_types = readr::cols(.default = "c")) %>%
+  dplyr::mutate(dplyr::across(.fns = stringr::str_to_lower)) %>%
+  dplyr::rename_with(stringr::str_to_lower) %>%
+  dplyr::mutate(dplyr::across(2:dplyr::last_col(), ~.x==dplyr::cur_column())) %>%
+  dplyr::mutate(dplyr::across(2:dplyr::last_col(), ~!is.na(.x))) %>%
+  dplyr::mutate(dplyr::across(2:dplyr::last_col(), ~dplyr::if_else(.x==TRUE, "&#10004;","&#10060;"))) %>% 
+  knitr::kable(caption =  "ACS NSQIP<sup>&copy;</sup> Variables", align = "c")
+```

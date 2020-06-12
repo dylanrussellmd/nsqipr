@@ -15,13 +15,15 @@ df <- readr::read_csv("../nsqipr-misc/allvars.csv", # This function will show me
   dplyr::mutate(dplyr::across(.fns = stringr::str_to_lower)) %>%
   dplyr::rename_with(stringr::str_to_lower) %>%
   dplyr::mutate(dplyr::across(2:dplyr::last_col(), ~.x==dplyr::cur_column())) %>%
-  dplyr::mutate(dplyr::across(2:dplyr::last_col(), ~!is.na(.x)))
+  dplyr::mutate(dplyr::across(2:dplyr::last_col(), ~!is.na(.x))) %>%
+  dplyr::mutate(dplyr::across(2:dplyr::last_col(), ~dplyr::if_else(TRUE, "U+2713", "U+274C"))) %>%
+  knitr::kable()
 
-  formattable::as.datatable(formattable::formattable(df, align = rep("c",ncol(df)),
+  formattable::formattable(df, align = rep("c",ncol(df)),
                            list(area(col = 2:ncol(df)) ~ formatter("span",
                                             style = function(x) style(color = ifelse(x==TRUE, "green", "black")),
                                             function(x) icontext(ifelse(x==TRUE, "ok","")))
-                             )))
+                             ))
 
 
 
