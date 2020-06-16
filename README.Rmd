@@ -100,7 +100,7 @@ The `.Renviron` file should contain the following variables:
 ## Variables
 
 ```{r}
-readr::read_csv("../nsqipr-misc/allvars.csv", # This function will show me which columns have non-matching rows.
+readr::read_csv("../nsqipr-misc/allvars.csv",
                       na = "",
                       col_types = readr::cols(.default = "c")) %>%
   dplyr::mutate(dplyr::across(.fns = stringr::str_to_lower)) %>%
