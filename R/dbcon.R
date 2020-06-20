@@ -169,8 +169,7 @@ write_to_database <- function(conn, tmpdir) {
 #'
 write_from_file <- function(file, conn) {
   tablename <- parse_filename(file)
-  df <- create_df(file)
-  check_table(conn, tablename, df)
+  check_table(conn, tablename, file)
   write_to_table(tablename, df)
   usethis::ui_done("{usethis::ui_path(basename(file))} copied to table {usethis::ui_value(tablename)}.")
 }
@@ -189,22 +188,6 @@ parse_filename <- function(file) {
                             ignore_case = TRUE)
   stopifnot(stringr::str_detect(file, pattern))
   tablename <- stringr::str_extract(file, pattern) %>% stringr::str_to_lower()
-  }
-
-#' @describeIn write_from_file creates a dataframe from the delimited text file passed by \code{file}.
-#' Will eventually be separated into a separate \code{.R} file with multiple functions to provide
-#' more sophisticated formatting.
-#'
-#' @inheritParams write_from_file
-#'
-#' @keywords internal
-#'
-create_df <- function(file) {
-  nas <- c("", "NA", "-99","NULL")
-  df <- readr::read_tsv(file, na = nas, guess_max = 30000,
-                        trim_ws = TRUE, col_types = readr::cols()) %>% # cols() just to suppress messages.
-    dplyr::rename_all(tolower) %>%
-    dplyr::mutate(dplyr::across(where(is.character), stringr::str_to_sentence))
 }
 
 #' @describeIn write_from_file checks if the database contains a table equal to \code{tablename}.
@@ -216,12 +199,22 @@ create_df <- function(file) {
 #'
 #' @keywords internal
 #'
-check_table <- function(conn, tablename, df) {
+check_table <- function(conn, tablename, file) {
   if (!DBI::dbExistsTable(conn, tablename)) {
-    DBI::dbCreateTable(conn, tablename, df)
+    headers <- get_headers(file)
+    DBI::dbCreateTable(conn, tablename, headers)
     usethis::ui_info("{usethis::ui_value(tablename)} does not exist as a table.")
     usethis::ui_done("Created table {usethis::ui_value(tablename)}.")
   }
+}
+
+get_headers <- function(file) {
+  file %>% readr::read_lines(n_max = 1) %>%
+    stringr::str_split(pattern = stringr::boundary("word")) %>%
+    unlist() %>%
+    stringr::str_to_lower() %>%
+    magrittr::set_names(., .) %>%
+    dplyr::mutate(dplyr::across(.fns = "character"))
 }
 
 #' @describeIn write_from_file creates a temporary \code{.csv} file from a dataframe and writes the data
@@ -242,16 +235,13 @@ check_table <- function(conn, tablename, df) {
 #'
 #' @keywords internal
 #'
-write_to_table <- function(tablename, df) {
-  tmp <- tempfile(fileext = ".csv")
-  data.table::fwrite(df, tmp)
+write_to_table <- function(tablename, file) {
   URI <- sprintf("postgresql://%s:%s@%s:%s/%s", Sys.getenv('NSQIP_DB_USER'), Sys.getenv('NSQIP_DB_PW'),
                  Sys.getenv('NSQIP_DB_HOST'), Sys.getenv('NSQIP_DB_PORT'), Sys.getenv('NSQIP_DB'))
   system(
-    sprintf("psql -c \"\\copy %s (%s) from %s (FORMAT CSV, HEADER)\" %s",
-            tablename, paste(colnames(df), collapse = ","),
-            tmp, URI),
+    sprintf("psql -c \"\\copy %s from %s\" %s",
+            tablename, file, URI),
     show.output.on.console = FALSE
   )
-  unlink(tmp)
 }
+
