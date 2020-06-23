@@ -213,8 +213,7 @@ get_headers <- function(file) {
     stringr::str_split(pattern = stringr::boundary("word")) %>%
     unlist() %>%
     stringr::str_to_lower() %>%
-    magrittr::set_names(., .) %>%
-    dplyr::mutate(dplyr::across(.fns = "character"))
+    magrittr::set_names(., .)
 }
 
 #' @describeIn write_from_file creates a temporary \code{.csv} file from a dataframe and writes the data
