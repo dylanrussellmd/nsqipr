@@ -43,6 +43,7 @@
 #'
 #' @export
 nsqip <- function(dir, conn) {
+  stopifnot("Directory does not exist"=dir.exists(dir))
   tmpdir <- build_tmp_dir()
   extract_exe_folder(dir, tmpdir)
   write_to_database(conn, tmpdir)
@@ -139,7 +140,7 @@ extract_exe_file <- function(file, tmpdir) {
   usethis::ui_done("{usethis::ui_path(basename(file))} successfully unarchived.")
 }
 
-#' Write a delimited text file to a database
+#' Write delimited text files to a database
 #'
 #' Accepts a directory containing \code{.txt} files to be written to a database
 #' and applies the function \code{\link{write_from_file}} to each file.
@@ -208,12 +209,17 @@ check_table <- function(conn, tablename, file) {
   }
 }
 
+#' @describeIn get_headers retrieves the column headings from the \code{file} and returns them as a vector.
+#'
+#' @inheritParams write_from_file
+#'
+#' @keywords internal
+#'
 get_headers <- function(file) {
   file %>% readr::read_lines(n_max = 1) %>%
     stringr::str_split(pattern = stringr::boundary("word")) %>%
     unlist() %>%
-    stringr::str_to_lower() %>%
-    magrittr::set_names(., .)
+    stringr::str_to_lower()
 }
 
 #' @describeIn write_from_file creates a temporary \code{.csv} file from a dataframe and writes the data
