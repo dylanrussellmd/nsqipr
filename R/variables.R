@@ -40,20 +40,22 @@ get_five <- function(file) {
     stringr::str_to_lower() %>% magrittr::set_names(., column)
 }
 
-yes_no_cols <- c("ethnicity_hispanic","electsurg","smoke","ventilat","hxcopd","ascites","hxchf","hypermed",
+yes_no_cols <- c("electsurg","smoke","ventilat","hxcopd","ascites","hxchf","hypermed",
                  "renafail","dialysis","discancr","wndinf","steroid","wtloss","bleeddis","transfus","emergncy",
                  "sssipatos","dssipatos","ossipatos","pnapatos","ventpatos","utipatos","sepsispatos",
                  "sepshockpatos","returnor","stillinhosp","reoperation1","retorrelated","reoperation2","retorrelated2","reoperation3",
                  "readmission1","unplannedreadmission1","readmrelated1","readmission2","unplannedreadmission2","readmrelated2",
                  "readmission3","unplannedreadmission3","readmrelated3", "readmission4","unplannedreadmission4","readmrelated4",
-                 "readmission5","unplannedreadmission5","readmrelated5")
+                 "readmission5","unplannedreadmission5","readmrelated5", "etoh", "dnr", "cpneumon", "esovar","hxmi","prvpci","prvpcs",
+                 "hxangina","hxpvd","restpain","impsens", "hemi", "hxtia","cva", "cvano", "tumorcns","para","quad","chemo","radio","pregnancy",
+                 "proper30", "readmission","unplanreadmission","reoperation")
 
 numscale_cols <- c("wndclas","asaclas")
 
 complication_cols <- c("supinfec","wndinfd","orgspcssi","dehis","oupneumo","reintub","pulembol","failwean","renainsf","oprenafl","urninfec",
                        "cnscva","cdarrest","cdmi","othbleed","othdvt","othsysep","othseshock","othcdiff")
 
-date_cols <- c("pufyear","admyr","operyr","yrdeath","hdisdt")
+date_cols <- c("admyr","operyr","yrdeath","hdisdt", "admsyr","sdisdt")
 
 integer_cols <- c("height","weight","optime","tothlos", "admqtr","htooday", "dsupinfec","dwndinfd","dorgspcssi", "doupneumo","dreintub",
                   "dpulembol","dfailwean","drenainsf","doprenafl","durninfec","dcnscva","dcdarrest","dcdmi","dothbleed","dothdvt",
@@ -61,7 +63,8 @@ integer_cols <- c("height","weight","optime","tothlos", "admqtr","htooday", "dsu
                   "readmpodays3", "readmpodays4", "readmpodays5", "dprna", "dprbun", "dprcreat", "dpralbum", "dprbili", "dprsgot", "dpralkph",
                   "dprwbc", "dprhct", "dprplate", "dprptt", "dprpt", "dprinr", "nsupinfec", "nwndinfd", "norgspcssi", "ndehis", "noupneumo",
                   "nreintub", "npulembol", "nfailwean", "nrenainsf", "noprenafl", "nurninfec", "ncnscva", "ncdarrest", "ncdmi", "nothbleed",
-                  "nothdvt", "nothsysep", "nothseshock", "nothcdiff")
+                  "nothdvt", "nothsysep", "nothseshock", "nothcdiff", "packs", "pgy", "mallamp", "rbc", "anesurg","surgane","dpatrm","anetime",
+                  "stooday","totslos", "dsdtohd")
 
 numeric_cols <- c("prsodm","prbun","prcreat","pralbum","prbili","prsgot","pralkph","prwbc","prhct","prplate","prptt","prinr","prpt",
                   "mortprob","morbprob", "workrvu", "otherwrvu1", "otherwrvu2", "otherwrvu3", "otherwrvu4", "otherwrvu5", "otherwrvu6",
@@ -70,19 +73,35 @@ numeric_cols <- c("prsodm","prbun","prcreat","pralbum","prbili","prsgot","pralkp
 reason_cols <- c("readmsuspreason1", "readmunrelsusp1", "readmsuspreason2", "readmunrelsusp2", "readmsuspreason3", "readmunrelsusp3",
                  "readmsuspreason4", "readmunrelsusp4", "readmsuspreason5")
 
-conv_to_standard <- function(file) {
-  readr::read_tsv(file, n_max = 1000) %>%
+redundant_cols <- c('race_new','readmission','unplanreadmission','reoperation')
+
+set_up_df <- function(file) {
+  readr::read_tsv(file) %>%
     dplyr::rename_with(., tolower) %>%
     dplyr::mutate(dplyr::across(everything(), tolower)) %>%
     dplyr::mutate(dplyr::across(everything(), dplyr::na_if, "unknown")) %>%
     dplyr::mutate(dplyr::across(everything(), dplyr::na_if, "null")) %>%
     dplyr::mutate(dplyr::across(everything(), dplyr::na_if, "-99")) %>%
     dplyr::mutate(dplyr::across(everything(), dplyr::na_if, -99)) %>%
-    tibble::add_column(., !!!col_names[setdiff(names(col_names), names(.))]) %>%
+    tibble::add_column(., !!!col_names[setdiff(names(col_names), names(.))])
+}
+
+conv_to_standard <- function(file) {
+  set_up_df(file) %>%
+    dplyr::mutate(dplyr::across(dplyr::any_of(date_cols), ~ lubridate::ymd(.x, truncated = 2))) %>%
+    dplyr::mutate(dplyr::across(dplyr::any_of(complication_cols), conv_complication)) %>%
+    dplyr::mutate(dplyr::across(dplyr::any_of(numscale_cols), conv_numscale)) %>%
+    dplyr::mutate(dplyr::across(dplyr::any_of(yes_no_cols), conv_yesno)) %>%
+    dplyr::mutate(dplyr::across(dplyr::any_of(integer_cols), as.integer)) %>%
+    dplyr::mutate(dplyr::across(dplyr::any_of(numeric_cols), conv_numeric)) %>%
+    dplyr::mutate(dplyr::across(dplyr::any_of(reason_cols), conv_reasons)) %>%
     dplyr::mutate(
+      pufyear = conv_pufyear(file),
       sex = conv_sex(sex),
-      race_new = conv_race_new(race_new),
+      ethnicity_hispanic = conv_hispanic(ethnicity_hispanic, race),
+      race = conv_race(race, race_new),
       inout = conv_inout(inout),
+      attend = conv_attend(attend),
       transt = conv_transt(transt),
       age = conv_age(age),
       dischdest = conv_dischdest(dischdest),
@@ -93,18 +112,118 @@ conv_to_standard <- function(file) {
       diabetes = conv_notno(diabetes),
       when_dyspnea = when_dyspnea(dyspnea),
       dyspnea = conv_notno(dyspnea),
-      fnstatus2 = conv_fnstatus2(fnstatus2),
+      fnstatus1 = conv_fnstatus(fnstatus1),
+      fnstatus2 = conv_fnstatus(fnstatus2),
       type_prsepis = type_prsepis(prsepis),
       prsepis = conv_prsepis(prsepis),
-      wound_closure = conv_wound_closure(wound_closure)
+      coma = conv_coma(coma, pufyear),
+      wound_closure = conv_wound_closure(wound_closure),
+      pnapatos = dplyr::coalesce(cpneumon, pnapatos),
+      readmission1 = dplyr::coalesce(readmission, readmission1),
+      unplannedreadmission1 = dplyr::coalesce(unplanreadmission, unplannedreadmission1),
+      reoperation1 = dplyr::coalesce(reoperation, reoperation1),
+      opnote = conv_opnote(opnote),
+      airtra = conv_airtra(airtra),
+      ncnscoma = conv_dn_comagraftpn(ncnscoma, pufyear),
+      cnscoma = conv_comagraftpn(cnscoma, pufyear),
+      dcnscoma = conv_dn_comagraftpn(dcnscoma, pufyear),
+      nneurodef = conv_dn_comagraftpn(nneurodef, pufyear),
+      neurodef = conv_comagraftpn(neurodef, pufyear),
+      dneurodef = conv_dn_comagraftpn(dneurodef, pufyear),
+      nothgrafl = conv_dn_comagraftpn(nothgrafl, pufyear),
+      othgrafl = conv_comagraftpn(othgrafl, pufyear),
+      dothgrafl = conv_dn_comagraftpn(dothgrafl, pufyear)
     ) %>%
-    dplyr::mutate(dplyr::across(dplyr::any_of(date_cols), ~ lubridate::ymd(.x, truncated = 2))) %>%
-    dplyr::mutate(dplyr::across(dplyr::any_of(complication_cols), conv_complication)) %>%
-    dplyr::mutate(dplyr::across(dplyr::any_of(numscale_cols), conv_numscale)) %>%
-    dplyr::mutate(dplyr::across(dplyr::any_of(yes_no_cols), conv_yesno)) %>%
-    dplyr::mutate(dplyr::across(dplyr::any_of(integer_cols), as.integer)) %>%
-    dplyr::mutate(dplyr::across(dplyr::any_of(numeric_cols), conv_numeric)) %>%
-    dplyr::mutate(dplyr::across(dplyr::any_of(reason_cols), conv_reasons))
+    dplyr::select(., !dplyr::any_of(redundant_cols))
+}
+
+###################  Graft failure, Coma, and Peripheral Nerve Injury should not be considered accurate for any PUF after 2010
+
+conv_dn_comagraftpn <- function(vec, pufyear) {
+  ifelse(assert_before_puf11(pufyear), as.integer(vec), NA)
+}
+conv_comagraftpn <- function(vec, pufyear) {
+  ifelse(assert_before_puf11(pufyear), conv_complication(vec), NA)
+}
+
+conv_typeintoc <- function(vec) {
+  val <- c("cardiac arrest requiring cpr" = 1L,
+           "myocardial infarction" = 2L,
+           "unplanned intubation" = 3L)
+
+  unname(val[vec])
+}
+
+conv_airtra <- function(vec) {
+  val <- c("none" = 1L,
+           "lip laceration or hematoma" = 2L,
+           "tooth chipped, loosened or lost" = 3L,
+           "tongue laceration or hematoma" = 4L,
+           "pharyngeal laceration" = 5L,
+           "laryngeal laceration" = 6L,
+           "failure to intubate" = 7L)
+  unname(val[vec])
+}
+
+conv_opnote <- function(vec) {
+  val <- c("attending" = 1L,
+           "resident" = 2L,
+           "not available" = NA)
+
+  unname(val[vec])
+}
+
+conv_coma <- function(vec, pufyear) {
+  ifelse(assert_before_puf11(pufyear), conv_yesno(vec), NA)
+}
+
+assert_before_puf11 <- function(pufyear) {
+  pufyear %in% c('05_06','07','08','09','10')
+}
+
+conv_attend <- function(vec) {
+  val <- c("attending alone" = 1L,
+           "attending in or" = 2L,
+           "attending in or suite" = 3L,
+           "attending not present, but available" = 4L,
+           "not entered" = NA)
+  unname(val[vec])
+}
+
+conv_pufyear <- function(file) {
+  stringr::str_extract(file, stringr::regex("(?<=puf_?)(\\d{1,2}_\\d{1,2}|\\d{1,2})(?=.*\\.txt)", ignore_case = TRUE))
+}
+
+conv_hispanic <- function(vec, race) {
+  ifelse(!is.na(race), stringr::str_detect(race, "^hispanic,"), conv_yesno(vec))
+}
+
+conv_race <- function(race, race_new, pacific = "asian") {
+
+  pacific <- switch(pacific,
+                    "asian" = 2L,
+                    "hawaiian" = 4L,
+                    "exclude" = NA)
+
+  race_val <- c("hispanic, white" = 5L,
+           "hispanic, black" = 2L,
+           "hispanic, color unknown" = NA,
+           "black, not of hispanic origin" = 2L,
+           "white, not of hispanic origin" = 5L,
+           "american indian or alaska native" = 1L,
+           "asian or pacific islander" = pacific,
+           "unknown" = NA)
+  race_vec <- unname(race_val[race])
+
+  race_new_val <- c("american indian or alaska native" = 1L,
+           "asian" = 2L,
+           "black or african american" = 3L,
+           "native hawaiian or pacific islander" = 4L,
+           "white" = 5L,
+           "unknown/not reported" = NA)
+  race_new_vec <- unname(race_new_val[race_new])
+
+  dplyr::coalesce(race_vec, race_new_vec)
 }
 
 conv_numeric <- function(vec) {
@@ -161,20 +280,6 @@ conv_age <- function(vec) {
 
 conv_numscale <- function(vec) {
   as.integer(stringr::str_extract(vec,"^\\d"))
-}
-
-conv_race_new <- function(vec) {
-  val <- c("american indian or alaska native" = 1L,
-           "asian" = 2L,
-           "black or african american" = 3L,
-           "native hawaiian or pacific islander" = 4L,
-           "white" = 5L,
-           "unknown/not reported" = NA)
-  unname(val[vec])
-}
-
-conv_hispanic <- function(vec, race) {
-  # TO-DO need to find a way to work old race variable into new race variable
 }
 
 conv_transt <- function(vec) {
@@ -235,7 +340,7 @@ conv_notno <- function(vec) {
 }
 
 insulin <- function(vec) {
-  diabetes(vec) & stringr::str_detect(vec, "^insulin$")
+  conv_notno(vec) & stringr::str_detect(vec, "^insulin$")
 }
 
 conv_yesno <- function(vec) {
@@ -249,7 +354,7 @@ when_dyspnea <- function(vec) {
   unname(val[vec])
 }
 
-conv_fnstatus2 <- function(vec) {
+conv_fnstatus <- function(vec) {
   val <- c("independent" = 1L,
            "partially dependent" = 2L,
            "totally dependent" = 3L,
@@ -270,9 +375,16 @@ type_prsepis <- function(vec) {
 }
 
 df <- conv_to_standard("../nsqipr-txt/nsqip-puf/acs_nsqip_puf18.txt")
-
 readr::write_csv(df, path = "../nsqipr-txt/puf18.csv", na = "", col_names = FALSE)
 
+conv_dir_to_standard <- function(dir) {
+  list.files(path = dir, pattern = "*.txt$", full.names = TRUE, recursive = FALSE) %>%
+    lapply(., conv_and_write)
+}
+
+conv_and_write <- function(file) {
+  conv_to_standard(file) %>% readr::write_csv(df, path = paste("../nsqipr-txt/", conv_pufyear(file), ".csv", sep = ""), na = "", col_names = FALSE)
+}
 
 get_bq_def <- function(col) {
   switch(class(col),
