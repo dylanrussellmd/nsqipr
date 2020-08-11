@@ -7,7 +7,7 @@ Authors@R:
            role = c("aut", "cre"),
            email = "dyl.russell@gmail.com",
            comment = c(ORCID = "0000-0002-9543-9897"))
-Description: Streamlines reading and writing clean NSQIP data to a database instance.
+Description: Streamlines reading and writing clean NSQIP data.
 License: CC0
 Encoding: UTF-8
 LazyData: true
@@ -24,13 +24,10 @@ BugReports: https://github.com/doctortickle/nsqipr/issues
 Language: en-US
 Imports: 
     stringr,
-    DBI,
-    odbc,
     readr,
     magrittr,
-    data.table,
-    stringi,
-    usethis
-SystemRequirements:
-    7zip,
-    psql
+    usethis,
+    dplyr,
+    tibble
+Depends: 
+    R (>= 2.10)
