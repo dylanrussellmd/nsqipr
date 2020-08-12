@@ -8,6 +8,7 @@ get_bq_def <- function(col) {
   )
 }
 
+#' @export
 print_bq_schema <- function(df) {
   bq <- unname(purrr::imap_chr(purrr::map_chr(df, get_bq_def), ~paste0(.y,":",.x)))
   stringr::str_c(bq, collapse = ",")

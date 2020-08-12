@@ -2,5 +2,6 @@
 
 export("%>%")
 export(nsqip)
+export(print_bq_schema)
 importFrom("utils","file_test")
 importFrom(magrittr,"%>%")
