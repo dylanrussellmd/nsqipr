@@ -1,5 +1,5 @@
 Package: nsqipr
-Title: What the Package Does (One Line, Title Case)
+Title: Interact with NSQIP data via R
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "Dylan",
@@ -7,7 +7,7 @@ Authors@R:
            role = c("aut", "cre"),
            email = "dyl.russell@gmail.com",
            comment = c(ORCID = "0000-0002-9543-9897"))
-Description: What the package does (one paragraph).
+Description: Streamlines reading and writing clean NSQIP data.
 License: CC0
 Encoding: UTF-8
 LazyData: true
@@ -24,13 +24,13 @@ BugReports: https://github.com/doctortickle/nsqipr/issues
 Language: en-US
 Imports: 
     stringr,
-    DBI,
-    odbc,
     readr,
     magrittr,
-    data.table,
-    stringi,
-    usethis
-SystemRequirements:
-    7zip,
-    psql
+    usethis,
+    dplyr,
+    tibble,
+    lubridate,
+    purrr,
+    tools
+Depends: 
+    R (>= 2.10)

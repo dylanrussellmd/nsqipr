@@ -9,8 +9,11 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
-  out.width = "100%"
+  out.width = "100%",
+  echo = FALSE,
+  knitr.table.format = "markdown"
 )
+library(magrittr)
 ```
 
 <!-- badges: start -->
@@ -64,33 +67,15 @@ We are not (yet) available on CRAN.
 
 `nsqipr` has a few set-up requirements:
 
-### Database
-
-A local or remote database to which you have read/write privileges needs to be available. At the time, only a PostgreSQL server is compatible (recommend PostgreSQL 12). If you currently do not have one available, one can be easily and cheaply procured with [Google Cloud](https://cloud.google.com/). 
-
-### .Renviron
-The `.Renviron` file should contain the following variables:
-
-  * `NSQIP_DB` - the name of the database
-  * `NSQIP_DB_USER` - the database user name
-  * `NSQIP_DB_PW` - the database password
-  * `NSQIP_DB_DRIVER` - the database driver (see \code{\link[odbc]{odbc}})
-  * `NSQIP_DB_PORT` - the database port
-  * `NSQIP_DB_HOST` - the host IP address
-
-### External dependencies
-
-`7z` and `psql` must be installed on the host (your) operating system.
-
-`psql` is the standard command line interface for interacting with a PostgreSQL instance. For installation instructions, please refer to [this tutorial](https://blog.timescale.com/tutorials/how-to-install-psql-on-mac-ubuntu-debian-windows/).
-
-`7z` is a file archiver with a high compression ratio format. It is used to unzip the `.exe` executable files delivered by ACS NSQIP<sup>&copy;</sup> upon request. For installation instructions, please refer to [the 7zip website](https://www.7-zip.org/download.html).
-
 ## Use
 
-  1. Store all `.exe` executable files from ACS NSQIP<sup>&copy;</sup> in a single directory (do **not** change the default file names). Assign the directory path to `dir`.
-  2. Connect to your database instance with `conn <- DBI::dbConnect(...)`.
-  3. Now simply run `nsqip(dir, conn)`.
+  1. Excute all `.exe` executable files from ACS NSQIP<sup>&copy;</sup> in a single directory (`dir`) (you may, but it is not recommended to, change the default file names). 
+  2. Now simply run `nsqip(dir)`.
   
-`nsqipr` will take care of the unzipping, data importing, and data cleaning. You're now ready to use the ACS NSQIP<sup>&copy;</sup> for data analysis!
+`nsqipr` will take care of the data importing and data cleaning. You're now ready to use the ACS NSQIP<sup>&copy;</sup> for data analysis!
+
+## Variables
+
+TODO: Build example table of raw variables, clean variables, and type
+
 
