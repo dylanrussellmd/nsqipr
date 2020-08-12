@@ -1,3 +1,15 @@
+#' Pipe operator
+#'
+#' See \code{magrittr::\link[magrittr:pipe]{\%>\%}} for details.
+#'
+#' @name %>%
+#' @rdname pipe
+#' @keywords internal
+#' @export
+#' @importFrom magrittr %>%
+#' @usage lhs \%>\% rhs
+NULL
+
 #' Check if a path is a directory or a file
 #'
 #' Checks if a provided path is a directory or a file. This allows a user to pass either a directory
