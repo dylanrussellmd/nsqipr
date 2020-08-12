@@ -1,4 +1,4 @@
-get_unittest_df <- function(dir, maxlen = 30L) {
+get_test_df1 <- function(dir, maxlen = 30L) {
   list.files(path = dir, pattern = "*.txt$", full.names = TRUE, recursive = FALSE) %>%
     purrr::map(~get_unique_list(file = ., maxlen = maxlen)) %>%
     purrr::reduce(., cat_lists) %>%

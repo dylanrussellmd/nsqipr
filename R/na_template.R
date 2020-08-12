@@ -1,3 +1,6 @@
+# These functions are used strictly in development to create the 'col_names' variable that is stored in sysdata.rda.
+# 'col_names' is necessary for the standard conversion to occur
+
 create_na_template <- function(dir) {
   collect_column_names(dir) %>%
     na_template()

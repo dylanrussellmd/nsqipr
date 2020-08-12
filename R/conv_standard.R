@@ -1,31 +1,40 @@
+#' Converts a single NSQIP \code{.txt} or a directory of NSQIP \code{.txt} files into a standardized NSQIP data frame.
+#'
+#' @return a data frame of class \code{tibble}.
+#'
+#' @param path path to file or directory.
+#' @param write_to_csv write the resulting data frame to a \code{.csv} file
+#' @param return_df return the resulting data frame
+#'
 #' @export
-conv_to_standard <- function(file, write_to_csv = FALSE) {
-  readr::read_tsv(file, col_types = readr::cols(.default = "c")) %>%
+#' @importFrom "utils" "file_test"
+#'
+nsqip <- function(path, write_to_csv = FALSE, return_df = TRUE) {
+  lapply(get_file_or_dir(path, pattern = "*.txt$"),
+         conv_to_standard, write_to_csv = write_to_csv, return_df = return_df)
+}
+
+conv_to_standard <- function(file, write_to_csv, return_df) {
+
+  df <- readr::read_tsv(file, col_types = readr::cols(.default = "c")) %>%
     set_up_df() %>%
     conv_type_cols() %>%
     conv_special_cols() %>%
-    dplyr::select(., !dplyr::any_of(redundant_cols)) %>%
-    ifelse(write_to_csv,
-           readr::write_csv(., path = paste("./", file, "_clean.csv", sep = ""), na = "", col_names = FALSE),
-           return(.))
-}
+    dplyr::select(!dplyr::any_of(redundant_cols))
 
-#' @export
-conv_dir_to_standard <- function(dir) {
-  list.files(path = dir, pattern = "*.txt$", full.names = TRUE, recursive = FALSE) %>%
-    lapply(., conv_to_standard, write_to_csv = TRUE)
-}
+  if(write_to_csv) readr::write_csv(df, path = paste(tools::file_path_sans_ext(file), "_clean.csv", sep = ""), na = "", col_names = FALSE)
 
-########################################################
+  if(return_df) return(df)
+}
 
 set_up_df <- function(df) {
   df %>%
     dplyr::rename_with(., tolower) %>%
-    dplyr::mutate(dplyr::across(everything(), tolower)) %>%
-    dplyr::mutate(dplyr::across(everything(), dplyr::na_if, "unknown")) %>%
-    dplyr::mutate(dplyr::across(everything(), dplyr::na_if, "null")) %>%
-    dplyr::mutate(dplyr::across(everything(), dplyr::na_if, "-99")) %>%
-    dplyr::mutate(dplyr::across(everything(), dplyr::na_if, -99)) %>%
+    dplyr::mutate(dplyr::across(dplyr::everything(), tolower)) %>%
+    dplyr::mutate(dplyr::across(dplyr::everything(), dplyr::na_if, "unknown")) %>%
+    dplyr::mutate(dplyr::across(dplyr::everything(), dplyr::na_if, "null")) %>%
+    dplyr::mutate(dplyr::across(dplyr::everything(), dplyr::na_if, "-99")) %>%
+    dplyr::mutate(dplyr::across(dplyr::everything(), dplyr::na_if, -99)) %>%
     tibble::add_column(., !!!col_names[setdiff(names(col_names), names(.))])
 }
 

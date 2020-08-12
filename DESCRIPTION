@@ -1,5 +1,5 @@
 Package: nsqipr
-Title: Interact with NSQIP data via R.
+Title: Interact with NSQIP data via R
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "Dylan",
@@ -28,6 +28,9 @@ Imports:
     magrittr,
     usethis,
     dplyr,
-    tibble
+    tibble,
+    lubridate,
+    purrr,
+    tools
 Depends: 
     R (>= 2.10)
