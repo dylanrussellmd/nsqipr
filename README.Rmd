@@ -63,10 +63,6 @@ devtools::install_github("doctortickle/nsqipr")
 
 We are not (yet) available on CRAN.
 
-## Set-up
-
-`nsqipr` has a few set-up requirements:
-
 ## Use
 
   1. Excute all `.exe` executable files from ACS NSQIP<sup>&copy;</sup> in a single directory (`dir`) (you may, but it is not recommended to, change the default file names). 
@@ -78,4 +74,6 @@ We are not (yet) available on CRAN.
 
 TODO: Build example table of raw variables, clean variables, and type
 
+## File Size
 
+`nsqipr` significant reduces the file sizes after cleaning the data.

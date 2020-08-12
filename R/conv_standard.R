@@ -14,6 +14,7 @@ nsqip <- function(path, write_to_csv = FALSE, return_df = TRUE) {
          conv_to_standard, write_to_csv = write_to_csv, return_df = return_df)
 }
 
+#TODO specifically order the columns.
 conv_to_standard <- function(file, write_to_csv, return_df) {
 
   df <- readr::read_tsv(file, col_types = readr::cols(.default = "c")) %>%
