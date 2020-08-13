@@ -1,5 +1,5 @@
 testthat::test_that("set_up_df function works correctly", {
-  set_up_df(test_df1) %>%
+  set_up_df(test_df1, col_names) %>%
     purrr::imap(~testthat::expect_equal(.x, test_df2[[.y]]))
 }) # test that test_df1 is converted to test_df2 correctly.
 

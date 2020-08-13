@@ -21,7 +21,7 @@ NULL
 #'
 #' @keywords internal
 #'
-get_file_or_dir <- function(path, pattern){
+get_file_or_dir <- function(path, pattern = "*.txt"){
   if (file_test("-d", path)) {
     result <- list.files(path = path, pattern = pattern,
                          full.names = TRUE, recursive = FALSE)

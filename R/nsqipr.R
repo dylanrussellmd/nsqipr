@@ -104,5 +104,13 @@ if(getRversion() >= "2.15.1")  {
                            "readmunrelicd103", "readmrelicd104", "readmunrelicd104",
                            "readmrelicd105", "readmunrelicd105", "wound_closure",
                            "podiag_other", "podiag_other10", "anesthes_other",
-                           "pufyear", "othcdiff", "nothcdiff", "dothcdiff"))
+                           "pufyear", "othcdiff", "nothcdiff", "dothcdiff", "col_steroid",
+                           "col_steroid_unk", "col_mech_bowel_prep", "col_mech_bowel_prep_unk",
+                           "col_oral_antibiotic", "col_oral_antibiotic_unk", "col_chemo",
+                           "col_chemo_unk", "col_indication", "col_icd9_indication",
+                           "col_emergent", "col_icd9_emergent", "col_approach", "col_open_assist",
+                           "col_unplanned_conversion", "col_margins", "col_margins_unk",
+                           "col_malignancyt", "col_malignancyn", "col_malignancym",
+                           "col_anastomotic", "col_leak_treatment", "col_ileus", "col_ileus_unk", "col_nodeseval",
+                           "col_icd10_indication", "col_icd10_emergent"))
 }

@@ -6,7 +6,8 @@ yes_no_cols <- c("electsurg","smoke","ventilat","hxcopd","ascites","hxchf","hype
                  "readmission3","unplannedreadmission3","readmrelated3", "readmission4","unplannedreadmission4","readmrelated4",
                  "readmission5","unplannedreadmission5","readmrelated5", "etoh", "dnr", "cpneumon", "esovar","hxmi","prvpci","prvpcs",
                  "hxangina","hxpvd","restpain","impsens", "hemi", "hxtia","cva", "cvano", "tumorcns","para","quad","chemo","radio","pregnancy",
-                 "proper30", "readmission","unplanreadmission","reoperation")
+                 "proper30", "readmission","unplanreadmission","reoperation", "col_steroid", "col_mech_bowel_prep","col_oral_antibiotic", "col_chemo",
+                 "col_margins","col_ileus")
 
 numscale_cols <- c("wndclas","asaclas")
 
@@ -22,7 +23,7 @@ integer_cols <- c("caseid","height","weight","optime","tothlos", "admqtr","htood
                   "dprwbc", "dprhct", "dprplate", "dprptt", "dprpt", "dprinr", "nsupinfec", "nwndinfd", "norgspcssi", "ndehis", "noupneumo",
                   "nreintub", "npulembol", "nfailwean", "nrenainsf", "noprenafl", "nurninfec", "ncnscva", "ncdarrest", "ncdmi", "nothbleed",
                   "nothdvt", "nothsysep", "nothseshock", "nothcdiff", "packs", "pgy", "mallamp", "rbc", "anesurg","surgane","dpatrm","anetime",
-                  "stooday","totslos", "dsdtohd")
+                  "stooday","totslos", "dsdtohd","col_nodeseval")
 
 numeric_cols <- c("prsodm","prbun","prcreat","pralbum","prbili","prsgot","pralkph","prwbc","prhct","prplate","prptt","prinr","prpt",
                   "mortprob","morbprob", "workrvu", "otherwrvu1", "otherwrvu2", "otherwrvu3", "otherwrvu4", "otherwrvu5", "otherwrvu6",
