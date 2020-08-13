@@ -85,6 +85,7 @@ conv_special_cols <- function(df) {
       col_chemo_unk = tryCatch(conv_1_to_true(col_chemo_unk), error = function(e) return(NULL)),
       col_margins_unk = tryCatch(conv_1_to_true(col_margins_unk), error = function(e) return(NULL)),
       col_ileus_unk = tryCatch(conv_1_to_true(col_ileus_unk), error = function(e) return(NULL)),
+      col_mech_bowel_prep_unk = tryCatch(conv_1_to_true(col_mech_bowe_prep_unk), error = function(e) return(NULL)),
       col_indication = tryCatch(conv_col_indication(col_indication), error = function(e) return(NULL)),
       col_emergent = tryCatch(conv_col_emergent(col_emergent), error = function(e) return(NULL)),
       col_open_assist = tryCatch(conv_col_open_assist(col_approach), error = function(e) return(NULL)),
