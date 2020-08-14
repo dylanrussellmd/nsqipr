@@ -1,4 +1,4 @@
-conv_to_standard <- function(file, set, write_to_csv, append, return_df, col_names) {
+conv_to_standard <- function(file, write_to_csv, append, return_df, col_names) {
 
   df <- readr::read_tsv(file, col_types = readr::cols(.default = "c")) %>%
     set_up_df(col_names) %>%

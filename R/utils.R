@@ -32,3 +32,19 @@ get_file_or_dir <- function(path, pattern = "*.txt"){
   }
   return(result)
 }
+
+extract_unique_filenames <- function(path) {
+  get_file_or_dir(path) %>%
+    sapply(parse_filename) %>%
+    unique() %>%
+    sapply(dir.create)
+}
+
+parse_filename <- function(file) {
+  pattern <- stringr::regex("acs_nsqip_puf|puf_tar_[a-z]{1,4}",
+                            ignore_case = TRUE)
+  stopifnot(stringr::str_detect(file, pattern))
+  tablename <- stringr::str_extract(file, pattern) %>% stringr::str_to_lower()
+  tablename
+}
+

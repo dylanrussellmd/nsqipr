@@ -16,7 +16,7 @@ nsqip <- function(path, write_to_csv = FALSE, append = FALSE, return_df = TRUE) 
 
   lapply(get_file_or_dir(path),
          conv_to_standard,
-         set = set, write_to_csv = write_to_csv, append = append, return_df = return_df,
-         col_names = col_names)
-
+         write_to_csv = write_to_csv, append = append, return_df = return_df, col_names = col_names)
 }
+
+
