@@ -33,11 +33,37 @@ get_file_or_dir <- function(path, pattern = "*.txt"){
   return(result)
 }
 
-extract_unique_filenames <- function(path) {
-  get_file_or_dir(path) %>%
-    sapply(parse_filename) %>%
+parse_files <- function(path) {
+
+  files <- get_file_or_dir(path) %>%
+    sapply(parse_filename)
+
+  create_dirs(files, path)
+
+  files %>% move_file(path = path)
+}
+
+create_dirs <- function(files, path) {
+  files %>%
     unique() %>%
-    sapply(dir.create)
+    create_path(path) %>%
+    sapply(filesstrings::create_dir)
+}
+
+move_file <- function(file, path) {
+  filesstrings::move_files(names(file), file.path(check_separator(path), file))
+}
+
+create_path <- function(dir_name, path) {
+  if (file_test("-d", path)) {
+    return(file.path(check_separator(path), dir_name))
+  } else {
+    return(file.path(dirname(path), dir_name))
+  }
+}
+
+check_separator <- function(path) {
+  stringr::str_remove_all(path, "[:punct:]+$")
 }
 
 parse_filename <- function(file) {
@@ -47,4 +73,5 @@ parse_filename <- function(file) {
   tablename <- stringr::str_extract(file, pattern) %>% stringr::str_to_lower()
   tablename
 }
+
 
