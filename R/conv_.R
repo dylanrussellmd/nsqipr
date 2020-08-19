@@ -51,9 +51,10 @@ conv_attend <- function(vec) {
   unname(val[vec])
 }
 
+#TODO confirm that these caseids are accurate for checking pufyear.
 conv_pufyear <- function(caseid) {
   vec <- c(152491, 363898, 635266, 822831, 1520169, 1979085,
-           2435678, 3113030, 3873435, 5232202, 6708628, 7842829, 9090216)
+           2435678, 3113030, 3873435, 5232202, 6708628, 7842829, 9284384)
   findInterval(caseid, vec) + 1
 }
 
