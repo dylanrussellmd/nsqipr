@@ -16,7 +16,7 @@ testthat::test_that("assert_before_puf11 selects only years before 2011", {
 })
 
 testthat::test_that("conv_special_cols function works correctly", {
-  conv_special_cols(test_df3) %>%
+  conv_special_cols("acs_nsqip_puf18.txttest",test_df3) %>%
     purrr::imap(~testthat::expect_equal(.x, test_df4[[.y]]))
 }) # test that test_df3 is converted to test_df4 correctly.
 

@@ -128,9 +128,9 @@ conv_col_indication <- function(vec) {
   unname(val[vec])
 }
 
-conv_1_to_true <- function(vec) {
-  vec == "1"
-}
+#conv_1_to_true <- function(vec) {
+#  vec == "1"
+#}
 
 conv_dn_comagraftpn <- function(vec, pufyear) {
   ifelse(assert_before_puf11(pufyear), as.integer(vec), NA)

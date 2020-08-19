@@ -32,4 +32,5 @@ numeric_cols <- c("prsodm","prbun","prcreat","pralbum","prbili","prsgot","pralkp
 reason_cols <- c("readmsuspreason1", "readmunrelsusp1", "readmsuspreason2", "readmunrelsusp2", "readmsuspreason3", "readmunrelsusp3",
                  "readmsuspreason4", "readmunrelsusp4", "readmsuspreason5", "readmunrelsusp5")
 
-redundant_cols <- c('race_new','readmission','unplanreadmission','reoperation')
+redundant_cols <- c('race_new','readmission','unplanreadmission','reoperation','col_steroid_unk','col_oral_antibiotic_unk','col_chemo_unk','col_margins_unk',
+                    'col_ileus_unk','col_mech_bowel_prep_unk')
