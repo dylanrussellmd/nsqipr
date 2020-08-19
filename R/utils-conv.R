@@ -1,4 +1,4 @@
-conv_to_standard <- function(file, write_to_csv, append, return_df, col_names) {
+conv_to_standard <- function(file, write_to_csv, append, col_names) {
 
   df <- readr::read_tsv(file, col_types = readr::cols(.default = "c")) %>%
     set_up_df(col_names) %>%
@@ -9,8 +9,6 @@ conv_to_standard <- function(file, write_to_csv, append, return_df, col_names) {
 
   if(write_to_csv & !append) readr::write_csv(df, path = paste(tools::file_path_sans_ext(file), "_clean.csv", sep = ""), na = "", col_names = FALSE)
   if(write_to_csv & append) readr::write_csv(df, path = paste(dirname(file),"/full_clean.csv", sep = ""), na = "", col_names = FALSE, append = TRUE)
-
-  if(return_df) return(df)
 }
 
 set_up_df <- function(df, col_names) {
@@ -44,8 +42,6 @@ conv_special_cols <- function(df, file) {
 }
 
 # TODO Explore error function e and try to only capture the error for variable not found.
-# TODO Split these into separate functions by file type and just parse on file name.
-# TODO verify that the "Unknown" columns in puf-tar-col are actually necessary.
 conv_acs_cols <- function(df) {
   df %>%
     dplyr::mutate(
@@ -94,12 +90,6 @@ conv_col_cols <- function(df) {
   df %>%
     dplyr::mutate(
       pufyear = tryCatch(conv_pufyear(caseid), error = function(e) return(NULL)),
-#      col_steroid_unk = tryCatch(conv_1_to_true(col_steroid_unk), error = function(e) return(NULL)),
-#      col_oral_antibiotic_unk = tryCatch(conv_1_to_true(col_oral_antibiotic_unk), error = function(e) return(NULL)),
-#      col_chemo_unk = tryCatch(conv_1_to_true(col_chemo_unk), error = function(e) return(NULL)),
-#      col_margins_unk = tryCatch(conv_1_to_true(col_margins_unk), error = function(e) return(NULL)),
-#      col_ileus_unk = tryCatch(conv_1_to_true(col_ileus_unk), error = function(e) return(NULL)),
-#      col_mech_bowel_prep_unk = tryCatch(conv_1_to_true(col_mech_bowe_prep_unk), error = function(e) return(NULL)),
       col_indication = tryCatch(conv_col_indication(col_indication), error = function(e) return(NULL)),
       col_emergent = tryCatch(conv_col_emergent(col_emergent), error = function(e) return(NULL)),
       col_open_assist = tryCatch(conv_col_open_assist(col_approach), error = function(e) return(NULL)),

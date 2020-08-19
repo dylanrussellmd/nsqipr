@@ -10,13 +10,16 @@
 #' @export
 #' @importFrom "utils" "file_test"
 #'
-nsqip <- function(path, write_to_csv = FALSE, append = FALSE, return_df = TRUE) {
+
+# TODO Need to add in the functionality to create all the directories then parse through directories.
+
+nsqip <- function(path, write_to_csv = FALSE, append = FALSE) {
 
   col_names <- create_na_template(path)
 
   lapply(get_file_or_dir(path),
          conv_to_standard,
-         write_to_csv = write_to_csv, append = append, return_df = return_df, col_names = col_names)
+         write_to_csv = write_to_csv, append = append, col_names = col_names)
 }
 
 
