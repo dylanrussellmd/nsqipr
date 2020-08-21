@@ -12,7 +12,7 @@
 
 # TODO Need to add in the functionality to create all the directories then parse through directories.
 
-nsqip <- function(path, return_df = FALSE, write_to_csv = FALSE, append = FALSE) {
+nsqip <- function(path, return_df = TRUE, write_to_csv = FALSE, append = FALSE) {
 
   files <- get_file_or_dir(path)
   parse_files(files)
