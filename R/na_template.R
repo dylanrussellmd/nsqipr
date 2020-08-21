@@ -1,13 +1,10 @@
-# These functions are used strictly in development to create the 'col_names' variable that is stored in sysdata.rda.
-# 'col_names' is necessary for the standard conversion to occur
-
-create_na_template <- function(dir) {
-  collect_column_names(dir) %>%
+create_na_template <- function(path) {
+  collect_column_names(path) %>%
     na_template()
 }
 
-collect_column_names <- function(dir) {
-  list.files(path = dir, pattern = "*.txt$", full.names = TRUE, recursive = FALSE) %>%
+collect_column_names <- function(path) {
+  path %>%
     lapply(., get_headers) %>%
     unlist() %>%
     unique()

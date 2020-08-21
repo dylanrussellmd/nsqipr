@@ -1,3 +1,48 @@
+# TODO Explore error function e and try to only capture the error for variable not found.
+conv_acs_cols <- function(df) {
+  df %>%
+    dplyr::mutate(
+      pufyear = tryCatch(conv_pufyear(caseid), error = function(e) return(NULL)),
+      sex = tryCatch(conv_sex(sex), error = function(e) return(NULL)),
+      ethnicity_hispanic = tryCatch(conv_hispanic(ethnicity_hispanic, race), error = function(e) return(NULL)),
+      race = tryCatch(conv_race(race, race_new), error = function(e) return(NULL)),
+      inout = tryCatch(conv_inout(inout), error = function(e) return(NULL)),
+      attend = tryCatch(conv_attend(attend), error = function(e) return(NULL)),
+      transt = tryCatch(conv_transt(transt), error = function(e) return(NULL)),
+      age = tryCatch(conv_age(age), error = function(e) return(NULL)),
+      dischdest = tryCatch(conv_dischdest(dischdest), error = function(e) return(NULL)),
+      anesthes = tryCatch(conv_anesthes(anesthes), error = function(e) return(NULL)),
+      anesthes_other = tryCatch(conv_anesthes(anesthes_other), error = function(e) return(NULL)),
+      surgspec = tryCatch(conv_surgspec(surgspec), error = function(e) return(NULL)),
+      insulin = tryCatch(insulin(diabetes), error = function(e) return(NULL)),
+      diabetes = tryCatch(conv_notno(diabetes), error = function(e) return(NULL)),
+      when_dyspnea = tryCatch(when_dyspnea(dyspnea), error = function(e) return(NULL)),
+      dyspnea = tryCatch(conv_notno(dyspnea), error = function(e) return(NULL)),
+      fnstatus1 = tryCatch(conv_fnstatus(fnstatus1), error = function(e) return(NULL)),
+      fnstatus2 = tryCatch(conv_fnstatus(fnstatus2), error = function(e) return(NULL)),
+      type_prsepis = tryCatch(type_prsepis(prsepis), error = function(e) return(NULL)),
+      prsepis = tryCatch(conv_prsepis(prsepis), error = function(e) return(NULL)),
+      coma = tryCatch(conv_coma(coma, pufyear), error = function(e) return(NULL)),
+      wound_closure = tryCatch(conv_wound_closure(wound_closure), error = function(e) return(NULL)),
+      pnapatos = tryCatch(dplyr::coalesce(cpneumon, pnapatos), error = function(e) return(NULL)),
+      readmission1 = tryCatch(dplyr::coalesce(readmission, readmission1), error = function(e) return(NULL)),
+      unplannedreadmission1 = tryCatch(dplyr::coalesce(unplanreadmission, unplannedreadmission1), error = function(e) return(NULL)),
+      reoperation1 = tryCatch(dplyr::coalesce(reoperation, reoperation1), error = function(e) return(NULL)),
+      opnote = tryCatch(conv_opnote(opnote), error = function(e) return(NULL)),
+      airtra = tryCatch(conv_airtra(airtra), error = function(e) return(NULL)),
+      ncnscoma = tryCatch(conv_dn_comagraftpn(ncnscoma, pufyear), error = function(e) return(NULL)),
+      cnscoma = tryCatch(conv_comagraftpn(cnscoma, pufyear), error = function(e) return(NULL)),
+      dcnscoma = tryCatch(conv_dn_comagraftpn(dcnscoma, pufyear), error = function(e) return(NULL)),
+      nneurodef = tryCatch(conv_dn_comagraftpn(nneurodef, pufyear), error = function(e) return(NULL)),
+      neurodef = tryCatch(conv_comagraftpn(neurodef, pufyear), error = function(e) return(NULL)),
+      dneurodef = tryCatch(conv_dn_comagraftpn(dneurodef, pufyear), error = function(e) return(NULL)),
+      nothgrafl = tryCatch(conv_dn_comagraftpn(nothgrafl, pufyear), error = function(e) return(NULL)),
+      othgrafl = tryCatch(conv_comagraftpn(othgrafl, pufyear), error = function(e) return(NULL)),
+      dothgrafl = tryCatch(conv_dn_comagraftpn(dothgrafl, pufyear), error = function(e) return(NULL)),
+      typeintoc = tryCatch(conv_typeintoc(typeintoc), error = function(e) return(NULL))
+    )
+}
+
 conv_dn_comagraftpn <- function(vec, pufyear) {
   ifelse(assert_before_puf11(pufyear), as.integer(vec), NA)
 }
