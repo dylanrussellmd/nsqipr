@@ -33,37 +33,17 @@ get_file_or_dir <- function(path, pattern = "*.txt"){
   return(result)
 }
 
-parse_files <- function(path) {
+parse_files <- function(files) {
 
-  files <- get_file_or_dir(path) %>%
+  dirnames <- files %>%
     sapply(parse_filename)
 
-  create_dirs(files, path)
+  base <- unique(sapply(files, dirname))
+  stopifnot("Are you sure the files are in the specified folder?" = length(base) == 1)
 
-  files %>% move_file(path = path)
-}
+  create_dirs(dirnames, base)
 
-create_dirs <- function(files, path) {
-  files %>%
-    unique() %>%
-    create_path(path) %>%
-    sapply(filesstrings::create_dir)
-}
-
-move_file <- function(file, path) {
-  filesstrings::move_files(names(file), file.path(check_separator(path), file))
-}
-
-create_path <- function(dir_name, path) {
-  if (file_test("-d", path)) {
-    return(file.path(check_separator(path), dir_name))
-  } else {
-    return(file.path(dirname(path), dir_name))
-  }
-}
-
-check_separator <- function(path) {
-  stringr::str_remove_all(path, "[:punct:]+$")
+  dirnames %>% move_file(base = base)
 }
 
 parse_filename <- function(file) {
@@ -73,4 +53,30 @@ parse_filename <- function(file) {
   stringr::str_extract(file, pattern) %>% stringr::str_to_lower()
 }
 
+create_dirs <- function(dirnames, base) {
+  dirnames %>%
+    unique() %>%
+    sapply(., create_path, base = base) %>%
+    sapply(filesstrings::create_dir)
+}
 
+move_file <- function(dirnames, base) {
+  paste(dirnames, base)
+  filesstrings::move_files(names(dirnames), file.path(base, dirnames))
+}
+
+create_path <- function(dir_name, base) {
+  if (file_test("-d", base)) {
+    return(file.path(check_separator(base), dir_name))
+  } else {
+    return(file.path(dirname(base), dir_name))
+  }
+}
+
+check_separator <- function(path) {
+  stringr::str_remove_all(path, "[:punct:]+$")
+}
+
+open_dir <- function(path) {
+  list.files(path, pattern = "*.txt", full.names = TRUE, recursive = FALSE)
+}

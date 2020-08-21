@@ -4,7 +4,7 @@ create_na_template <- function(path) {
 }
 
 collect_column_names <- function(path) {
-  get_file_or_dir(path) %>%
+  path %>%
     lapply(., get_headers) %>%
     unlist() %>%
     unique()

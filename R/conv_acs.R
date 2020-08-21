@@ -1,131 +1,46 @@
-conv_col_anastomotic <- function(vec) {
-  stringr::str_detect(vec, "yes-|leak, ")
-}
-
-conv_col_leak_treatment <- function(vec) {
-  val <- c("no" = NA,
-           "yes-reoperation" = 1L,
-           "yes-percutaneous intervention" = 2L,
-           "yes-no intervention required" = 3L,
-           "unknown" = NA,
-           "no definitive diagnosis of leak/leak related abscess" = NA,
-           "leak, treated w/ reoperation" = 1L,
-           "leak, treated w/ interventional means" = 2L,
-           "leak, no treatment intervention documented" = 3L,
-           "leak, treated w/ non-interventional/non-operative means" = 4L)
-  unname(val[vec])
-}
-
-conv_col_malignancym <- function(vec) {
-  val <- c("m0/mx" = 1L,
-           "m1" = 2L,
-           "m1a" = 3L,
-           "m1b" = 4L,
-           "unknown" = NA,
-           "n/a" = NA
-  )
-  unname(val[vec])
-}
-
-conv_col_malignancyt <- function(vec) {
-  val <- c("t0" = 1L,
-           "t1" = 2L,
-           "t2" = 3L,
-           "t3" = 4L,
-           "t4" = 5L,
-           "t4a" = 6L,
-           "t4b" = 7L,
-           "tis" = 8L,
-           "tx" = 9L,
-           "unknown" = NA,
-           "n/a" = NA
-           )
-  unname(val[vec])
-}
-
-conv_col_malignancyn <- function(vec) {
-  val <- c("n0" = 1L,
-           "n1" = 2L,
-           "n1a" = 3L,
-           "n1b" = 4L,
-           "n1c" = 5L,
-           "n2" = 6L,
-           "n2a" = 7L,
-           "n2b" = 8L,
-           "nx" = 9L,
-           "unknown" = NA,
-           "n/a" = NA
-           )
-  unname(val[vec])
-}
-
-conv_col_open_assist <- function(vec) {
-  stringr::str_detect(vec, "w/ open assist|hand assisted")
-}
-
-conv_col_unplanned_conversion <- function(vec) {
-  stringr::str_detect(vec, "w/ unplanned conversion to open")
-}
-
-conv_col_approach <- function(vec) {
-  val <- c("endoscopic" = 1L,
-           "endoscopic w/ open assist" = 1L,
-           "endoscopic w/ unplanned conversion to open" = 1L,
-           "hybrid" = 2L,
-           "hybrid w/ open assist" = 2L,
-           "hybrid w/ unplanned conversion to open" = 2L,
-           "laparoscopic" = 3L,
-           "laparoscopic w/ open assist" = 3L,
-           "laparoscopic w/ unplanned conversion to open" = 3L,
-           "laparoscopic hand assisted" = 3L,
-           "notes" = 4L,
-           "notes w/ open assist" = 4L,
-           "notes w/ unplanned conversion to open" = 4L,
-           "open" = 5L,
-           "open (planned)" = 5L,
-           "other"= 6L,
-           "other mis approach" = 7L,
-           "other mis approach w/ open assist" = 7L,
-           "other mis approach w/ unplanned conversion to open" = 7L,
-           "robotic" = 8L,
-           "robotic w/ open assist" = 8L,
-           "robotic w/ unplanned conversion to open" = 8L,
-           "sils" = 9L,
-           "sils w/ open assist" = 9L,
-           "sils w/ unplanned conversion to open" = 9L,
-           "unknown" = NA
-           )
-  unname(val[vec])
-}
-
-conv_col_emergent <- function(vec) {
-  val <- c("bleeding" = 1L,
-           "obstruction" = 2L,
-           "perforation" = 3L,
-           "toxic colitis (toxic megacolon, c. diff w/out perforation, ischemic colitis)" = 4L,
-           "other (enter icd-9 code)" = 5L,
-           "other (enter icd-10 code)" = 6L,
-           "unknown" = NA
-           )
-  unname(val[vec])
-}
-
-conv_col_indication <- function(vec) {
-  val <- c("acute diverticulitis" = 1L,
-           "bleeding" = 2L,
-           "chronic diverticular disease" = 3L,
-           "colon cancer" = 4L,
-           "colon cancer w/ obstruction" = 5L,
-           "crohn's disease" = 6L,
-           "enterocolitis (e.g. c. difficile)" = 7L,
-           "non-malignant polyp" = 8L,
-           "other-enter icd-9 for diagnosis" = 9L,
-           "other-enter icd-10 for diagnosis" = 10L,
-           "ulcerative colitis" = 11L,
-           "volvulus" = 12L,
-           "unknown" = NA
-           )
-  unname(val[vec])
+# TODO Explore error function e and try to only capture the error for variable not found.
+conv_acs_cols <- function(df) {
+  df %>%
+    dplyr::mutate(
+      pufyear = tryCatch(conv_pufyear(caseid), error = function(e) return(NULL)),
+      sex = tryCatch(conv_sex(sex), error = function(e) return(NULL)),
+      ethnicity_hispanic = tryCatch(conv_hispanic(ethnicity_hispanic, race), error = function(e) return(NULL)),
+      race = tryCatch(conv_race(race, race_new), error = function(e) return(NULL)),
+      inout = tryCatch(conv_inout(inout), error = function(e) return(NULL)),
+      attend = tryCatch(conv_attend(attend), error = function(e) return(NULL)),
+      transt = tryCatch(conv_transt(transt), error = function(e) return(NULL)),
+      age = tryCatch(conv_age(age), error = function(e) return(NULL)),
+      dischdest = tryCatch(conv_dischdest(dischdest), error = function(e) return(NULL)),
+      anesthes = tryCatch(conv_anesthes(anesthes), error = function(e) return(NULL)),
+      anesthes_other = tryCatch(conv_anesthes(anesthes_other), error = function(e) return(NULL)),
+      surgspec = tryCatch(conv_surgspec(surgspec), error = function(e) return(NULL)),
+      insulin = tryCatch(insulin(diabetes), error = function(e) return(NULL)),
+      diabetes = tryCatch(conv_notno(diabetes), error = function(e) return(NULL)),
+      when_dyspnea = tryCatch(when_dyspnea(dyspnea), error = function(e) return(NULL)),
+      dyspnea = tryCatch(conv_notno(dyspnea), error = function(e) return(NULL)),
+      fnstatus1 = tryCatch(conv_fnstatus(fnstatus1), error = function(e) return(NULL)),
+      fnstatus2 = tryCatch(conv_fnstatus(fnstatus2), error = function(e) return(NULL)),
+      type_prsepis = tryCatch(type_prsepis(prsepis), error = function(e) return(NULL)),
+      prsepis = tryCatch(conv_prsepis(prsepis), error = function(e) return(NULL)),
+      coma = tryCatch(conv_coma(coma, pufyear), error = function(e) return(NULL)),
+      wound_closure = tryCatch(conv_wound_closure(wound_closure), error = function(e) return(NULL)),
+      pnapatos = tryCatch(dplyr::coalesce(cpneumon, pnapatos), error = function(e) return(NULL)),
+      readmission1 = tryCatch(dplyr::coalesce(readmission, readmission1), error = function(e) return(NULL)),
+      unplannedreadmission1 = tryCatch(dplyr::coalesce(unplanreadmission, unplannedreadmission1), error = function(e) return(NULL)),
+      reoperation1 = tryCatch(dplyr::coalesce(reoperation, reoperation1), error = function(e) return(NULL)),
+      opnote = tryCatch(conv_opnote(opnote), error = function(e) return(NULL)),
+      airtra = tryCatch(conv_airtra(airtra), error = function(e) return(NULL)),
+      ncnscoma = tryCatch(conv_dn_comagraftpn(ncnscoma, pufyear), error = function(e) return(NULL)),
+      cnscoma = tryCatch(conv_comagraftpn(cnscoma, pufyear), error = function(e) return(NULL)),
+      dcnscoma = tryCatch(conv_dn_comagraftpn(dcnscoma, pufyear), error = function(e) return(NULL)),
+      nneurodef = tryCatch(conv_dn_comagraftpn(nneurodef, pufyear), error = function(e) return(NULL)),
+      neurodef = tryCatch(conv_comagraftpn(neurodef, pufyear), error = function(e) return(NULL)),
+      dneurodef = tryCatch(conv_dn_comagraftpn(dneurodef, pufyear), error = function(e) return(NULL)),
+      nothgrafl = tryCatch(conv_dn_comagraftpn(nothgrafl, pufyear), error = function(e) return(NULL)),
+      othgrafl = tryCatch(conv_comagraftpn(othgrafl, pufyear), error = function(e) return(NULL)),
+      dothgrafl = tryCatch(conv_dn_comagraftpn(dothgrafl, pufyear), error = function(e) return(NULL)),
+      typeintoc = tryCatch(conv_typeintoc(typeintoc), error = function(e) return(NULL))
+    )
 }
 
 conv_dn_comagraftpn <- function(vec, pufyear) {
