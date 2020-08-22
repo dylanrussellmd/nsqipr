@@ -20,6 +20,7 @@ set_up_df <- function(df, col_names) {
     dplyr::mutate(dplyr::across(dplyr::everything(), dplyr::na_if, "null")) %>%
     dplyr::mutate(dplyr::across(dplyr::everything(), dplyr::na_if, "n/a")) %>%
     dplyr::mutate(dplyr::across(dplyr::everything(), dplyr::na_if, "not documented")) %>%
+    dplyr::mutate(dplyr::across(dplyr::everything(), dplyr::na_if, "none/not documented")) %>%
     dplyr::mutate(dplyr::across(dplyr::everything(), dplyr::na_if, "-99")) %>%
     dplyr::mutate(dplyr::across(dplyr::everything(), dplyr::na_if, -99)) %>%
     tibble::add_column(., !!!col_names[setdiff(names(col_names), names(.))])
@@ -40,7 +41,8 @@ conv_special_cols <- function(df, file) {
   fn <- switch(parse_filename(file),
                "acs_nsqip_puf" = `conv_acs_cols`,
                "puf_tar_col" = `conv_col_cols`,
-               "puf_tar_aaa" = `conv_aaa_cols`)
+               "puf_tar_aaa" = `conv_aaa_cols`,
+               "puf_tar_aie" = `conv_aie_cols`)
   fn(df)
 }
 

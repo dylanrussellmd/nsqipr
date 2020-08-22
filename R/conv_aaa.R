@@ -80,6 +80,6 @@ conv_aaa_colitis_treat <- function(vec) {
   unname(val[vec])
 }
 
-conv_age <- function(vec) {
+conv_aaa_iculos <- function(vec) {
   as.integer(ifelse(stringr::str_detect(vec, "30 or more"), "30", vec))
 }
