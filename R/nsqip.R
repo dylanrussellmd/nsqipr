@@ -16,7 +16,8 @@ nsqip <- function(path, return_df = TRUE, write_to_csv = FALSE, append = FALSE) 
 
   files <- get_file_or_dir(path)
   parse_files(files)
-  dirs <- unique(sapply(path, list.dirs, recursive = FALSE))
+  #dirs <- unique(sapply(path, list.dirs, recursive = FALSE)) # is this necessary? Does list.dirs not work alone?
+  dirs <- list.dirs(path, recursive = FALSE)
   lapply(dirs,
          nsqip_dir,
          return_df = return_df, write_to_csv = write_to_csv, append = append)

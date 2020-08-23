@@ -4,7 +4,7 @@
 \alias{get_file_or_dir}
 \title{Check if a path is a directory or a file}
 \usage{
-get_file_or_dir(path, pattern)
+get_file_or_dir(path, pattern = "*.txt")
 }
 \arguments{
 \item{path}{a character vector of full path names; the default

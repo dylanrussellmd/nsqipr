@@ -8,7 +8,7 @@ conv_aaa_cols <- function(df) {
       aaa_pae= tryCatch(conv_aaa_pae(aaa_pae), error = function(e) return(NULL)),
       aaa_distext= tryCatch(conv_aaa_distext(aaa_distext), error = function(e) return(NULL)),
       aaa_mima= tryCatch(conv_aaa_mima(aaa_mima), error = function(e) return(NULL)),
-      aaa_colitis_treat= tryCatch(conv_aaa_colitis_treat(aaa_colitis_treat), error = function(e) return(NULL)),
+      aaa_colitiis_treat= tryCatch(conv_aaa_colitis_treat(aaa_colitiis_treat), error = function(e) return(NULL)), # I should work in correcting the spelling here of colitis.
       aaa_iculos= tryCatch(conv_aaa_iculos(aaa_iculos), error = function(e) return(NULL))
     )
 }

@@ -21,6 +21,7 @@ set_up_df <- function(df, col_names) {
     dplyr::mutate(dplyr::across(dplyr::everything(), dplyr::na_if, "n/a")) %>%
     dplyr::mutate(dplyr::across(dplyr::everything(), dplyr::na_if, "not documented")) %>%
     dplyr::mutate(dplyr::across(dplyr::everything(), dplyr::na_if, "none/not documented")) %>%
+    dplyr::mutate(dplyr::across(dplyr::everything(), dplyr::na_if, "not entered")) %>%
     dplyr::mutate(dplyr::across(dplyr::everything(), dplyr::na_if, "-99")) %>%
     dplyr::mutate(dplyr::across(dplyr::everything(), dplyr::na_if, -99)) %>%
     tibble::add_column(., !!!col_names[setdiff(names(col_names), names(.))])
