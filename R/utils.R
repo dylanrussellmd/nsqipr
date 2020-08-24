@@ -10,6 +10,8 @@
 #' @usage lhs \%>\% rhs
 NULL
 
+`%V%` <- function(lhs, rhs) {rhs; lhs}
+
 #' Check if a path is a directory or a file
 #'
 #' Checks if a provided path is a directory or a file. This allows a user to pass either a directory
