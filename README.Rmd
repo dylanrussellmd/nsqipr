@@ -77,7 +77,7 @@ TODO: Build example table of raw variables, clean variables, and type
 
 ## File Size
 
-`nsqipr` significant reduces file sizes after cleaning the data.
+`nsqipr` significantly reduces file sizes after cleaning the data.
 
 ```{r file_size}
 sizedf %>%

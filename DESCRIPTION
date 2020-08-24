@@ -19,8 +19,8 @@ Suggests:
     testthat,
     spelling
 VignetteBuilder: knitr
-URL: https://github.com/doctortickle/nsqipr
-BugReports: https://github.com/doctortickle/nsqipr/issues
+URL: https://github.com/dylanrussellmd/nsqipr
+BugReports: https://github.com/dylanrussellmd/nsqipr/issues
 Language: en-US
 Imports: 
     stringr,

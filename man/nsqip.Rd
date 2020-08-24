@@ -2,16 +2,18 @@
 % Please edit documentation in R/nsqip.R
 \name{nsqip}
 \alias{nsqip}
-\title{Converts a single NSQIP \code{.txt} or a directory of NSQIP \code{.txt} files into a standardized NSQIP data frame.}
+\title{Clean NSQIP data}
 \usage{
 nsqip(path, return_df = TRUE, write_to_csv = FALSE, append = FALSE)
 }
 \arguments{
 \item{path}{path to file or directory.}
 
+\item{return_df}{return a data frame.}
+
 \item{write_to_csv}{write the resulting data frame to a \code{.csv} file. Produces individual files for each \code{.txt} input}
 
-\item{append}{writes the resulting data frames all to a single \code{.csv} file called \code{nsqip_clean.csv}}
+\item{append}{writes the resulting data frames all to a single \code{.csv} file}
 }
 \value{
 a data frame of class \code{tibble}.
