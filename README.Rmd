@@ -13,11 +13,12 @@ knitr::opts_chunk$set(
   echo = FALSE,
   knitr.table.format = "markdown"
 )
+load("R/sysdata.rda")
 library(magrittr)
 ```
 
 <!-- badges: start -->
-[![Travis build status](https://travis-ci.org/doctortickle/nsqipr.svg?branch=master)](https://travis-ci.org/doctortickle/nsqipr)
+[![Travis build status](https://travis-ci.com/dylanrussellmd/nsqipr.svg?branch=master)](https://travis-ci.com/dylanrussellmd/nsqipr)
 <img src='man/figures/nsqipr_hex.png' align="right" height="60" />
 <!-- badges: end -->
 
@@ -49,7 +50,7 @@ The data from ACS NSQIP<sup>&copy;</sup> is used to produce **approximately 400 
 
 ## Purpose
 
-ACS NSQIP<sup>&copy;</sup> requires that members request specific datasets for use in research. The files are then delivered as `.exe` executables avaiable for download from a JavaServer page for a limited duration of time. The archived files can be unzipped and contain a `.txt` tab-delimited file. Some will also contain a PDF version of the Participant Use File (**PUF**); these define the variables in the dataset. The `.txt` tab-delimited file must be read into R as a data frame and meticulously cleaned prior to being used for data analysis. 
+ACS NSQIP<sup>&copy;</sup> requires that members request specific datasets for use in research. The files are then delivered as `.exe` executables avaiable for download for a limited duration of time. The archived files can be unzipped and contain a `.txt` tab-delimited file. Some will also contain a PDF version of the Participant Use File (**PUF**); these define the variables in the dataset. The `.txt` tab-delimited file must be read into R as a data frame and meticulously cleaned prior to being used for data analysis. Researchers often want to combine data across multiple years. This complicates data preparation as variables are removed or added every year and sometimes the same variable may be recorded differently in two different years.
 
 The purpose of `nsqipr` is to streamline this process. This package is geared towards those surgical interns, residents, and attendings who have limited experience with `R`, `SQL`, or "big data" analysis. It is also designed to be a useful tool for that experienced researcher or computer scientist making frequent use of ACS NSQIP<sup>&copy;</sup> PUFs.
 
@@ -58,17 +59,17 @@ The purpose of `nsqipr` is to streamline this process. This package is geared to
 You can install or upgrade `nsqipr` with:
 
 ```r
-devtools::install_github("doctortickle/nsqipr")
+devtools::install_github("dylanrussellmd/nsqipr")
 ```
 
 We are not (yet) available on CRAN.
 
 ## Use
 
-  1. Excute all `.exe` executable files from ACS NSQIP<sup>&copy;</sup> in a single directory (`dir`) (you may, but it is not recommended to, change the default file names). 
+  1. Excute all `.exe` executable files from ACS NSQIP<sup>&copy;</sup> in a single directory (`dir`) (do not change the default file names). 
   2. Now simply run `nsqip(dir)`.
   
-`nsqipr` will take care of the data importing and data cleaning. You're now ready to use the ACS NSQIP<sup>&copy;</sup> for data analysis!
+`nsqipr` will take care of the rest. You're now ready to use the ACS NSQIP<sup>&copy;</sup> data for data analysis!
 
 ## Variables
 
@@ -76,4 +77,16 @@ TODO: Build example table of raw variables, clean variables, and type
 
 ## File Size
 
-`nsqipr` significant reduces the file sizes after cleaning the data.
+`nsqipr` significant reduces file sizes after cleaning the data.
+
+```{r file_size}
+sizedf %>%
+  ggplot2::ggplot(ggplot2::aes(x = name, y = size, fill = type)) +
+  ggplot2::geom_bar(stat = "identity", position = ggplot2::position_dodge()) +
+  ggplot2::scale_fill_brewer(palette="Paired", labels = c("Before", "After")) +
+  ggplot2::coord_flip() +
+  ggplot2::labs(y = "File size (MB)") +
+  ggplot2::theme_minimal() +
+  ggplot2::theme(axis.title.y = ggplot2::element_blank(),
+                 legend.title = ggplot2::element_blank())
+```

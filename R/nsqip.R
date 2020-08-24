@@ -9,14 +9,10 @@
 #' @export
 #' @importFrom "utils" "file_test"
 #'
-
-# TODO Need to add in the functionality to create all the directories then parse through directories.
-
 nsqip <- function(path, return_df = TRUE, write_to_csv = FALSE, append = FALSE) {
 
   files <- get_file_or_dir(path)
   parse_files(files)
-  #dirs <- unique(sapply(path, list.dirs, recursive = FALSE)) # is this necessary? Does list.dirs not work alone?
   dirs <- list.dirs(path, recursive = FALSE)
   lapply(dirs,
          nsqip_dir,

@@ -33,6 +33,12 @@ get_file_or_dir <- function(path, pattern = "*.txt"){
   return(result)
 }
 
+#' Parses a directory of files and creates the requisite directories. Moves files into their respective directories.
+#'
+#' @param files a character vector of file names.
+#'
+#' @keywords internal
+#'
 parse_files <- function(files) {
 
   dirnames <- files %>%
@@ -46,6 +52,14 @@ parse_files <- function(files) {
   dirnames %>% move_file(base = base)
 }
 
+#' Parses a file name and returns a lower-case string of the extracted regular expression match.
+#'
+#' @param file a file name
+#'
+#' @return string
+#'
+#' @keywords internal
+#'
 parse_filename <- function(file) {
   pattern <- stringr::regex("acs_nsqip_puf|puf_tar_[a-z]{1,4}",
                             ignore_case = TRUE)
@@ -53,6 +67,13 @@ parse_filename <- function(file) {
   stringr::str_extract(file, pattern) %>% stringr::str_to_lower()
 }
 
+#' Creates directories from a vector of desired directory names. Only creates unique directories.
+#'
+#' @param dirnames a character vector of desired directory names
+#' @param base the path of the containing directory
+#'
+#' @keywords internal
+#'
 create_dirs <- function(dirnames, base) {
   dirnames %>%
     unique() %>%
@@ -60,11 +81,24 @@ create_dirs <- function(dirnames, base) {
     sapply(filesstrings::create_dir)
 }
 
+#' Moves files from a parent directory to newly created subdirectories.
+#'
+#' @inheritParams create_dirs
+#'
+#' @keywords internal
+#'
 move_file <- function(dirnames, base) {
   paste(dirnames, base)
   filesstrings::move_files(names(dirnames), file.path(base, dirnames))
 }
 
+#' Creates a path to a directory.
+#'
+#' @param dir_name desired name of directory
+#' @inheritParams create_dirs
+#'
+#' @keywords internal
+#'
 create_path <- function(dir_name, base) {
   if (file_test("-d", base)) {
     return(file.path(check_separator(base), dir_name))
@@ -73,10 +107,21 @@ create_path <- function(dir_name, base) {
   }
 }
 
+#' Checks a path name for a final back- or forward slash.
+#'
+#' @param path a directory path
+#'
+#' @keywords internal
+#'
 check_separator <- function(path) {
   stringr::str_remove_all(path, "[:punct:]+$")
 }
 
+#' Opens a directory and lists all \code{.txt} files with full names.
+#'
+#' @inheritParams check_separator
+#'
+#' @keywords internal
 open_dir <- function(path) {
   list.files(path, pattern = "*.txt", full.names = TRUE, recursive = FALSE)
 }
