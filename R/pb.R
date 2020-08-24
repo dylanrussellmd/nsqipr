@@ -1,9 +1,9 @@
-pb <- function() {
-  progress_bar$new(
-    format = "(:spin)  :preface :what [:bar] :percent", total = 120, clear = FALSE, show_after = 0)
+pb <- function(write_to_csv) {
+  progress::progress_bar$new(
+    format = "(:spin)  :preface :what [:bar] :percent", total = 6 + write_to_csv, clear = FALSE, show_after = 0)
 }
 
-tick <- function(pb, preface, file, len = 20) {
+tick <- function(df = NULL, pb, preface, file, len = 1) {
   pb$tick(len, tokens = list(what = basename(file), preface = preface))
 }
 

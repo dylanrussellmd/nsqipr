@@ -23,6 +23,7 @@ nsqip <- function(path, return_df = TRUE, write_to_csv = FALSE, append = FALSE) 
          nsqip_dir,
          return_df = return_df, write_to_csv = write_to_csv, append = append)
 
+  usethis::ui_done('Successfullly cleaned all files in {usethis::ui_path(path)}.')
 }
 
 #' Runs the \code{nsqip} function in a single directory.

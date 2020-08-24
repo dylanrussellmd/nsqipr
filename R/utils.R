@@ -5,12 +5,20 @@
 #' @name %>%
 #' @rdname pipe
 #' @keywords internal
-#' @export
 #' @importFrom magrittr %>%
 #' @usage lhs \%>\% rhs
 NULL
 
-`%V%` <- function(lhs, rhs) {rhs; lhs}
+#' T Pipe operator
+#'
+#' See \code{magrittr::\link[magrittr:pipe]{\%T>\%}} for details.
+#'
+#' @name %T>%
+#' @rdname pipe
+#' @keywords internal
+#' @importFrom magrittr %T>%
+#' @usage lhs \%T>\% rhs
+NULL
 
 #' Check if a path is a directory or a file
 #'
@@ -49,7 +57,7 @@ parse_files <- function(files) {
   base <- unique(sapply(files, dirname))
   stopifnot("Are you sure the files are in the specified folder?" = length(base) == 1)
 
-  create_dirs(dirnames, base)
+  suppressMessages(create_dirs(dirnames, base)) # Suppress the messages from the filesstrings::create_dir function.
 
   dirnames %>% move_file(base = base)
 }
@@ -91,7 +99,7 @@ create_dirs <- function(dirnames, base) {
 #'
 move_file <- function(dirnames, base) {
   paste(dirnames, base)
-  filesstrings::move_files(names(dirnames), file.path(base, dirnames))
+  suppressMessages(filesstrings::move_files(names(dirnames), file.path(base, dirnames))) # Suppress messages from the filesstrings::move_files function.
 }
 
 #' Creates a path to a directory.

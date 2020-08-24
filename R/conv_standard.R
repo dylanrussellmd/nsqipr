@@ -1,17 +1,18 @@
 conv_to_standard <- function(file, return_df, write_to_csv, append, col_names) {
 
-  progbar <- pb()
+  progbar <- pb(write_to_csv)
+  tick(NULL, progbar, "reading", file, 0)
 
-  df <- readr::read_tsv(file, col_types = readr::cols(.default = "c"), progress = FALSE) %V% tick(progbar, "reading", file, 0) %>%
-    set_up_df(col_names) %V% tick(progbar, "setting up", file) %>%
-    conv_type_cols() %V% tick(progbar, "converting generic columns of", file) %>%
-    conv_special_cols(file) %V% tick(progbar, "converting unique columns of", file) %>%
-    dplyr::select(!dplyr::any_of(redundant_cols)) %V% tick(progbar, "removing redundant columns of", file) %>%
-    dplyr::select(dplyr::any_of(col_order)) %V% tick(progbar, "ordering columns of", file)
+  df <- readr::read_tsv(file, col_types = readr::cols(.default = "c"), progress = FALSE) %T>% tick(progbar, "setting up", file) %>%
+    set_up_df(col_names) %T>% tick(progbar, "converting generic columns of", file) %>%
+    conv_type_cols() %T>% tick(progbar, "converting unique columns of", file) %>%
+    conv_special_cols(file) %T>% tick(progbar, "removing redundant columns of", file) %>%
+    dplyr::select(!dplyr::any_of(redundant_cols)) %T>% tick(progbar, "ordering columns of", file) %>%
+    dplyr::select(dplyr::any_of(col_order)) %T>% {if(write_to_csv) tick(NULL, progbar, "writing CSV for", file) else .}
 
   if(write_to_csv & !append) readr::write_csv(df, path = paste(tools::file_path_sans_ext(file), "_clean.csv", sep = ""), na = "", col_names = FALSE)
   if(write_to_csv & append) readr::write_csv(df, path = file.path(dirname(file),paste(parse_filename(file),"full_clean.csv", sep = "_")), na = "", col_names = FALSE, append = TRUE)
-  tick(progbar, "completed", file)
+  tick(NULL, progbar, "completed", file)
   if(return_df) df
 }
 
