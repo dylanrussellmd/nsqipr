@@ -5,7 +5,9 @@
 
 [![Travis build
 status](https://travis-ci.com/dylanrussellmd/nsqipr.svg?token=HoLzyTtjbHZhKQ9MzmcE&branch=master)](https://travis-ci.com/dylanrussellmd/nsqipr)
-<img src='man/figures/nsqipr_hex.png' align="right" height="60" />
+<img src='man/figures/nsqipr_hex.png' align="right" height="60" /> [![R
+build
+status](https://github.com/dylanrussellmd/nsqipr/workflows/R-CMD-check/badge.svg)](https://github.com/dylanrussellmd/nsqipr/actions)
 <!-- badges: end -->
 
 ![NSQIPR Logo](man/figures/nsqipr_banner_alpha.png)
@@ -25,7 +27,7 @@ ACS NSQIP <sup>©</sup> is a nationally validated, risk-adjusted,
 outcomes-based program to measure and improve the quality of surgical
 care.
 
-As of 2020-08-24, there are currently [706
+As of 2020-08-25, there are currently [706
 hospitals](https://www.facs.org/search/nsqip-participants?allresults=)
 that participate in and contribute to the program. The entire database
 contains **more than 6.6 million cases** for data analysis.
@@ -47,7 +49,7 @@ become available. Excluded cases are:
 ## Publications
 
 The data from ACS NSQIP<sup>©</sup> is used to produce **approximately
-400 publications per year**. As of 2020-08-24, there are currently
+400 publications per year**. As of 2020-08-25, there are currently
 [2,728 publications](https://pubmed.ncbi.nlm.nih.gov/?term=nsqip)
 analyzing the ACS NSQIP<sup>©</sup> database.
 
@@ -85,7 +87,7 @@ We are not (yet) available on CRAN.
 
 ## Use
 
-1.  Excute all `.exe` executable files from ACS NSQIP<sup>©</sup> in a
+1.  Execute all `.exe` executable files from ACS NSQIP<sup>©</sup> in a
     single directory (`dir`) (do not change the default file names).
 2.  Now simply run `nsqip(dir)`.
 

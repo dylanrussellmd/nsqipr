@@ -20,6 +20,7 @@ library(magrittr)
 <!-- badges: start -->
 [![Travis build status](https://travis-ci.com/dylanrussellmd/nsqipr.svg?token=HoLzyTtjbHZhKQ9MzmcE&branch=master)](https://travis-ci.com/dylanrussellmd/nsqipr)
 <img src='man/figures/nsqipr_hex.png' align="right" height="60" />
+[![R build status](https://github.com/dylanrussellmd/nsqipr/workflows/R-CMD-check/badge.svg)](https://github.com/dylanrussellmd/nsqipr/actions)
 <!-- badges: end -->
 
 ![NSQIPR Logo](man/figures/nsqipr_banner_alpha.png)

@@ -8,3 +8,4 @@
 ^\.Renviron
 ^\.Rprofile
 ^gcloud-service-key\.json
+^\.github$
