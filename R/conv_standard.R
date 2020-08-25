@@ -1,4 +1,5 @@
-conv_to_standard <- function(file, return_df, write_to_csv, append, col_names) {
+# TODO: Figure out how to append CSVs while keeping first row as headers.
+conv_to_standard <- function(file, return_df, write_to_csv, append, headers, col_names) {
 
   progbar <- pb(write_to_csv)
   tick(NULL, progbar, "reading", file, 0)
@@ -10,7 +11,7 @@ conv_to_standard <- function(file, return_df, write_to_csv, append, col_names) {
     dplyr::select(!dplyr::any_of(redundant_cols)) %T>% tick(progbar, "ordering columns of", file) %>%
     dplyr::select(dplyr::any_of(col_order)) %T>% {if(write_to_csv) tick(NULL, progbar, "writing CSV for", file) else .}
 
-  if(write_to_csv & !append) readr::write_csv(df, path = paste(tools::file_path_sans_ext(file), "_clean.csv", sep = ""), na = "", col_names = FALSE)
+  if(write_to_csv & !append) readr::write_csv(df, path = paste(tools::file_path_sans_ext(file), "_clean.csv", sep = ""), na = "", col_names = headers)
   if(write_to_csv & append) readr::write_csv(df, path = file.path(dirname(file),paste(parse_filename(file),"full_clean.csv", sep = "_")), na = "", col_names = FALSE, append = TRUE)
   tick(NULL, progbar, "completed", file)
   if(return_df) df

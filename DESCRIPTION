@@ -33,6 +33,7 @@ Imports:
     purrr,
     tools,
     utils,
-    filesstrings
+    filesstrings,
+    progress
 Depends: 
-    R (>= 2.10)
+    R (>= 3.5.0)

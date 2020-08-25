@@ -4,7 +4,7 @@
 \alias{nsqip_dir}
 \title{Runs the \code{nsqip} function in a single directory.}
 \usage{
-nsqip_dir(dir, return_df, write_to_csv, append)
+nsqip_dir(dir, return_df, write_to_csv, append, headers)
 }
 \arguments{
 \item{dir}{directory to which the \code{nsqip} function is being applied.}
@@ -14,6 +14,8 @@ nsqip_dir(dir, return_df, write_to_csv, append)
 \item{write_to_csv}{write the resulting data frame to a \code{.csv} file. Produces individual files for each \code{.txt} input}
 
 \item{append}{writes the resulting data frames all to a single \code{.csv} file}
+
+\item{headers}{whether to include column headers in the generated \code{.csv} file}
 }
 \description{
 Utilized by \code{nsqip} after all files are parsed and respective directories are created.

@@ -8,6 +8,7 @@
 #' @docType package
 #' @name nsqipr
 #' @importFrom magrittr %>%
+#' @importFrom magrittr %T>%
 NULL
 
 ## quiets concerns of R CMD check for global variables being used.

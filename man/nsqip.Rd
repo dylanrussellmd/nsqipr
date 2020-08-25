@@ -4,7 +4,13 @@
 \alias{nsqip}
 \title{Clean NSQIP data}
 \usage{
-nsqip(path, return_df = TRUE, write_to_csv = FALSE, append = FALSE)
+nsqip(
+  path,
+  return_df = TRUE,
+  write_to_csv = FALSE,
+  append = FALSE,
+  headers = TRUE
+)
 }
 \arguments{
 \item{path}{path to file or directory.}
@@ -14,6 +20,8 @@ nsqip(path, return_df = TRUE, write_to_csv = FALSE, append = FALSE)
 \item{write_to_csv}{write the resulting data frame to a \code{.csv} file. Produces individual files for each \code{.txt} input}
 
 \item{append}{writes the resulting data frames all to a single \code{.csv} file}
+
+\item{headers}{whether to include column headers in the generated \code{.csv} file}
 }
 \value{
 a data frame of class \code{tibble}.
