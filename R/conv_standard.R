@@ -15,6 +15,10 @@ conv_to_standard <- function(file, return_df, write_to_csv, append, headers, col
   if(write_to_csv & append) readr::write_csv(df, path = file.path(dirname(file),paste(parse_filename(file),"full_clean.csv", sep = "_")), na = "", col_names = FALSE, append = TRUE)
   tick(NULL, progbar, "completed", file)
   if(return_df) return(df) else return(NULL)
+
+# Need to work in (or at least make it possible to) outputting tidy long data. In addition, should probably split into two tables (one patient, one procedures, one by case id)
+#  df1 %>% rename(othercpt0 = cpt, otherproc0 = prncptx, wrvu0 = workrvu) %>% pivot_longer(cols = c(starts_with("othercpt"), starts_with("otherproc"), starts_with("otherwrvu")), names_to = c(".value", "procedure"), names_pattern = "^other([a-z]*)(\\d)$", names_repair = "unique", values_drop_na = TRUE, names_transform = list(procedure = as.integer)) %>% mutate(procedure = procedure + 1) %>% select(caseid,procedure, cpt, proc, wrvu) %>% View()
+
 }
 
 set_up_df <- function(df, col_names) {
