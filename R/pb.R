@@ -8,7 +8,7 @@
 #'
 pb <- function(write_to_csv) {
   progress::progress_bar$new(
-    format = "(:spin)  :preface :what [:bar] :percent", total = 6 + write_to_csv, clear = FALSE, show_after = 0)
+    format = "(:spin)  :preface :what [:bar] :current/:total", total = 6 + write_to_csv, clear = FALSE, show_after = 0)
 }
 
 #' Increment a progress bar

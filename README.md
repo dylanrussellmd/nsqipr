@@ -98,6 +98,17 @@ TODO: Build example table of raw variables, clean variables, and type
 
 ## File Size
 
-`nsqipr` significantly reduces file sizes after cleaning the data.
+`nsqipr` significantly reduces file sizes after cleaning the data. The
+cumulative file size for the entire NSQIP database (not including
+targeted procedures) is reduced from 12.2 GB to 6.7 GB (a 45% decrease).
 
 <img src="man/figures/README-file_size-1.png" width="100%" />
+
+## Cleaning Time
+
+Compared to manually cleaning and combining data, `nsqipr` is blazing
+fast. The largest single file, acs\_nsqip\_puf17.txt, takes only 103
+seconds to clean. The entire NSQIP database (not including targeted
+procedures) can be cleaned and combined in only 12.3 minutes.
+
+<img src="man/figures/README-clean_time-1.png" width="100%" />

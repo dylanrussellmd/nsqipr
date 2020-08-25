@@ -76,8 +76,15 @@ We are not (yet) available on CRAN.
 TODO: Build example table of raw variables, clean variables, and type
 
 ## File Size
+```{r compute_size, echo=FALSE, include=FALSE}
+sizes <- sizedf %>% dplyr::group_by(type) %>% dplyr::summarise(sum(size))
+orig_size <- round(sizes[1, 2]/1000, 1)
+clean_size <- round(sizes[2, 2]/1000, 1)
+percent <- round((orig_size-clean_size)/orig_size*100, 0)
+```
 
-`nsqipr` significantly reduces file sizes after cleaning the data.
+
+`nsqipr` significantly reduces file sizes after cleaning the data. The cumulative file size for the entire NSQIP database (not including targeted procedures) is reduced from `r orig_size` GB to `r clean_size` GB (a `r percent`% decrease).
 
 ```{r file_size}
 sizedf %>%
@@ -86,6 +93,21 @@ sizedf %>%
   ggplot2::scale_fill_brewer(palette="Paired", labels = c("Before", "After")) +
   ggplot2::coord_flip() +
   ggplot2::labs(y = "File size (MB)") +
+  ggplot2::theme_minimal() +
+  ggplot2::theme(axis.title.y = ggplot2::element_blank(),
+                 legend.title = ggplot2::element_blank())
+```
+
+## Cleaning Time
+
+Compared to manually cleaning and combining data, `nsqipr` is blazing fast. The largest single file, `r mb$expr[which(mb$time == max(mb$time))]`, takes only `r max(mb$time)` seconds to clean. The entire NSQIP database (not including targeted procedures) can be cleaned and combined in only `r round(sum(mb$time)/60, 1)` minutes.
+
+```{r clean_time}
+mb %>%
+  ggplot2::ggplot(ggplot2::aes(x = expr, y = time)) +
+  ggplot2::geom_bar(stat = "identity", fill = "#56B4E9") +
+  ggplot2::coord_flip() +
+  ggplot2::labs(y = "Cleaning time (sec)") +
   ggplot2::theme_minimal() +
   ggplot2::theme(axis.title.y = ggplot2::element_blank(),
                  legend.title = ggplot2::element_blank())
