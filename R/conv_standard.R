@@ -14,7 +14,7 @@ conv_to_standard <- function(file, return_df, write_to_csv, append, headers, col
   if(write_to_csv & !append) readr::write_csv(df, path = paste(tools::file_path_sans_ext(file), "_clean.csv", sep = ""), na = "", col_names = headers)
   if(write_to_csv & append) readr::write_csv(df, path = file.path(dirname(file),paste(parse_filename(file),"full_clean.csv", sep = "_")), na = "", col_names = FALSE, append = TRUE)
   tick(NULL, progbar, "completed", file)
-  if(return_df) df
+  if(return_df) return(df) else return(NULL)
 }
 
 set_up_df <- function(df, col_names) {

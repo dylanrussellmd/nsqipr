@@ -20,11 +20,13 @@ nsqip <- function(path, return_df = TRUE, write_to_csv = FALSE, append = FALSE, 
   parse_files(files)
   dirs <- list.dirs(unique(dirname(files)), recursive = FALSE) # This allows this function to work whether the user passes a single file or a directory of files.
 
-  lapply(dirs,
+  df <- lapply(dirs,
          nsqip_dir,
          return_df = return_df, write_to_csv = write_to_csv, append = append, headers = headers)
 
-  usethis::ui_done('Successfullly cleaned all files in {usethis::ui_path(path)}.')
+  usethis::ui_done('Successfully cleaned all files in {usethis::ui_path(path)}.')
+
+  return(df)
 }
 
 #' Runs the \code{nsqip} function in a single directory.

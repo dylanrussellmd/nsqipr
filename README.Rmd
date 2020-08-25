@@ -66,7 +66,7 @@ We are not (yet) available on CRAN.
 
 ## Use
 
-  1. Excute all `.exe` executable files from ACS NSQIP<sup>&copy;</sup> in a single directory (`dir`) (do not change the default file names). 
+  1. Execute all `.exe` executable files from ACS NSQIP<sup>&copy;</sup> in a single directory (`dir`) (do not change the default file names). 
   2. Now simply run `nsqip(dir)`.
   
 `nsqipr` will take care of the rest. You're now ready to use the ACS NSQIP<sup>&copy;</sup> data for data analysis!
