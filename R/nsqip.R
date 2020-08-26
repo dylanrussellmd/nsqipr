@@ -16,7 +16,7 @@
 # TODO If only one type of PUF (i.e. just ACS, just targeted, etc.), then skip making directories.
 nsqip <- function(path, return_df = TRUE, write_to_csv = FALSE, append = FALSE, headers = TRUE) {
 
-  files <- get_file_or_dir(path)
+  files <- get_file_or_dir(path) # returns a
   parse_files(files)
   dirs <- list.dirs(unique(dirname(files)), recursive = FALSE) # This allows this function to work whether the user passes a single file or a directory of files.
 

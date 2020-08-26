@@ -39,7 +39,8 @@ conv_acs_cols <- function(df) {
       nothgrafl = tryCatch(conv_dn_comagraftpn(nothgrafl, pufyear), error = function(e) return(NULL)),
       othgrafl = tryCatch(conv_comagraftpn(othgrafl, pufyear), error = function(e) return(NULL)),
       dothgrafl = tryCatch(conv_dn_comagraftpn(dothgrafl, pufyear), error = function(e) return(NULL)),
-      typeintoc = tryCatch(conv_typeintoc(typeintoc), error = function(e) return(NULL))
+      typeintoc = tryCatch(conv_typeintoc(typeintoc), error = function(e) return(NULL)),
+      dindo = dindo(.)
     )
 }
 
