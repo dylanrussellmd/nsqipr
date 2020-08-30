@@ -52,13 +52,14 @@ checkAnyDead <- function(...) {
     apply(., 1, any)
 }
 
+
 #' Classifies a patient according to the Dindo-Clavien surgical complication grading scale.
 #'
-#'  @param df a dataframe including relevant columns containing information on specific post-operative complications.
+#' @param df a dataframe including relevant columns containing information on specific post-operative complications.
 #'
-#'  @return a numeric vector representing the Dindo-Clavien classification.
+#' @return a numeric vector representing the Dindo-Clavien classification.
 #'
-#'  @keywords internal
+#' @keywords internal
 #'
 dindo <- function(df) {
   e <- new.env()

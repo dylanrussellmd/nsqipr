@@ -25,6 +25,7 @@ set_up_df <- function(df, col_names) {
   df %>%
     dplyr::rename_with(., tolower) %>%
     dplyr::mutate(dplyr::across(dplyr::everything(), tolower)) %>%
+    #dplyr::mutate(dplyr::across(dplyr::everything(), furniture::washer, "unknown", "null", "n/a", "not documented", "none/not documented", "not entered","-99", -99)) %>%  NEEDS TO BE TESTED
     dplyr::mutate(dplyr::across(dplyr::everything(), dplyr::na_if, "unknown")) %>%
     dplyr::mutate(dplyr::across(dplyr::everything(), dplyr::na_if, "null")) %>%
     dplyr::mutate(dplyr::across(dplyr::everything(), dplyr::na_if, "n/a")) %>%
