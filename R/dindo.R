@@ -59,7 +59,7 @@ checkAnyDead <- function(...) {
 #'
 #' @return a numeric vector representing the Dindo-Clavien classification.
 #'
-#' @keywords internal
+#' @export
 #'
 dindo <- function(df) {
   e <- new.env()

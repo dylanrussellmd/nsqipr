@@ -15,4 +15,3 @@ a numeric vector representing the Dindo-Clavien classification.
 \description{
 Classifies a patient according to the Dindo-Clavien surgical complication grading scale.
 }
-\keyword{internal}
