@@ -4,4 +4,4 @@ language: R
 cache: packages
 branches:
   except:
-    keyval
+    - keyval
