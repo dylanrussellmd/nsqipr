@@ -45,7 +45,8 @@ conv_special_cols <- function(df, file) {
                "acs_nsqip_puf" = `conv_acs_cols`,
                "puf_tar_col" = `conv_col_cols`,
                "puf_tar_aaa" = `conv_aaa_cols`,
-               "puf_tar_aie" = `conv_aie_cols`)
+               "puf_tar_aie" = `conv_aie_cols`,
+               "puf_tar_pan" = `conv_pan_cols`)
   fn(df)
 }
 

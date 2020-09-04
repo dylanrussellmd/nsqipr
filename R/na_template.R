@@ -1,10 +1,10 @@
-create_na_template <- function(path) {
-  collect_column_names(path) %>%
+create_na_template <- function(files) {
+  collect_column_names(files) %>%
     na_template()
 }
 
-collect_column_names <- function(path) {
-  path %>%
+collect_column_names <- function(files) {
+  files %>%
     lapply(., get_headers) %>%
     unlist() %>%
     unique()
