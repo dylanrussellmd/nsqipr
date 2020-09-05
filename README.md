@@ -1,15 +1,15 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+<img src='man/figures/hex.png' align="right" height="400"/>
+
 <!-- badges: start -->
 
 [![Travis build
 status](https://travis-ci.com/dylanrussellmd/nsqipr.svg?token=HoLzyTtjbHZhKQ9MzmcE&branch=master)](https://travis-ci.com/dylanrussellmd/nsqipr)
-<img src='man/figures/hex.png' align="right" height="60" /> [![R build
+[![R build
 status](https://github.com/dylanrussellmd/nsqipr/workflows/R-CMD-check/badge.svg)](https://github.com/dylanrussellmd/nsqipr/actions)
 <!-- badges: end -->
-
-![NSQIPR Logo](man/figures/banner.png)
 
 What would you like to see implemented in `nsqipr`? [Open an
 issue](https://github.com/doctortickle/nsqipr/issues)\! Are you
