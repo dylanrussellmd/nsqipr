@@ -9,11 +9,12 @@
 #'
 #' @keywords internal
 #'
-get_file_or_dir <- function(path, pattern = "*.txt"){
-  if (file_test("-d", path)) {
-    result <- list.files(path = path, pattern = pattern,
-                         full.names = TRUE, recursive = FALSE)
-  } else if (file_test("-f", path)) {
+get_file_or_dir <- function(path, pattern = "^(acs_nsqip_puf|puf_tar_[a-z]{1,4})(?:\\d{2})?(?:.*)?\\.txt$"){
+  pattern <- stringr::regex(pattern, ignore_case = TRUE)
+  if (fs::is_dir(path)) {
+    result <- fs::dir_ls(path = path, pattern = pattern,
+                         type = "file", recurse = FALSE)
+  } else if (fs::is_file(path)) {
     result <- path
   } else {
     usethis::ui_stop("{usethis::ui_path(path)} is an invalid file or directory path.")
@@ -29,15 +30,13 @@ get_file_or_dir <- function(path, pattern = "*.txt"){
 #'
 parse_files <- function(files) {
 
-  dirnames <- files %>%
-    sapply(parse_filename)
-
-  base <- unique(sapply(files, dirname))
-  stopifnot("Are you sure the files are in the specified folder?" = length(base) == 1)
-
-  suppressMessages(create_dirs(dirnames, base)) # Suppress the messages from the filesstrings::create_dir function.
-
-  dirnames %>% move_file(base = base)
+  new_dirnames <- purrr::map_chr(files, parse_filename) # iterates over a list of file paths and parses out the base of the name i.e. acs_nsqip_puf, puf_tar_col, etc.
+  stopifnot("Are you sure the files are in the specified folder?" = length(new_dirnames) > 0)
+  base <- unique(purrr::map_chr(files, dirname)) # retrieves the original path by finding the unique base name
+  stopifnot("Something strange is happening. Move all the files you want cleaned to their own folder with nothing else in it and try again." = length(base) == 1)
+  dirs <- create_dirs(new_dirnames, base)
+  files %>% move_files() # Move files into the correct directory
+  return(dirs)
 }
 
 #' Parses a file name and returns a lower-case string of the extracted regular expression match.
@@ -49,10 +48,9 @@ parse_files <- function(files) {
 #' @keywords internal
 #'
 parse_filename <- function(file) {
-  pattern <- stringr::regex("acs_nsqip_puf|puf_tar_[a-z]{1,4}",
-                            ignore_case = TRUE)
-  stopifnot(stringr::str_detect(file, pattern))
-  stringr::str_extract(file, pattern) %>% stringr::str_to_lower()
+  pattern <- stringr::regex("acs_nsqip_puf|puf_tar_[a-z]{1,4}", ignore_case = TRUE)
+  stopifnot(stringr::str_detect(file, pattern)) # Double check that the file matches the pattern provided.
+  stringr::str_extract(file, pattern) %>% stringr::str_to_lower() # Extract the file and convert it to lower case.
 }
 
 #' Creates directories from a vector of desired directory names. Only creates unique directories.
@@ -63,53 +61,21 @@ parse_filename <- function(file) {
 #' @keywords internal
 #'
 create_dirs <- function(dirnames, base) {
-  dirnames %>%
+  dirs <- dirnames %>%
     unique() %>%
-    sapply(., create_path, base = base) %>%
-    sapply(filesstrings::create_dir)
+    purrr::map_chr(~fs::path(base, .)) %T>% # Create list of paths for new directories
+    fs::dir_create()  # Create each of these directories
 }
 
 #' Moves files from a parent directory to newly created subdirectories.
 #'
-#' @inheritParams create_dirs
+#' @param files character vector of files to move
 #'
 #' @keywords internal
 #'
-move_file <- function(dirnames, base) {
-  paste(dirnames, base)
-  suppressMessages(filesstrings::move_files(names(dirnames), file.path(base, dirnames))) # Suppress messages from the filesstrings::move_files function.
-}
-
-#' Creates a path to a directory.
-#'
-#' @param dir_name desired name of directory
-#' @inheritParams create_dirs
-#'
-#' @keywords internal
-#'
-create_path <- function(dir_name, base) {
-  if (file_test("-d", base)) {
-    return(file.path(check_separator(base), dir_name))
-  } else {
-    return(file.path(dirname(base), dir_name))
-  }
-}
-
-#' Checks a path name for a final back- or forward slash.
-#'
-#' @param path a directory path
-#'
-#' @keywords internal
-#'
-check_separator <- function(path) {
-  stringr::str_remove_all(path, "[:punct:]+$")
-}
-
-#' Opens a directory and lists all \code{.txt} files with full names.
-#'
-#' @inheritParams check_separator
-#'
-#' @keywords internal
-open_dir <- function(path) {
-  list.files(path, pattern = "*.txt", full.names = TRUE, recursive = FALSE)
+move_files <- function(files) {
+  files %>%　purrr::walk(function(x) {
+    to <- fs::path(fs::path_dir(x), parse_filename(x))
+    fs::file_move(x, to) # Move files into the correct directories
+  })
 }

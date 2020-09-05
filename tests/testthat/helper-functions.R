@@ -2,7 +2,7 @@ load(file.path("test_dataframe.rda"))
 
 test_set <- function(name) {
   testthat::test_that(paste("set_up_df function works correctly for",name), {
-    set_up_df(df(name, 1), df(name, "cols")) %>%
+    set_up_df(df(name, 1)) %>%
       purrr::imap(~testthat::expect_equal(.x, df(name, 2)[[.y]]))
   })
 
