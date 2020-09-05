@@ -33,8 +33,9 @@ Imports:
     purrr,
     tools,
     utils,
-    filesstrings,
     progress,
-    furniture
+    furniture,
+    fs,
+    vroom
 Depends: 
     R (>= 3.5.0)

@@ -74,7 +74,7 @@ create_dirs <- function(dirnames, base) {
 #' @keywords internal
 #'
 move_files <- function(files) {
-  files %>%　purrr::walk(function(x) {
+  files %>% purrr::walk(function(x) {
     to <- fs::path(fs::path_dir(x), parse_filename(x))
     fs::file_move(x, to) # Move files into the correct directories
   })

@@ -4,7 +4,10 @@
 \alias{get_file_or_dir}
 \title{Check if a path is a directory or a file}
 \usage{
-get_file_or_dir(path, pattern = "*.txt")
+get_file_or_dir(
+  path,
+  pattern = "^(acs_nsqip_puf|puf_tar_[a-z]{1,4})(?:\\\\d{2})?(?:.*)?\\\\.txt$"
+)
 }
 \arguments{
 \item{path}{a character vector of full path names; the default

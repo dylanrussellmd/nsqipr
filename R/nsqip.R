@@ -14,10 +14,11 @@
 #'
 nsqip <- function(path, return_df = TRUE, write_to_csv = FALSE, append = FALSE, headers = TRUE) {
 
+  usethis::ui_info("This could take a while (10-15 minutes depending on how many files)! Don't worry, its working...")
   files <- get_file_or_dir(path) # returns a character vector of matching file(s)
   dirs <- parse_files(files) # Creates directories and moves files into them
   dataframes <- dirs %>% purrr::map(nsqip_dir, return_df, write_to_csv, append, headers) # Runs nsqip_dir over each directory
-  usethis::ui_done('All files in {usethis::ui_path(path)} converted to {usethis::ui_field(nsqipr)} dataframes!')
+  usethis::ui_done('All files in {usethis::ui_path(path)} converted to {usethis::ui_field("nsqipr")} dataframes!')
   return(dataframes)
 }
 
