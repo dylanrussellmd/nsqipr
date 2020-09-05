@@ -17,7 +17,7 @@ load("R/sysdata.rda")
 library(magrittr)
 ```
 
-<img src='man/figures/hex.png' align="right" height="400"/>
+# nsqipr <img src='man/figures/hex.png' align="right" height="200"/>
 
 <!-- badges: start -->
 [![Travis build status](https://travis-ci.com/dylanrussellmd/nsqipr.svg?token=HoLzyTtjbHZhKQ9MzmcE&branch=master)](https://travis-ci.com/dylanrussellmd/nsqipr)

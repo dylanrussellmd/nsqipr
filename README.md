@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-<img src='man/figures/hex.png' align="right" height="400"/>
+# nsqipr <img src='man/figures/hex.png' align="right" height="200"/>
 
 <!-- badges: start -->
 
