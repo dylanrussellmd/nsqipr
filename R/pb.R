@@ -8,7 +8,7 @@
 #'
 pb <- function(write_to_csv) {
   progress::progress_bar$new(
-    format = "(:spin)  :preface :what [:bar] :current/:total", total = 6 + write_to_csv, clear = FALSE, show_after = 0)
+    format = "(:spin)  :preface :what [:bar] :current/:total", total = 5 + write_to_csv, show_after = 0)
 }
 
 #' Increment a progress bar
@@ -24,6 +24,6 @@ pb <- function(write_to_csv) {
 #' @keywords internal
 #'
 tick <- function(df = NULL, pb, preface, file, len = 1) {
-  pb$tick(len, tokens = list(what = basename(file), preface = preface))
+  pb$tick(len, tokens = list(what = file, preface = preface))
 }
 

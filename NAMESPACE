@@ -2,6 +2,5 @@
 
 export(dindo)
 export(nsqip)
-importFrom("utils","file_test")
 importFrom(magrittr,"%>%")
 importFrom(magrittr,"%T>%")
