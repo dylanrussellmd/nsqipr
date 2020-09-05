@@ -257,7 +257,7 @@ conv_pan_ductsize <- function(vec) {
 }
 
 conv_pan_open_assist <- function(vec) {
-  stringr::str_detect(vec, "w/ open assist")
+  stringr::str_detect(vec, "w/ open assist|hand assisted")
 }
 
 conv_pan_unplanned_conversion <- function(vec) {
