@@ -42,7 +42,9 @@ conv_to_standard <- function(df, dir, return_df, write_to_csv, append, headers, 
 set_up_df <- function(df) {
   df %>%
     dplyr::rename_with(., tolower) %>%
+    dplyr::rename(dplyr::any_of(c("race" = "race_new"))) %>%
     dplyr::mutate(dplyr::across(dplyr::everything(), tolower)) %>%
+    dplyr::mutate(dplyr::across(dplyr::everything(), stringr::str_squish)) %>%
     dplyr::mutate(dplyr::across(dplyr::everything(), furniture::washer, "unknown", "null", "n/a", "not documented", "none/not documented", "not entered","-99", -99))
 }
 
@@ -57,8 +59,8 @@ conv_type_cols <- function(df) {
     dplyr::mutate(dplyr::across(dplyr::any_of(reason_cols), conv_reasons))
 }
 
-conv_special_cols <- function(df, file) {
-  fn <- switch(parse_filename(file),
+conv_special_cols <- function(df, dir) {
+  fn <- switch(parse_filename(dir),
                "acs_nsqip_puf" = `conv_acs_cols`,
                "puf_tar_col" = `conv_col_cols`,
                "puf_tar_aaa" = `conv_aaa_cols`,

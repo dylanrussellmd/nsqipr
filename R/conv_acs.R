@@ -4,8 +4,8 @@ conv_acs_cols <- function(df) {
     dplyr::mutate(
       pufyear = tryCatch(conv_pufyear(caseid), error = function(e) return(NULL)),
       sex = tryCatch(conv_sex(sex), error = function(e) return(NULL)),
-      ethnicity_hispanic = tryCatch(conv_hispanic(ethnicity_hispanic, race), error = function(e) return(NULL)),
-      race = tryCatch(conv_race(race, race_new), error = function(e) return(NULL)),
+      #ethnicity_hispanic = tryCatch(conv_hispanic_race(race, ethnicity_hispanic), error = function(e) return(NULL)),
+      race = tryCatch(conv_race(race), error = function(e) return(NULL)),
       inout = tryCatch(conv_inout(inout), error = function(e) return(NULL)),
       attend = tryCatch(conv_attend(attend), error = function(e) return(NULL)),
       transt = tryCatch(conv_transt(transt), error = function(e) return(NULL)),
@@ -40,7 +40,8 @@ conv_acs_cols <- function(df) {
       othgrafl = tryCatch(conv_comagraftpn(othgrafl, pufyear), error = function(e) return(NULL)),
       dothgrafl = tryCatch(conv_dn_comagraftpn(dothgrafl, pufyear), error = function(e) return(NULL)),
       typeintoc = tryCatch(conv_typeintoc(typeintoc), error = function(e) return(NULL))
-    )
+    ) %>%
+    convert_hispanic()
 }
 
 conv_dn_comagraftpn <- function(vec, pufyear) {
@@ -51,33 +52,6 @@ conv_comagraftpn <- function(vec, pufyear) {
   ifelse(assert_before_puf11(pufyear), conv_complication(vec), NA)
 }
 
-conv_typeintoc <- function(vec) {
-  val <- c("cardiac arrest requiring cpr" = 1L,
-           "myocardial infarction" = 2L,
-           "unplanned intubation" = 3L)
-
-  unname(val[vec])
-}
-
-conv_airtra <- function(vec) {
-  val <- c("none" = 1L,
-           "lip laceration or hematoma" = 2L,
-           "tooth chipped, loosened or lost" = 3L,
-           "tongue laceration or hematoma" = 4L,
-           "pharyngeal laceration" = 5L,
-           "laryngeal laceration" = 6L,
-           "failure to intubate" = 7L)
-  unname(val[vec])
-}
-
-conv_opnote <- function(vec) {
-  val <- c("attending" = 1L,
-           "resident" = 2L,
-           "not available" = NA)
-
-  unname(val[vec])
-}
-
 conv_coma <- function(vec, pufyear) {
   ifelse(assert_before_puf11(pufyear), conv_yesno(vec), NA)
 }
@@ -86,14 +60,37 @@ assert_before_puf11 <- function(pufyear) {
   pufyear <= 5
 }
 
+conv_typeintoc <- function(vec) {
+  c(`Cardiac arrest requiring CPR` = "cardiac arrest requiring cpr",
+    `Myocardial infarction` = "myocardial infarction",
+    `Unplanned intubation` = "unplanned intubation"
+  ) %>% fact(vec)
+}
+
+conv_airtra <- function(vec) {
+  c(`None` = "none",
+    `Lip laceration or hematoma` = "lip laceration or hematoma",
+    `Tooth chipped, loosened, or lost` = "tooth chipped, loosened or lost",
+    `Tongue laceration or hematoma` = "tongue laceration or hematoma",
+    `Pharyngeal laceration` = "pharyngeal laceration",
+    `Laryngeal laceration` = "laryngeal laceration",
+    `Failure to intubate` = "failure to intubate"
+    ) %>% fact(vec)
+}
+
+conv_opnote <- function(vec) {
+  c(`Attending` = "attending",
+    `Resident` = "resident"
+    ) %>% fact(vec)
+}
+
 conv_attend <- function(vec) {
-  val <- c("attending alone" = 1L,
-           "attending in or" = 2L,
-           "attending & resident in or" = 2L,
-           "attending in or suite" = 3L,
-           "attending not present, but available" = 4L,
-           "not entered" = NA)
-  unname(val[vec])
+  c(`Attending alone` = "attending alone",
+    `Attending and resident in OR` = "attending in or",
+    `Attending and resident in OR` = "attending & resident in or",
+    `Attending in OR suite` = "attending in or suite",
+    `Attending not present, but available` = "attending not present, but available"
+    ) %>% fact(vec)
 }
 
 #TODO confirm that these caseids are accurate for checking pufyear.
@@ -103,75 +100,47 @@ conv_pufyear <- function(caseid) {
   findInterval(caseid, vec) + 1
 }
 
-conv_hispanic <- function(vec, race) {
-  ifelse(!is.na(race), stringr::str_detect(race, "^hispanic,"), conv_yesno(vec))
+conv_hispanic_race <- function(race, ethnicity_hispanic) {
+  stringr::str_detect(race, "^hispanic,")
 }
 
-conv_race <- function(race, race_new, pacific = "asian") {
+convert_hispanic <- function(df) {
+  if("ethnicity_hispanic" %in% names(df)) {
+    ifelse(is.na(df[["ethnicity_hispanic"]]), stringr::str_detect(df[["race"]], "^hispanic,"), conv_yesno(df[["ethnicity_hispanic"]]))
+  } else {
+    stringr::str_detect(df[["race"]], "^hispanic,")
+  }
+}
 
+conv_race <- function(vec, pacific = "asian") {
   pacific <- switch(pacific,
-                    "asian" = 2L,
-                    "hawaiian" = 4L,
-                    "exclude" = NA)
+                    "asian" = "Asian",
+                    "hawaiian" = "Native Hawaiian or Pacific islander")
 
-  race_val <- c("hispanic, white" = 5L,
-                "hispanic, black" = 2L,
-                "hispanic, color unknown" = NA,
-                "black, not of hispanic origin" = 2L,
-                "white, not of hispanic origin" = 5L,
-                "american indian or alaska native" = 1L,
-                "asian or pacific islander" = pacific,
-                "unknown" = NA)
-  race_vec <- unname(race_val[race])
+  orig <- c("hispanic, white",
+            "white, not of hispanic origin",
+            "white",
+            "hispanic, black",
+            "black, not of hispanic origin",
+            "black or african american",
+            "american indian or alaska native",
+            "asian",
+            "native hawaiian or pacific islander",
+            "asian or pacific islander")
+  names <- c("White", "White", "White", "Black", "Black", "Black", "American Indian or Alaska native", "Asian", "Native Hawaiian or Pacific islander", pacific)
 
-  race_new_val <- c("american indian or alaska native" = 1L,
-                    "asian" = 2L,
-                    "black or african american" = 3L,
-                    "native hawaiian or pacific islander" = 4L,
-                    "white" = 5L,
-                    "unknown/not reported" = NA)
-  race_new_vec <- unname(race_new_val[race_new])
-
-  dplyr::coalesce(race_vec, race_new_vec)
+  setNames(orig, names) %>% fact(vec)
 }
 
-conv_numeric <- function(vec) {
-  round(as.numeric(vec), digits = 3)
-}
+# conv_hispanic <- function(ethnicity_hispanic, race) {
+#   ifelse(!is.na(race), stringr::str_detect(race, "^hispanic,"), conv_yesno(ethnicity_hispanic))
+# }
 
 conv_wound_closure <- function(vec) {
-  val <- c("all layers of incision (deep and superficial) fully closed" = 1L,
-           "only deep layers closed; superficial left open" = 2L,
-           "no layers of incision are surgically closed" = 3L)
-  unname(val[vec])
-}
-
-conv_reasons <- function(vec) {
-  val <- c("superficial incisional ssi" = 1L,
-           "deep incisional ssi" = 2L,
-           "organ/space ssi" = 3L,
-           "wound disruption" = 4L,
-           "pneumonia" = 5L,
-           "unplanned intubation" = 6L,
-           "pulmonary embolism" = 7L,
-           "on ventilator > 48 hours" = 8L,
-           "progressive renal insufficiency" = 9L,
-           "acute renal failure" = 10L,
-           "urinary tract infection" = 11L,
-           "cva" = 12L,
-           "cardiac arrest requiring cpr" = 13L,
-           "myocardial infarction" = 14L,
-           "bleeding requiring transfusion (72h of surgery start time)" = 15L,
-           "vein thrombosis requiring therapy" = 16L,
-           "dvt requiring therapy" = 16L,
-           "sepsis" = 17L,
-           "septic shock" = 18L,
-           "other (list icd 9 code)" =19L,
-           "other (list icd 10 code)" = 20L,
-           "c. diff" = 21L,
-           "graft/prosthesis/flap failure" = 22L,
-           "peripheral nerve injury" = 23L)
-  unname(val[vec])
+  c(`All layers of incision (deep and superficial) fully closed` = "all layers of incision (deep and superficial) fully closed",
+    `Only deep layers closed; superficial left open` = "only deep layers closed; superficial left open",
+    `No layers of incision are surgically closed` = "no layers of incision are surgically closed"
+    ) %>% fact(vec)
 }
 
 conv_sex <- function(vec) {
@@ -182,108 +151,87 @@ conv_inout <- function(vec) {
   stringr::str_detect(vec, "^inpatient$")
 }
 
-conv_complication <- function(vec) {
-  !stringr::str_detect(vec, "no complication")
-}
-
 conv_age <- function(vec) {
   as.integer(ifelse(stringr::str_detect(vec, "90+"), "90", vec))
 }
 
-conv_numscale <- function(vec) {
-  as.integer(stringr::str_extract(vec,"^\\d"))
-}
-
 conv_transt <- function(vec) {
-  val <- c("from acute care hospital inpatient" = 1L,
-           "acute care hospital" = 1L,
-           "va acute care hospital" = 1L,
-           "not transferred (admitted from home)" = 2L,
-           "admitted directly from home" = 2L,
-           "nursing home - chronic care - intermediate care" = 3L,
-           "chronic care facility" = 3L,
-           "va chronic care facility" = 3L,
-           "outside emergency department" = 4L,
-           "transfer from other" = 5L,
-           "other" = 5L,
-           "unknown" = NA)
-  unname(val[vec])
+  c(`Acute care hospital` = "from acute care hospital inpatient",
+    `Acute care hospital` = "acute care hospital",
+    `Acute care hospital` = "va acute care hospital",
+    `Admitted from home` = "not transferred (admitted from home)",
+    `Admitted from home` = "admitted directly from home",
+    `Chronic care facility` = "nursing home - chronic care - intermediate care",
+    `Chronic care facility` = "chronic care facility",
+    `Chronic care facility` = "va chronic care facility",
+    `Outside emergency department` = "outside emergency department",
+    `Other` = "transfer from other",
+    `Other` = "other"
+    ) %>% fact(vec)
+
 }
 
 conv_dischdest <- function(vec) {
-  val <- c("skilled care, not home" = 1L,
-           "unskilled facility not home" = 2L,
-           "facility which was home" = 3L,
-           "home" = 4L,
-           "separate acute care" = 5L,
-           "rehab" = 6L,
-           "expired" = 7L,
-           "against medical advice (ama)" = 8L,
-           "multi-level senior community" = 9L,
-           "hospice" = 10L,
-           "unknown" = NA)
-  unname(val[vec])
+  c(`Skilled care, not home` = "skilled care, not home",
+    `Unskilled facility, not home` = "unskilled facility not home",
+    `Facility which was home` = "facility which was home",
+    `Home` = "home",
+    `Separate acute care` = "separate acute care",
+    `Rehab` = "rehab",
+    `Expired` = "expired",
+    `Against medical advice (AMA)` = "against medical advice (ama)",
+    `Multi-level senior community` = "multi-level senior community",
+    `Hospice` = "hospice"
+    ) %>% fact(vec)
 }
 
 conv_anesthes <- function(vec) {
-  val <- c("epidural" = 1L,
-           "general" = 2L,
-           "local" = 3L,
-           "mac/iv sedation" = 4L,
-           "monitored anesthesia care" = 4L,
-           "none" = 5L,
-           "other" = 6L,
-           "regional" = 7L,
-           "spinal" = 8L,
-           "unknown" = NA)
-  unname(val[vec])
+  c(`Epidural` = "epidural",
+    `General` = "general",
+    `Local` = "local",
+    `Monitored anesthesia care` = "mac/iv sedation",
+    `Monitored anesthesia care` = "monitored anesthesia care",
+    `None` = "none",
+    `Other` = "other",
+    `Regional` = "regional",
+    `Spinal` = "spinal"
+    ) %>% fact(vec)
 }
 
 conv_surgspec <- function(vec) {
-  val <- c("cardiac surgery" = 1L,
-           "general surgery" = 2L,
-           "gynecology" = 3L,
-           "neurosurgery" = 4L,
-           "orthopedics" = 5L,
-           "otolaryngology (ent)" = 6L,
-           "plastics" = 7L,
-           "thoracic" = 8L,
-           "urology" = 9L,
-           "vascular" = 10L,
-           "interventional radiologist" = 11L,
-           "ophthalmology" = 12L,
-           "podiatry" = 13L,
-           "oral surgery" = 14L,
-           "other" = 15L,
-           "unknown" = NA)
-  unname(val[vec])
-}
-
-conv_notno <- function(vec) {
-  vec != "no"
+  val <- c(`Cardiac surgery` = "cardiac surgery",
+           `General surgery` = "general surgery",
+           `Gynecology` = "gynecology",
+           `Neurosurgery` = "neurosurgery",
+           `Orthopedics` = "orthopedics",
+           `Otolaryngology (ENT)` = "otolaryngology (ent)",
+           `Plastics` = "plastics",
+           `Thoracic` = "thoracic",
+           `Urology` = "urology",
+           `Vascular` = "vascular",
+           `Interventional radiologist` = "interventional radiologist",
+           `Ophthalmology` = "ophthalmology",
+           `Podiatry` = "podiatry",
+           `Oral surgery` = "oral surgery",
+           `Other` = "other"
+           ) %>% fact(vec)
 }
 
 insulin <- function(vec) {
   conv_notno(vec) & stringr::str_detect(vec, "^insulin$")
 }
 
-conv_yesno <- function(vec) {
-  stringr::str_detect(vec, "^yes$")
-}
-
 when_dyspnea <- function(vec) {
-  val <- c("at rest" = 1L,
-           "moderate exertion" = 2L,
-           "no" = NA)
-  unname(val[vec])
+  c(`At rest` = "at rest",
+    `Moderate exertion` = "moderate exertion"
+    ) %>% fact(vec)
 }
 
 conv_fnstatus <- function(vec) {
-  val <- c("independent" = 1L,
-           "partially dependent" = 2L,
-           "totally dependent" = 3L,
-           "unknown" = NA)
-  unname(val[vec])
+  c(`Independent` = "independent",
+    `Partially dependent` = "partially dependent",
+    `Totally dependent` = "totally dependent"
+    ) %>% fact(vec)
 }
 
 conv_prsepis <- function(vec) {
@@ -291,9 +239,8 @@ conv_prsepis <- function(vec) {
 }
 
 type_prsepis <- function(vec) {
-  val <- c("sirs" = 1L,
-           "sepsis" = 2L,
-           "septic shock" = 3L,
-           "none" = NA)
-  unname(val[vec])
+  c(`SIRS` = "sirs",
+    `Sepsis` = "sepsis",
+    `Septic shock` = "septic shock"
+    ) %>% fact(vec)
 }
