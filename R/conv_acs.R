@@ -4,7 +4,7 @@ conv_acs_cols <- function(df) {
     dplyr::mutate(
       pufyear = tryCatch(conv_pufyear(caseid), error = function(e) return(NULL)),
       sex = tryCatch(conv_sex(sex), error = function(e) return(NULL)),
-      #ethnicity_hispanic = tryCatch(conv_hispanic_race(race, ethnicity_hispanic), error = function(e) return(NULL)),
+      ethnicity_hispanic = tryCatch(conv_hispanic(.), error = function(e) return(NULL)),
       race = tryCatch(conv_race(race), error = function(e) return(NULL)),
       inout = tryCatch(conv_inout(inout), error = function(e) return(NULL)),
       attend = tryCatch(conv_attend(attend), error = function(e) return(NULL)),
@@ -40,8 +40,7 @@ conv_acs_cols <- function(df) {
       othgrafl = tryCatch(conv_comagraftpn(othgrafl, pufyear), error = function(e) return(NULL)),
       dothgrafl = tryCatch(conv_dn_comagraftpn(dothgrafl, pufyear), error = function(e) return(NULL)),
       typeintoc = tryCatch(conv_typeintoc(typeintoc), error = function(e) return(NULL))
-    ) %>%
-    convert_hispanic()
+    )
 }
 
 conv_dn_comagraftpn <- function(vec, pufyear) {
@@ -100,16 +99,20 @@ conv_pufyear <- function(caseid) {
   findInterval(caseid, vec) + 1
 }
 
-conv_hispanic_race <- function(race, ethnicity_hispanic) {
-  stringr::str_detect(race, "^hispanic,")
-}
-
-convert_hispanic <- function(df) {
+conv_hispanic <- function(df) {
   if("ethnicity_hispanic" %in% names(df)) {
-    ifelse(is.na(df[["ethnicity_hispanic"]]), stringr::str_detect(df[["race"]], "^hispanic,"), conv_yesno(df[["ethnicity_hispanic"]]))
+    conv_hispanic_helper(df[["race"]], df[["ethnicity_hispanic"]])
   } else {
     stringr::str_detect(df[["race"]], "^hispanic,")
   }
+}
+
+conv_hispanic_helper <- function(race, ethnicity_hispanic) {
+  ifelse((race %in% c("white","black or african american") | is.na(race)), # only PUFs after RACE_NEW was introduced should have these possible races.
+         conv_yesno(ethnicity_hispanic),
+         ifelse(race %in% c("american indian or alaska native","asian","native hawaiian or pacific islander","asian or pacific islander"),
+                FALSE,
+                stringr::str_detect(race, "^hispanic,")))
 }
 
 conv_race <- function(vec, pacific = "asian") {
@@ -131,10 +134,6 @@ conv_race <- function(vec, pacific = "asian") {
 
   setNames(orig, names) %>% fact(vec)
 }
-
-# conv_hispanic <- function(ethnicity_hispanic, race) {
-#   ifelse(!is.na(race), stringr::str_detect(race, "^hispanic,"), conv_yesno(ethnicity_hispanic))
-# }
 
 conv_wound_closure <- function(vec) {
   c(`All layers of incision (deep and superficial) fully closed` = "all layers of incision (deep and superficial) fully closed",
