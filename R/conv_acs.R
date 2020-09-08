@@ -4,6 +4,7 @@ conv_acs_cols <- function(df) {
     dplyr::mutate(
       pufyear = tryCatch(conv_pufyear(caseid), error = function(e) return(NULL)),
       sex = tryCatch(conv_sex(sex), error = function(e) return(NULL)),
+      race = check_race_new(.),
       ethnicity_hispanic = tryCatch(conv_hispanic(.), error = function(e) return(NULL)),
       race = tryCatch(conv_race(race), error = function(e) return(NULL)),
       inout = tryCatch(conv_inout(inout), error = function(e) return(NULL)),
@@ -133,6 +134,16 @@ conv_race <- function(vec, pacific = "asian") {
   names <- c("White", "White", "White", "Black", "Black", "Black", "American Indian or Alaska native", "Asian", "Native Hawaiian or Pacific islander", pacific)
 
   setNames(orig, names) %>% fact(vec)
+}
+
+check_race_new <- function(df) {
+  if(all(c("race_new", "race") %in% names(df))) {
+    dplyr::coalesce(df[["race"]],df[["race_new"]])
+  } else if("race_new" %in% names(df)) {
+    df[["race_new"]]
+  } else {
+    df[["race"]]
+  }
 }
 
 conv_wound_closure <- function(vec) {

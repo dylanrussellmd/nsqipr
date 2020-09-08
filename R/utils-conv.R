@@ -1,5 +1,5 @@
 fact <- function(levels, vec) {
-  factor(vec, levels) %>% forcats::fct_recode(!!!levels)
+  factor(stringr::str_squish(vec), levels) %>% forcats::fct_recode(!!!levels)
 }
 
 conv_yesno <- function(vec) {

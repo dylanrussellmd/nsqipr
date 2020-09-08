@@ -12,7 +12,7 @@ nsqip_dir <- function(dir, return_df, write_to_csv, append, headers) {
   tick(NULL, progbar, "reading", dir, 0)
   dataframe <- fs::dir_ls(dir) %>%
     purrr::map_dfr(function(x) {
-      vroom::vroom(x, col_types = vroom::cols(.default = "c"), progress = FALSE) %>%
+      readr::read_tsv(x, col_types = readr::cols(.default = "c"), progress = FALSE) %>%
         set_up_df()
   }) %>%
   conv_to_standard(dir, return_df, write_to_csv, append, headers, progbar)
@@ -42,9 +42,7 @@ conv_to_standard <- function(df, dir, return_df, write_to_csv, append, headers, 
 set_up_df <- function(df) {
   df %>%
     dplyr::rename_with(., tolower) %>%
-    dplyr::rename(dplyr::any_of(c("race" = "race_new"))) %>%
     dplyr::mutate(dplyr::across(dplyr::everything(), tolower)) %>%
-    #dplyr::mutate(dplyr::across(dplyr::everything(), stringr::str_squish)) %>%
     dplyr::mutate(dplyr::across(dplyr::everything(), furniture::washer, "unknown", "unknown/not reported", "null", "n/a", "not documented", "none/not documented", "not entered","-99", -99))
 }
 
