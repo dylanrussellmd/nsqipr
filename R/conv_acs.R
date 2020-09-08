@@ -1,10 +1,10 @@
 # TODO Explore error function e and try to only capture the error for variable not found.
 conv_acs_cols <- function(df) {
   df %>%
+    dplyr::rename(dplyr::any_of(c("race" = "race_new"))) %>%
     dplyr::mutate(
       pufyear = tryCatch(conv_pufyear(caseid), error = function(e) return(NULL)),
       sex = tryCatch(conv_sex(sex), error = function(e) return(NULL)),
-      race = check_race_new(.),
       ethnicity_hispanic = tryCatch(conv_hispanic(.), error = function(e) return(NULL)),
       race = tryCatch(conv_race(race), error = function(e) return(NULL)),
       inout = tryCatch(conv_inout(inout), error = function(e) return(NULL)),
@@ -136,16 +136,6 @@ conv_race <- function(vec, pacific = "asian") {
   setNames(orig, names) %>% fact(vec)
 }
 
-check_race_new <- function(df) {
-  if(all(c("race_new", "race") %in% names(df))) {
-    dplyr::coalesce(df[["race"]],df[["race_new"]])
-  } else if("race_new" %in% names(df)) {
-    df[["race_new"]]
-  } else {
-    df[["race"]]
-  }
-}
-
 conv_wound_closure <- function(vec) {
   c(`All layers of incision (deep and superficial) fully closed` = "all layers of incision (deep and superficial) fully closed",
     `Only deep layers closed; superficial left open` = "only deep layers closed; superficial left open",
@@ -209,22 +199,22 @@ conv_anesthes <- function(vec) {
 }
 
 conv_surgspec <- function(vec) {
-  val <- c(`Cardiac surgery` = "cardiac surgery",
-           `General surgery` = "general surgery",
-           `Gynecology` = "gynecology",
-           `Neurosurgery` = "neurosurgery",
-           `Orthopedics` = "orthopedics",
-           `Otolaryngology (ENT)` = "otolaryngology (ent)",
-           `Plastics` = "plastics",
-           `Thoracic` = "thoracic",
-           `Urology` = "urology",
-           `Vascular` = "vascular",
-           `Interventional radiologist` = "interventional radiologist",
-           `Ophthalmology` = "ophthalmology",
-           `Podiatry` = "podiatry",
-           `Oral surgery` = "oral surgery",
-           `Other` = "other"
-           ) %>% fact(vec)
+  c(`Cardiac surgery` = "cardiac surgery",
+    `General surgery` = "general surgery",
+    `Gynecology` = "gynecology",
+    `Neurosurgery` = "neurosurgery",
+    `Orthopedics` = "orthopedics",
+    `Otolaryngology (ENT)` = "otolaryngology (ent)",
+    `Plastics` = "plastics",
+    `Thoracic` = "thoracic",
+    `Urology` = "urology",
+    `Vascular` = "vascular",
+    `Interventional radiologist` = "interventional radiologist",
+    `Ophthalmology` = "ophthalmology",
+    `Podiatry` = "podiatry",
+    `Oral surgery` = "oral surgery",
+    `Other` = "other"
+    ) %>% fact(vec)
 }
 
 insulin <- function(vec) {
