@@ -50,3 +50,19 @@ conv_reasons <- function(vec) {
   ) %>% fact(vec)
 }
 
+setlowernames <- function(df) {
+  data.table::setnames(df, stringi::stri_trans_tolower(names(df)))
+}
+
+setlower <- function(df) {
+  for(j in seq_along(df)){
+    data.table::set(df, j=j, value=stringi::stri_trans_tolower(df[[j]]))
+  }
+}
+
+setna <- function(df, val) {
+  for(j in seq_along(df)){
+    data.table::set(df, i=which(df[[j]] %in% val), j=j, value=NA)
+  }
+}
+

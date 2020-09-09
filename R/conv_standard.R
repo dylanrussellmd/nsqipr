@@ -12,7 +12,7 @@ nsqip_dir <- function(dir, rds, csv, dataframe) {
    lapply(function(file) {
       progbar <- pb(rds, csv, dataframe)
       tick(progbar, "reading", file, 0)
-      data.table::fread(file, sep = "\t", colClasses = character(), data.table = FALSE, showProgress = FALSE) %>%
+      data.table::fread(file, sep = "\t", colClasses = character(), showProgress = FALSE) %>%
         conv_to_standard(file, rds, csv, dataframe, progbar)
   })
   usethis::ui_done('Successfully cleaned all files in {usethis::ui_path(dir)}.')
@@ -22,7 +22,7 @@ nsqip_dir <- function(dir, rds, csv, dataframe) {
 conv_to_standard <- function(df, file, rds, csv, dataframe, progbar) {
 
   df %>%
-    set_up_df(file, progbar) %>%
+    setup(file, progbar) %>%
     conv_type_cols(file, progbar) %>%
     conv_special_cols(file, progbar) %>%
     conv_order_cols(file, progbar) %>%
@@ -36,23 +36,13 @@ conv_to_standard <- function(df, file, rds, csv, dataframe, progbar) {
 
 }
 
-set_up_df <- function(df, file, progbar) {
-  tick(progbar, "setting up", file)
-  data.table::setnames(df, stringi::stri_trans_tolower(names(x)))
+setup <- function(df, file, progbar) {
+  tick(progbar, "converting names to lower case in", file)
+  setlowernames(df)
+  tick(progbar, "converting values to lower case in", file)
   setlower(df)
+  tick(progbar, "setting NA values in", file)
   setna(df, c("unknown", "unknown/not reported", "null", "n/a", "not documented", "none/not documented", "not entered","-99"))
-}
-
-setna <- function(df, val) {
-  for(j in seq_along(df)){
-    data.table::set(df, i=which(df[[j]] %in% val), j=j, value=NA)
-  }
-}
-
-setlower <- function(df) {
-  for(j in seq_along(df)){
-    data.table::set(df, j=j, value=stringi::stri_trans_tolower(df[[j]]))
-  }
 }
 
 conv_type_cols <- function(df, file, progbar) {
@@ -66,6 +56,11 @@ conv_type_cols <- function(df, file, progbar) {
     dplyr::mutate(dplyr::across(dplyr::any_of(numeric_cols), conv_numeric)) %>%
     dplyr::mutate(dplyr::across(dplyr::any_of(reason_cols), conv_reasons))
 }
+
+conv_integer <- function(df, integer_cols) {
+  for (j in integer_cols) data.table::set(df, j = j, value = as.integer(df[[j]]))
+}
+
 
 conv_special_cols <- function(df, file, progbar) {
   tick(progbar, "converting unique columns of", file)
