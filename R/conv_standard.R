@@ -38,11 +38,21 @@ conv_to_standard <- function(df, file, rds, csv, dataframe, progbar) {
 
 set_up_df <- function(df, file, progbar) {
   tick(progbar, "setting up", file)
-  df[, sapply(data.table::.SD, stringi::stri_trans_tolower)]
-  df %>%
-    dplyr::rename_with(., tolower) %>%
-    dplyr::mutate(dplyr::across(dplyr::everything(), tolower)) %>%
-    dplyr::mutate(dplyr::across(dplyr::everything(), furniture::washer, "unknown", "unknown/not reported", "null", "n/a", "not documented", "none/not documented", "not entered","-99", -99))
+  data.table::setnames(df, stringi::stri_trans_tolower(names(x)))
+  setlower(df)
+  setna(df, c("unknown", "unknown/not reported", "null", "n/a", "not documented", "none/not documented", "not entered","-99"))
+}
+
+setna <- function(df, val) {
+  for(j in seq_along(df)){
+    data.table::set(df, i=which(df[[j]] %in% val), j=j, value=NA)
+  }
+}
+
+setlower <- function(df) {
+  for(j in seq_along(df)){
+    data.table::set(df, j=j, value=stringi::stri_trans_tolower(df[[j]]))
+  }
 }
 
 conv_type_cols <- function(df, file, progbar) {
@@ -70,6 +80,7 @@ conv_special_cols <- function(df, file, progbar) {
 
 conv_order_cols <- function(df, file, progbar) {
   tick(progbar, "ordering columns of", file)
+  #Think about using set order
   df %>%
     dplyr::select(!dplyr::any_of(redundant_cols)) %>%
     dplyr::select(dplyr::any_of(col_order))
