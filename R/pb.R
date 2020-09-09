@@ -6,16 +6,15 @@
 #'
 #' @keywords internal
 #'
-pb <- function(write_to_csv) {
+pb <- function(rds, csv, dataframe) {
   progress::progress_bar$new(
-    format = "(:spin)  :preface :what [:bar] :current/:total", total = 6 + write_to_csv, show_after = 0)
+    format = "(:spin)  :preface :what [:bar] :current/:total", total = 5 + rds + csv + dataframe, show_after = 0)
 }
 
 #' Increment a progress bar
 #'
 #' Increments a progress bar by a specified number of ticks. Meant to be used in a pipe.
 #'
-#' @param df accepts a dummy variable that allows it to be used in a pipe.
 #' @param pb a progress bar object
 #' @param preface the desired preface text to a progress bar
 #' @param file the file being processed
@@ -23,7 +22,7 @@ pb <- function(write_to_csv) {
 #'
 #' @keywords internal
 #'
-tick <- function(df = NULL, pb, preface, file, len = 1) {
+tick <- function(pb, preface, file, len = 1) {
   pb$tick(len, tokens = list(what = file, preface = preface))
 }
 
