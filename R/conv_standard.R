@@ -10,23 +10,23 @@
 nsqip_dir <- function(dir, rds, csv, dataframe) {
   fs::dir_ls(dir) %>%
    lapply(function(file) {
-      progbar <- pb(rds, csv, dataframe)
-      tick(progbar, "reading", file, 0)
-      data.table::fread(file, sep = "\t", colClasses = character(), showProgress = FALSE) %>%
-        conv_to_standard(file, rds, csv, dataframe, progbar)
+     conv_to_standard(file, rds, csv, dataframe, progbar)
   })
   usethis::ui_done('Successfully cleaned all files in {usethis::ui_path(dir)}.')
 }
 
 # TODO: Figure out how to append CSVs while keeping first row as headers.
-conv_to_standard <- function(df, file, rds, csv, dataframe, progbar) {
+conv_to_standard <- function(file, rds, csv, dataframe, progbar) {
+  progbar <- pb(rds, csv, dataframe)
+  filename <- fs::path_file(file)
+  tick(progbar, "reading", filename, 0)
 
-  df %>%
-    setup(file, progbar) %>%
-    conv_type_cols(file, progbar) %>%
-    conv_special_cols(file, progbar) %>%
-    conv_order_cols(file, progbar) %>%
-    output(file, rds, csv, dataframe, progbar)
+  df <- data.table::fread(file, sep = "\t", colClasses = character(), showProgress = FALSE)
+  setup(df, filename, progbar)
+  conv_type_cols(df, filename, progbar)
+  df <- conv_special_cols(df, filename, progbar)
+  conv_order_cols(df, filename, progbar)
+  output(df, file, rds, csv, dataframe, progbar)
 
   tick(progbar, "completed", file)
   usethis::ui_done('Successfully cleaned {usethis::ui_path(file)}.')
@@ -45,20 +45,27 @@ setup <- function(df, file, progbar) {
   setna(df, c("unknown", "unknown/not reported", "null", "n/a", "not documented", "none/not documented", "not entered","-99"))
 }
 
-conv_type_cols <- function(df, file, progbar) {
-  tick(progbar, "converting generic columns of", file)
-  df %>%
-    dplyr::mutate(dplyr::across(dplyr::any_of(date_cols), ~ lubridate::ymd(.x, truncated = 2))) %>%
-    dplyr::mutate(dplyr::across(dplyr::any_of(complication_cols), conv_complication)) %>%
-    dplyr::mutate(dplyr::across(dplyr::any_of(numscale_cols), conv_numscale)) %>%
-    dplyr::mutate(dplyr::across(dplyr::any_of(yes_no_cols), conv_yesno)) %>%
-    dplyr::mutate(dplyr::across(dplyr::any_of(integer_cols), as.integer)) %>%
-    dplyr::mutate(dplyr::across(dplyr::any_of(numeric_cols), conv_numeric)) %>%
-    dplyr::mutate(dplyr::across(dplyr::any_of(reason_cols), conv_reasons))
+setupdev <- function(df) {
+  setlowernames(df)
+  setlower(df)
+  setna(df, c("unknown", "unknown/not reported", "null", "n/a", "not documented", "none/not documented", "not entered","-99"))
 }
 
-conv_integer <- function(df, integer_cols) {
-  for (j in integer_cols) data.table::set(df, j = j, value = as.integer(df[[j]]))
+conv_type_cols <- function(df, file, progbar) {
+  tick(progbar, "converting integer columns of", file)
+  conv_(df, integer_cols, as.integer)
+  tick(progbar, "converting numeric columns of", file)
+  conv_(df, numeric_cols, as.numeric)
+  tick(progbar, "converting complication columns of", file)
+  conv_(df, complication_cols, conv_complication)
+  tick(progbar, "converting number scale columns of", file)
+  conv_(df, numscale_cols, conv_numscale)
+  tick(progbar, "converting yes/no columns of", file)
+  conv_(df, yes_no_cols, conv_yesno)
+  tick(progbar, "converting reason for readmission columns of", file)
+  conv_(df, reason_cols, conv_reasons)
+  tick(progbar, "converting date columns of", file)
+  conv_(df, date_cols, conv_date)
 }
 
 
@@ -75,10 +82,9 @@ conv_special_cols <- function(df, file, progbar) {
 
 conv_order_cols <- function(df, file, progbar) {
   tick(progbar, "ordering columns of", file)
-  #Think about using set order
-  df %>%
-    dplyr::select(!dplyr::any_of(redundant_cols)) %>%
-    dplyr::select(dplyr::any_of(col_order))
+  colorder(df)
+  tick(progbar, "removing redundant columns from", file)
+  remove_redundant(df)
 }
 
 

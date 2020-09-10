@@ -4,13 +4,7 @@
 \alias{nsqip}
 \title{Clean NSQIP data}
 \usage{
-nsqip(
-  path,
-  return_df = TRUE,
-  write_to_csv = FALSE,
-  append = FALSE,
-  headers = TRUE
-)
+nsqip(path, rds = TRUE, csv = TRUE, dataframe = FALSE)
 }
 \arguments{
 \item{path}{path to file or directory.}
@@ -22,9 +16,6 @@ nsqip(
 \item{append}{writes the resulting data frames all to a single \code{.csv} file}
 
 \item{headers}{whether to include column headers in the generated \code{.csv} file}
-}
-\value{
-a data frame of class \code{tibble}.
 }
 \description{
 Converts a single NSQIP \code{.txt} or a directory of NSQIP \code{.txt} files into a standardized NSQIP data frame.

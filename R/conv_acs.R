@@ -44,6 +44,86 @@ conv_acs_cols <- function(df) {
     )
 }
 
+# THIS CHANGES EVERYTHING
+fnstatus1 <- list(Independent = "independent",
+                 `Partially dependent` = "partially dependent",
+                 `Totally dependent` = "totally dependent")
+fnstatus2 <- fnstatus1
+type_prsepsis <- list(SIRS = "sirs",
+                      Sepsis = "sepsis",
+                      `Septic shock` = "septic shock")
+typeintoc <- list(`Cardiac arrest requiring CPR` = "cardiac arrest requiring cpr",
+                  `Myocardial infarction` = "myocardial infarction",
+                  `Unplanned intubation` = "unplanned intubation")
+airtra <- list(None = "none",
+               `Lip laceration or hematoma` = "lip laceration or hematoma",
+               `Tooth chipped, loosened, or lost` = "tooth chipped, loosened or lost",
+               `Tongue laceration or hematoma` = "tongue laceration or hematoma",
+               `Pharyngeal laceration` = "pharyngeal laceration",
+               `Laryngeal laceration` = "laryngeal laceration",
+               `Failure to intubate` = "failure to intubate")
+opnote <- list(Attending = "attending",
+               Resident = "resident")
+attend <- list(`Attending alone` = "attending alone",
+               `Attending and resident in OR` = c("attending in or","attending & resident in or"),
+               `Attending in OR suite` = "attending in or suite",
+               `Attending not present, but available` = "attending not present, but available")
+wound_closure <- list(`All layers of incision (deep and superficial) fully closed` = "all layers of incision (deep and superficial) fully closed",
+                      `Only deep layers closed; superficial left open` = "only deep layers closed; superficial left open",
+                      `No layers of incision are surgically closed` = "no layers of incision are surgically closed")
+transt <- list(`Acute care hospital` = c("from acute care hospital inpatient","acute care hospital","va acute care hospital"),
+               `Admitted from home` = c("not transferred (admitted from home)","admitted directly from home"),
+               `Chronic care facility` = c("nursing home - chronic care - intermediate care","chronic care facility","va chronic care facility"),
+               `Outside emergency department` = "outside emergency department",
+               Other = c("transfer from other","other"))
+
+#' Converts readmission reasons to a factor
+#'
+#' @param vec a character vector containing readmission reasons
+#' @return a factor vector
+#'
+#' @details Formats factors accordingly:
+#'
+#' | \bold{Original}| \bold{Level}  | \bold{Label}  |
+#' | -------------  |:-------------:| -----:|
+#' | "superficial incisional ssi"       | sssi | Superficial incisional SSI |
+#'
+#'
+#' @md
+#' @keywords internal
+#' @examples
+#'
+#' x <- c("2000", "1900", "2020", "1950")
+#' conv_date(x)
+#'
+conv_reasons <- function(vec) {
+  c(`Superficial incisional SSI` = "superficial incisional ssi",
+    `Deep incisional SSI` = "deep incisional ssi",
+    `Organ-space SSI` = "organ/space ssi",
+    `Wound disruption` = "wound disruption",
+    `Pneumonia` = "pneumonia",
+    `Unplanned intubation` = "unplanned intubation",
+    `Pulmonary embolism` = "pulmonary embolism",
+    `On ventilator > 48 hours` = "on ventilator > 48 hours",
+    `Progressive renal insufficiency` = "progressive renal insufficiency",
+    `Acute renal failure` = "acute renal failure",
+    `Urinary tract infection` = "urinary tract infection",
+    `Cerebrovascular accident` = "cva",
+    `Cardiac arrest requiring CPR` = "cardiac arrest requiring cpr",
+    `Myocardial infarction` = "myocardial infarction",
+    `Bleeding requiring transfusion (within 72 hours of surgery start time)` = "bleeding requiring transfusion (72h of surgery start time)",
+    `Vein thrombosis requiring therapy` = "vein thrombosis requiring therapy",
+    `Vein thrombosis requiring therapy` = "dvt requiring therapy",
+    `Sepsis` = "sepsis",
+    `Septic shock` = "septic shock",
+    `Other` = "other (list icd 9 code)",
+    `Other` = "other (list icd 10 code)",
+    `C. difficile` = "c. diff",
+    `Graft/prosthesis/flap failure` = "graft/prosthesis/flap failure",
+    `Peripheral nerve injury` = "peripheral nerve injury"
+  ) %>% fact(vec)
+}
+
 conv_dn_comagraftpn <- function(vec, pufyear) {
   ifelse(assert_before_puf11(pufyear), as.integer(vec), NA)
 }
@@ -60,38 +140,37 @@ assert_before_puf11 <- function(pufyear) {
   pufyear <= 5
 }
 
-conv_typeintoc <- function(vec) {
-  c(`Cardiac arrest requiring CPR` = "cardiac arrest requiring cpr",
-    `Myocardial infarction` = "myocardial infarction",
-    `Unplanned intubation` = "unplanned intubation"
-  ) %>% fact(vec)
-}
+# conv_typeintoc <- function(vec) {
+#   c(`Cardiac arrest requiring CPR` = "cardiac arrest requiring cpr",
+#     `Myocardial infarction` = "myocardial infarction",
+#     `Unplanned intubation` = "unplanned intubation"
+#   ) %>% fact(vec)
+# }
 
-conv_airtra <- function(vec) {
-  c(`None` = "none",
-    `Lip laceration or hematoma` = "lip laceration or hematoma",
-    `Tooth chipped, loosened, or lost` = "tooth chipped, loosened or lost",
-    `Tongue laceration or hematoma` = "tongue laceration or hematoma",
-    `Pharyngeal laceration` = "pharyngeal laceration",
-    `Laryngeal laceration` = "laryngeal laceration",
-    `Failure to intubate` = "failure to intubate"
-    ) %>% fact(vec)
-}
+# conv_airtra <- function(vec) {
+#   c(`None` = "none",
+#     `Lip laceration or hematoma` = "lip laceration or hematoma",
+#     `Tooth chipped, loosened, or lost` = "tooth chipped, loosened or lost",
+#     `Tongue laceration or hematoma` = "tongue laceration or hematoma",
+#     `Pharyngeal laceration` = "pharyngeal laceration",
+#     `Laryngeal laceration` = "laryngeal laceration",
+#     `Failure to intubate` = "failure to intubate") %>% fact(vec)
+# }
 
-conv_opnote <- function(vec) {
-  c(`Attending` = "attending",
-    `Resident` = "resident"
-    ) %>% fact(vec)
-}
+# conv_opnote <- function(vec) {
+#   c(`Attending` = "attending",
+#     `Resident` = "resident"
+#     ) %>% fact(vec)
+# }
 
-conv_attend <- function(vec) {
-  c(`Attending alone` = "attending alone",
-    `Attending and resident in OR` = "attending in or",
-    `Attending and resident in OR` = "attending & resident in or",
-    `Attending in OR suite` = "attending in or suite",
-    `Attending not present, but available` = "attending not present, but available"
-    ) %>% fact(vec)
-}
+# conv_attend <- function(vec) {
+#   c(`Attending alone` = "attending alone",
+#     `Attending and resident in OR` = "attending in or",
+#     `Attending and resident in OR` = "attending & resident in or",
+#     `Attending in OR suite` = "attending in or suite",
+#     `Attending not present, but available` = "attending not present, but available"
+#     ) %>% fact(vec)
+# }
 
 #TODO confirm that these caseids are accurate for checking pufyear.
 conv_pufyear <- function(caseid) {
@@ -136,12 +215,12 @@ conv_race <- function(vec, pacific = "asian") {
   setNames(orig, names) %>% fact(vec)
 }
 
-conv_wound_closure <- function(vec) {
-  c(`All layers of incision (deep and superficial) fully closed` = "all layers of incision (deep and superficial) fully closed",
-    `Only deep layers closed; superficial left open` = "only deep layers closed; superficial left open",
-    `No layers of incision are surgically closed` = "no layers of incision are surgically closed"
-    ) %>% fact(vec)
-}
+# conv_wound_closure <- function(vec) {
+#   c(`All layers of incision (deep and superficial) fully closed` = "all layers of incision (deep and superficial) fully closed",
+#     `Only deep layers closed; superficial left open` = "only deep layers closed; superficial left open",
+#     `No layers of incision are surgically closed` = "no layers of incision are surgically closed"
+#     ) %>% fact(vec)
+# }
 
 conv_sex <- function(vec) {
   stringr::str_detect(vec, "^male$")
@@ -155,21 +234,21 @@ conv_age <- function(vec) {
   as.integer(ifelse(stringr::str_detect(vec, "90+"), "90", vec))
 }
 
-conv_transt <- function(vec) {
-  c(`Acute care hospital` = "from acute care hospital inpatient",
-    `Acute care hospital` = "acute care hospital",
-    `Acute care hospital` = "va acute care hospital",
-    `Admitted from home` = "not transferred (admitted from home)",
-    `Admitted from home` = "admitted directly from home",
-    `Chronic care facility` = "nursing home - chronic care - intermediate care",
-    `Chronic care facility` = "chronic care facility",
-    `Chronic care facility` = "va chronic care facility",
-    `Outside emergency department` = "outside emergency department",
-    `Other` = "transfer from other",
-    `Other` = "other"
-    ) %>% fact(vec)
-
-}
+# conv_transt <- function(vec) {
+#   c(`Acute care hospital` = "from acute care hospital inpatient",
+#     `Acute care hospital` = "acute care hospital",
+#     `Acute care hospital` = "va acute care hospital",
+#     `Admitted from home` = "not transferred (admitted from home)",
+#     `Admitted from home` = "admitted directly from home",
+#     `Chronic care facility` = "nursing home - chronic care - intermediate care",
+#     `Chronic care facility` = "chronic care facility",
+#     `Chronic care facility` = "va chronic care facility",
+#     `Outside emergency department` = "outside emergency department",
+#     `Other` = "transfer from other",
+#     `Other` = "other"
+#     ) %>% fact(vec)
+#
+# }
 
 conv_dischdest <- function(vec) {
   c(`Skilled care, not home` = "skilled care, not home",

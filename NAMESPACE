@@ -2,5 +2,6 @@
 
 export(dindo)
 export(nsqip)
+importFrom(data.table,":=")
 importFrom(magrittr,"%>%")
 importFrom(magrittr,"%T>%")
