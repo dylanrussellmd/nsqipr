@@ -21,7 +21,8 @@ conv_(df, cols, f, ..., newcol)
 Apply a given function to specified columns in a data table
 }
 \details{
-This function \bold{modifies by reference}.
+This function \bold{modifies by reference}. If passed a column name that does not exist in the
+provided data table, this will simply return the original data.table unmodified without error.
 }
 \examples{
 x <- data.table::data.table(x = rep("APPLE", 10), y = rep("BANANA", 10), z = rep("CHERRY", 10))

@@ -18,7 +18,8 @@ a data table
 Set data table columns to a specified order
 }
 \details{
-This function \bold{modifies by reference}.
+This function \bold{modifies by reference}. If a column that is not present is supplied
+to \code{col_order}, it will simply skip over it without error.
 }
 \examples{
 x <- data.table::data.table(c = c(1,2,3), b = c(1,2,3), a = c(1,2,3))

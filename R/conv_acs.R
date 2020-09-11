@@ -1,21 +1,8 @@
-# TODO Explore error function e and try to only capture the error for variable not found.
-# conv_acs_cols <- function(df) {
-#   df %>%
-#     dplyr::rename(dplyr::any_of(c("race" = "race_new"))) %>%
-#     dplyr::mutate(
-#      *  ethnicity_hispanic = tryCatch(conv_hispanic(.), error = function(e) return(NULL)),
-#       * race = tryCatch(conv_race(race), error = function(e) return(NULL)),
-#       wound_closure = tryCatch(conv_wound_closure(wound_closure), error = function(e) return(NULL)),
-#       *pnapatos = tryCatch(dplyr::coalesce(cpneumon, pnapatos), error = function(e) return(NULL)),
-#       *readmission1 = tryCatch(dplyr::coalesce(readmission, readmission1), error = function(e) return(NULL)),
-#       *unplannedreadmission1 = tryCatch(dplyr::coalesce(unplanreadmission, unplannedreadmission1), error = function(e) return(NULL)),
-#       *reoperation1 = tryCatch(dplyr::coalesce(reoperation, reoperation1), error = function(e) return(NULL)),
-#     )
-# }
-
-conv_acs_cols <- function(df, filename) {
-  data.table::setnames(df, "race_new","race")
+conv_acs_cols <- function(df, filename, factor_cols) {
   get_pufyear(df, filename)
+  data.table::setnames(df, "race_new","race", skip_absent = TRUE)
+  conv_hispanic(df)
+  conv_(df, "race", conv_race)
   conv_(df, "sex", conv_sex)
   conv_(df, "inout", conv_inout)
   conv_(df, "diabetes", insulin, newcol = "insulin")
@@ -24,8 +11,13 @@ conv_acs_cols <- function(df, filename) {
   conv_(df, "dyspnea", conv_notno)
   conv_(df, "prsepis", type_prsepis, newcol = "type_prsepis")
   conv_(df, "prsepis", conv_notno)
+  conv_(df, "pnapatos", coalesce, df[["cpneumon"]])
+  conv_(df, "readmission1", coalesce, df[["readmission"]])
+  conv_(df, "unplannedreadmission1", coalesce, df[["unplanreadmission"]])
+  conv_(df, "reoperation1", coalesce, df[["reoperation"]])
+  #TODO Need to figure out how to  coalesce these, rename them, and get rid of them in pufs that only have the unnumbered versions
+  check_comaneurograft(df)
 }
-
 
 fnstatus1 <- list(Independent = "independent",
                  `Partially dependent` = "partially dependent",
@@ -125,6 +117,12 @@ surgspec <- list(`Cardiac surgery` = "cardiac surgery",
 #'
 #' @param df a data.table from which to remove the coma, neuro deficit, and graft columns
 #'
+#' @details According to NSQIP, Graft failure, Coma, and Peripheral Nerve Injury should not be
+#' considered accurate for any PUF after 2010 (see the \link[https://www.facs.org/quality-programs/acs-nsqip/participant-use]{NSQIP} website).
+#'
+#' @return a data.table
+#' @keywords internal
+#'
 #' @examples
 #' x <- data.table::data.table(coma = c(TRUE, TRUE, FALSE), cnscoma = c(TRUE, TRUE, FALSE), ncnscoma = c(1,2,3), dcnscoma = c(1,2,3),
 #'                             neurodef = c(TRUE, TRUE, FALSE), nneurodef = c(1,2,3), dneurodef = c(1,2,3),
@@ -145,42 +143,96 @@ check_comaneurograft <- function(df) {
     cols <- c("coma","cnscoma","ncnscoma","dcnscoma","neurodef","nneurodef","dneurodef","othgrafl","nothgrafl","dothgrafl")
     for(j in intersect(cols, names(df))) data.table::set(df, j = j, value = NA)
   }
+  invisible(df)
 }
 
+#' Add or update hispanic ethnicity column
+#'
+#' @param df a data.table to add to or update with an \code{ethnicity_hispanic} column
+#' @param race a character vector containing race
+#' @param ethnicity_hispanic a character vector containing "yes" and "no" values regarding hispanic ethnicity
+#'
+#' @details \code{ethnicity_hispanic} was not added until the 2008 NSQIP PUF when \code{race} was revised to
+#' \code{race_new}. Data regarding hispanic ethnicity was hard coded directly into the old \code{race} variable
+#' (such as "Hispanic, white"). In order to marry early and later datasets, this information must be extracted
+#' from \code{race} and a new \code{ethnicity_hispanic} column created.
+#'
+#' If the data provided already has a \code{ethnicity_hispanic} column present, this column is simply converted
+#' into a logical vector.
+#'
+#' @return a data table
+#' @keywords internal
+#'
+#' @examples
+#' x <- data.table::data.table(race = c("hispanic, white", "white, not of hispanic origin","hispanic, black","black, not of hispanic origin",
+#' "american indian or alaska native","asian","native hawaiian or pacific islander","asian or pacific islander"))
+#' conv_hispanic(x)
+#' x
+#'
+#' x <- data.table::data.table(race = c("hispanic, white", "white, not of hispanic origin","white","hispanic, black", "black, not of hispanic origin","black or african american",
+#' + "american indian or alaska native","asian","native hawaiian or pacific islander","asian or pacific islander"),
+#' + ethnicity_hispanic = c(NA, NA, "yes", NA, NA, NA, NA, NA, NA, NA))
+#' conv_hispanic(x)
+#' x
+#'
 conv_hispanic <- function(df) {
   if("ethnicity_hispanic" %in% names(df)) {
-    conv_hispanic_helper(df[["race"]], df[["ethnicity_hispanic"]])
+    vec <- conv_hispanic_helper(df)
   } else {
-    stringr::str_detect(df[["race"]], "^hispanic,")
+    vec <- stringi::stri_detect_regex(df[["race"]], "^hispanic,", opts_regex = list(case_insensitive = TRUE))
   }
+  data.table::set(df, j = "ethnicity_hispanic", value = vec)
 }
 
-conv_hispanic_helper <- function(race, ethnicity_hispanic) {
-  ifelse((race %in% c("white","black or african american") | is.na(race)), # only PUFs after RACE_NEW was introduced should have these possible races.
-         conv_yesno(ethnicity_hispanic),
-         ifelse(race %in% c("american indian or alaska native","asian","native hawaiian or pacific islander","asian or pacific islander"),
+#' @describeIn conv_hispanic A helper function for updating the \code{ethnicity_hispanic} column
+conv_hispanic_helper <- function(df) {
+  ifelse((df[["race"]] %in% c("white","black or african american") | is.na(df[["race"]])), # only PUFs after RACE_NEW was introduced should have these possible races.
+         conv_yesno(df[["ethnicity_hispanic"]]),
+         ifelse(df[["race"]] %in% c("american indian or alaska native","asian","native hawaiian or pacific islander","asian or pacific islander"),
                 FALSE,
-                stringr::str_detect(race, "^hispanic,")))
+                stringi::stri_detect_regex(df[["race"]], "^hispanic,", opts_regex = list(case_insensitive = TRUE))))
 }
 
+
+#' Convert race to factor
+#'
+#' @param vec a character vector of races to be converted to a factor
+#' @param pacific whether to consider "asian or pacific islander" as part of the "Native Hawaiian or Pacific islander"
+#' level or part of the "Asian" level.
+#'
+#' @details 2005-2007 NSQIP PUFs included a race called "Asian or Pacific islander". Later PUFs split these into "Asian" and
+#' "Native Hawaiian or Pacific islander". In order to combine PUFs, a decision must be made as to which group to assign
+#' "Asian or Pacific islander" to. To assign them to "Asian", \code{pacific} should be set to "asian". To assign them to
+#' "Native Hawaiian or Pacific islander", \code{pacific} should be set to "hawaiian".
+#'
+#' @return a factor vector
+#'
+#' @keywords internal
+#' @examples
+#' x <- c("white","black or african american","asian or pacific islander")
+#' conv_race(x)
+#' x
+#'
+#' x <- c("white","black or african american","asian or pacific islander")
+#' conv_race(x, pacific = "hawaiian")
+#' x
 conv_race <- function(vec, pacific = "asian") {
-  pacific <- switch(pacific,
-                    "asian" = "Asian",
-                    "hawaiian" = "Native Hawaiian or Pacific islander")
+  asian <- list(White = c("hispanic, white", "white, not of hispanic origin","white"),
+                Black = c("hispanic, black","black, not of hispanic origin", "black or african american"),
+                `American Indian or Alaska native` = "american indian or alaska native",
+                `Asian` = c("asian", "asian or pacific islander"),
+                `Native Hawaiian or Pacific islander` = "native hawaiian or pacific islander")
+  hawaiian <- list(White = c("hispanic, white", "white, not of hispanic origin","white"),
+                   Black = c("hispanic, black","black, not of hispanic origin", "black or african american"),
+                   `American Indian or Alaska native` = "american indian or alaska native",
+                   `Asian` = "asian",
+                   `Native Hawaiian or Pacific islander` = c("native hawaiian or pacific islander","asian or pacific islander"))
 
-  orig <- c("hispanic, white",
-            "white, not of hispanic origin",
-            "white",
-            "hispanic, black",
-            "black, not of hispanic origin",
-            "black or african american",
-            "american indian or alaska native",
-            "asian",
-            "native hawaiian or pacific islander",
-            "asian or pacific islander")
-  names <- c("White", "White", "White", "Black", "Black", "Black", "American Indian or Alaska native", "Asian", "Native Hawaiian or Pacific islander", pacific)
+  levels <- switch(pacific,
+                    "asian" = asian,
+                    "hawaiian" = hawaiian)
 
-  setNames(orig, names) %>% fact(vec)
+  vec %^% levels
 }
 
 #' Convert sex to logical

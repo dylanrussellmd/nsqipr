@@ -268,7 +268,8 @@ conv_factor <- function(df, factor_cols) {
 #' @param col_order a character vector of column names in the desired order
 #' @return a data table
 #'
-#' @details This function \bold{modifies by reference}.
+#' @details This function \bold{modifies by reference}. If a column that is not present is supplied
+#' to \code{col_order}, it will simply skip over it without error.
 #'
 #' @keywords internal
 #' @examples
@@ -299,5 +300,27 @@ colorder <- function(df, col_order) {
 #'
 #' @importFrom data.table :=
 remove_undesired <- function(df, undesired_cols) {
-  df[, intersect(undesired_cols, names(df)) := NULL]
+  for(j in intersect(undesired_cols, names(df))) data.table::set(df, j=j, value = NULL)
+  invisible(df)
 }
+
+#' Coalesce two columns
+#'
+#' A simple wrapper around \code{\link[data.table:fcoalesce]{fcoalesce}}.
+#'
+#' @param new the newer column to be coalesced into. Will take priority if both
+#' columns are have values at the same position.
+#' @param old the older column to be coalesced.
+#'
+#' @return a vector of the type of \code{new}
+#' @keywords internal
+#'
+#' @examples
+#' x = c(11L, NA, 13L, NA, 15L, NA)
+#' y = c(NA, 12L, 5L, NA, NA, NA)
+#' coalesce(x, y)
+#'
+coalesce <- function(new, old) {
+  data.table::fcoalesce(new, old)
+}
+#TODO THIS NEEDS TESTING WRITTEN

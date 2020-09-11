@@ -24,9 +24,10 @@ conv_to_standard <- function(file, rds, csv, datatable, progbar) {
   df <- data.table::fread(file, sep = "\t", colClasses = character(), showProgress = FALSE)
   setup(df, filename, progbar)
   conv_type_cols(df, filename, progbar)
-  df <- conv_special_cols(df, filename, progbar)
+  conv_special_cols(df, filename, progbar)
+  conv_factor_cols(df, filename, progbar)
   conv_order_cols(df, filename, progbar)
-  #output(df, file, rds, csv, datatable, progbar)
+  output(df, file, rds, csv, datatable, progbar)
 
   tick(progbar, "completed", filename)
   usethis::ui_done('Successfully cleaned {usethis::ui_path(file)}.')
@@ -72,6 +73,11 @@ conv_special_cols <- function(df, filename, progbar) {
                "puf_tar_aie" = `conv_aie_cols`,
                "puf_tar_pan" = `conv_pan_cols`)
   fn(df, filename)
+}
+
+conv_factor_cols <- function(df, filename, progbar) {
+  tick(progbar, "converting factor columns of", filename)
+  conv_factor(df, factor_cols)
 }
 
 conv_order_cols <- function(df, filename, progbar) {

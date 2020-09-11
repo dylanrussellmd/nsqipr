@@ -8,7 +8,7 @@
 #'
 pb <- function(rds, csv, datatable) {
   progress::progress_bar$new(
-    format = "(:spin)  :preface :what [:bar] :current/:total", total = 12 + rds + csv + datatable, show_after = 0)
+    format = "(:spin)  :preface :what [:bar] :current/:total", total = 14 + rds + csv + datatable, show_after = 0)
 }
 
 #' Increment a progress bar

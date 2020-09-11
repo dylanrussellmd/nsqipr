@@ -10,15 +10,14 @@ when_dyspnea(vec)
 \item{vec}{a character vector of values to convert}
 }
 \value{
-a logical vector
+a factor vector
 }
 \description{
 Parse a column for type of dyspnea
 }
 \details{
 NSQIP encodes the \code{dyspnea} column as either "no", "at rest", or "moderate exertion".
-This function checks that the value is both \bold{not} "no" and also equal to "insulin". Returns
-FALSE if either "no" or "non-insulin". If given NA, will return NA.
+This function factors the vector for the levels "At rest" and "Moderate exertion".
 }
 \examples{
 

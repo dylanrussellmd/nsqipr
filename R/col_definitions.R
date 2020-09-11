@@ -12,10 +12,9 @@ integer_cols <- c("caseid","height","weight","optime","tothlos", "admqtr","htood
 
 numeric_cols <- c("prsodm","prbun","prcreat","pralbum","prbili","prsgot","pralkph","prwbc","prhct","prplate","prptt","prinr","prpt", "mortprob","morbprob", "workrvu", "otherwrvu1", "otherwrvu2", "otherwrvu3", "otherwrvu4", "otherwrvu5", "otherwrvu6", "otherwrvu7", "otherwrvu8", "otherwrvu9", "otherwrvu10", "conwrvu1", "conwrvu2", "aaa_andiam", "pan_amylase_pod1","pan_amylase_pod230")
 
-#reason_cols <- c("readmsuspreason1", "readmunrelsusp1", "readmsuspreason2", "readmunrelsusp2", "readmsuspreason3", "readmunrelsusp3","readmsuspreason4", "readmunrelsusp4", "readmsuspreason5", "readmunrelsusp5")
+factor_cols <- c("fnstatus1","fnstatus2","typeintoc","airtra","opnote","attend","wound_closure","transt","readmsuspreason1","readmunrelsusp1","readmsuspreason2","readmunrelsusp2","readmsuspreason3","readmunrelsusp3","readmsuspreason4","readmunrelsusp4","readmsuspreason5","readmunrelsusp5","dischdest","anesthes","anesthes_other","surgspec")
 
 redundant_cols <- c("race_new","readmission","unplanreadmission","reoperation", "aaa_andiam_unk", "col_steroid_unk","col_oral_antibiotic_unk","col_chemo_unk","col_margins_unk","col_ileus_unk","col_mech_bowel_prep_unk", "pan_jaundice_unk", "pan_chemo_unk", "pan_radio_unk","pan_drains_unk","pan_amylase_pod1_unk","pan_amylase_pod230_unk","pan_amylase_unk","pan_drain_removal_unk","pan_percdrainage")
-
 
 ## ----- INDIVIDUAL PUF/TARGETED COLUMN DEFINITIONS ----
 # THESE SHOULD HAVE ALL COLUMNS INCLUDING REDUNDANT COLUMSN AND COLUMNS ADDED BY THE UNIQUE COLUMN FUNCTIONS

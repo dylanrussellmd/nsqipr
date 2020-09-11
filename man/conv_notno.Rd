@@ -16,14 +16,14 @@ a logical vector
 Convert "no" columns to logicals
 }
 \details{
-Matches the case-insensitive fixed string \code{"no"} and negates the result.
-Any string that does not match will return TRUE. NA will return NA.
+Matches the case-insensitive fixed string \code{"no"} and \code{"none"} and negates the result.
+Any string that does not match either of these will return TRUE. NA will return NA.
 }
 \examples{
 
 x <- data.frame(x = rep("no", 10), y = rep("NO", 10), z = rep("yes", 10),
-xx = rep("", 10), yy = rep(NA, 10))
-lapply(x , conv_notno)
+xx = rep("", 10), yy = rep(NA, 10), zz = rep("NONE", 10))
+lapply(x, conv_notno)
 
 }
 \keyword{internal}
