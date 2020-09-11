@@ -4,7 +4,7 @@
 \alias{pb}
 \title{Create a progress bar}
 \usage{
-pb(rds, csv, dataframe)
+pb(rds, csv, datatable)
 }
 \arguments{
 \item{write_to_csv}{boolean value indicating if the user would like to write to a CSV.}

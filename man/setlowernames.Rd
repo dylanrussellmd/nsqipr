@@ -7,17 +7,20 @@
 setlowernames(df)
 }
 \arguments{
-\item{df}{a data frame to convert names to lower case}
+\item{df}{a data table to convert names to lower case}
 }
 \value{
-a data frame
+a data table
 }
 \description{
 Convert column names to lower case
 }
+\details{
+This function \bold{modifies by reference}.
+}
 \examples{
 
-x <- data.frame(X = NA, Y = NA, Z = NA)
+x <- data.table(X = NA, Y = NA, Z = NA)
 setlowernames(x)
 names(x)
 

@@ -1,11 +1,14 @@
 #' Convert column names to lower case
 #'
-#' @param df a data frame to convert names to lower case
-#' @return a data frame
+#' @param df a data table to convert names to lower case
+#' @return a data table
 #' @keywords internal
+#'
+#' @details This function \bold{modifies by reference}.
+#'
 #' @examples
 #'
-#' x <- data.frame(X = NA, Y = NA, Z = NA)
+#' x <- data.table(X = NA, Y = NA, Z = NA)
 #' setlowernames(x)
 #' names(x)
 #'
@@ -15,12 +18,15 @@ setlowernames <- function(df) {
 
 #' Convert all variables to lower case
 #'
-#' @param df a data frame to convert to lower case
-#' @return a data frame
+#' @param df a data table to convert to lower case
+#' @return a data table
 #' @keywords internal
+#'
+#' @details This function \bold{modifies by reference}.
+#'
 #' @examples
 #'
-#' x <- data.frame(x = rep("APPLE", 10), y = rep("BANANA", 10), z = rep("CHERRY", 10))
+#' x <- data.table::data.table(x = rep("APPLE", 10), y = rep("BANANA", 10), z = rep("CHERRY", 10))
 #' setlower(x)
 #' x
 #'
@@ -33,10 +39,13 @@ setlower <- function(df) {
 
 #' Convert all strings matching vector to NA
 #'
-#' @param df a data frame to convert values to NA
+#' @param df a data table to convert values to NA
 #' @param val a character vector of values to set to NA
-#' @return a data frame
+#' @return a data table
 #' @keywords internal
+#'
+#' @details This function \bold{modifies by reference}.
+#'
 #' @examples
 #'
 #' xx <- data.table::data.table(x = rep("unknown", 10), y = rep("unknown/not reported", 10), z = rep("null", 10),
@@ -53,8 +62,36 @@ setna <- function(df, val) {
   invisible(df)
 }
 
-conv_ <- function(df, cols, f) {
-  for(j in intersect(cols, names(df))) data.table::set(df, j = j, value = f(df[[j]]))
+#' Apply a given function to specified columns in a data table
+#'
+#' @param df a data table
+#' @param cols a character vector of column names to which the function \code{f} is applied
+#' @param f a function that applies to each column.
+#' @param ... arguments to pass to function \code{f}
+#' @param newcol a character vector of new column names to which the output of \code{f} will be applied.
+#'
+#' @details This function \bold{modifies by reference}. If passed a column name that does not exist in the
+#' provided data table, this will simply return the original data.table unmodified without error.
+#'
+#' @examples
+#' x <- data.table::data.table(x = rep("APPLE", 10), y = rep("BANANA", 10), z = rep("CHERRY", 10))
+#' conv_(x, c("x","y"), tolower)
+#' x
+#'
+#' x <- data.table::data.table(x = rep("APPLE", 10), y = rep("BANANA", 10), z = rep("CHERRY", 10))
+#' conv_(x, c("x","y"), tolower, c("X","Y"))
+#' x
+#'
+#' x <- data.table::data.table(x = rep("APPLE", 10), y = rep("BANANA", 10), z = rep("CHERRY", 10))
+#' conv_(x, "x", paste, "JUICE", sep = " ", newcol = "drink")
+#'
+conv_ <- function(df, cols, f, ..., newcol) {
+  if(missing(newcol)) {
+    for(j in intersect(cols, names(df))) data.table::set(df, j = j, value = f(df[[j]], ...))
+  } else {
+    for(j in intersect(cols, names(df))) data.table::set(df, j = newcol[[which(cols == j)]], value = f(df[[j]], ...))
+  }
+  invisible(df)
 }
 
 #' Convert yes/no columns to logicals
@@ -80,18 +117,19 @@ conv_yesno <- function(vec) {
 #' @param vec a character vector to convert "no" columns
 #' @return a logical vector
 #'
-#' @details Matches the case-insensitive fixed string \code{"no"} and negates the result.
-#' Any string that does not match will return TRUE. NA will return NA.
+#' @details Matches the case-insensitive fixed string \code{"no"} and \code{"none"} and negates the result.
+#' Any string that does not match either of these will return TRUE. NA will return NA.
 #'
 #' @keywords internal
 #' @examples
 #'
 #' x <- data.frame(x = rep("no", 10), y = rep("NO", 10), z = rep("yes", 10),
-#' xx = rep("", 10), yy = rep(NA, 10))
-#' lapply(x , conv_notno)
+#' xx = rep("", 10), yy = rep(NA, 10), zz = rep("NONE", 10))
+#' lapply(x, conv_notno)
 #'
 conv_notno <- function(vec) {
-  !stringi::stri_detect_fixed(vec, "no", opts_fixed = list(case_insensitive = TRUE))
+  !stringi::stri_detect_fixed(vec, "no", opts_fixed = list(case_insensitive = TRUE)) &
+    !stringi::stri_detect_fixed(vec, "none", opts_fixed = list(case_insensitive = TRUE))
 }
 
 #' Convert complication columns to logicals
@@ -149,6 +187,34 @@ conv_date <- function(vec) {
   as.Date(vec,"%Y")
 }
 
+#' Add a PUF year column
+#'
+#' This column notes the file from which the record came.
+#'
+#' @param df a data table to append the new column to
+#' @param filename the file name from which the record was derived
+#'
+#' @details Matches the year of the file from the file name using a regular expression.
+#' Requires that the original file names \bold{are not changed}.
+#'
+#' @return a data table with a new ordered factor column called \code{pufyear}
+#'
+#' @keywords internal
+#'
+#' @examples
+#' data.table::data.table(x = rep("name", 10))
+#' get_pufyear(x, "acs_nsqip_puf12.txt")
+#' x$pufyear < "2013"
+#' x$pufyear > "2005-2006"
+#'
+get_pufyear <- function(df, filename) {
+  yrs <- factor(stringi::stri_match_last_regex(filename, ".*(\\d{2})", opts_regex = list(case_insensitive = TRUE))[,2],
+                levels = c("06","07","08","09","10","11","12","13","14","15","16","17","18"),
+                labels = c("2005-2006","2007","2008","2009","2010","2011","2012","2013","2014","2015","2016","2017","2018"),
+                ordered = TRUE)
+  data.table::set(df, j = "pufyear", value = yrs)
+}
+
 #' Factor pipe
 #'
 #' A pipe that allows easy conversion of a vector into a factor with specified levels.
@@ -170,11 +236,13 @@ conv_date <- function(vec) {
 
 #' Convert factor columns
 #'
-#' @param df a data frame in which to convert factor columns
-#' @return a data frame
+#' @param df a data table in which to convert factor columns
+#' @param factor_cols columns to be converted to a factor
+#' @return a data table
 #'
-#' @details This function checks for which columns to factor by looking for a master character vector called \code{factor_cols}.
-#' The function then fetches a second variable with the same name as the column being converted to a factor.
+#' @details This function \bold{modifies by reference}.
+#' This function checks for which columns to factor by comparing against a character vector called \code{factor_cols}.
+#' The function then fetches a variable from the calling environment with the same name as the column being converted to a factor.
 #' This variable should reference a named list specifying how to rename the levels (see \code{\link[nsqipr:factorpipe]{\%^\%}})
 #' for further details.
 #'
@@ -189,16 +257,47 @@ conv_date <- function(vec) {
 #' conv_factor(x)
 #' x
 #'
-conv_factor <- function(df) {
-  for(j in intersect(factor_cols, names(x))) data.table::set(x, j = j, value = x[[j]] %^% get(j))
+conv_factor <- function(df, factor_cols) {
+  for(j in intersect(factor_cols, names(df))) data.table::set(df, j = j, value = df[[j]] %^% get(j, envir = rlang::caller_env()))
   invisible(df)
 }
 
-colorder <- function(df) {
+#' Set data table columns to a specified order
+#'
+#' @param df a data table to be ordered
+#' @param col_order a character vector of column names in the desired order
+#' @return a data table
+#'
+#' @details This function \bold{modifies by reference}.
+#'
+#' @keywords internal
+#' @examples
+#' x <- data.table::data.table(c = c(1,2,3), b = c(1,2,3), a = c(1,2,3))
+#' col_order <- c("a","b","c")
+#' colorder(x, col_order)
+#' identical(names(x), col_order)
+#'
+colorder <- function(df, col_order) {
   data.table::setcolorder(df, intersect(col_order, names(df)))
 }
 
+#' Remove undesired columns from a data table
+#'
+#' @param df a data table from which to remove columns
+#' @param undesired_cols a character vector of column names identifying columns to be removed
+#' @return a data table
+#'
+#' @details This function \bold{modifies by reference}.
+#'
+#' @keywords internal
+#' @examples
+#' x <- data.table::data.table(a = c(1,2,3), b = c(1,2,3), c = c(1,2,3))
+#' orignames <- names(x)
+#' undesired_cols <- c("a","b", "d")
+#' remove_undesired(x, undesired_cols)
+#' identical(names(x), setdiff(orignames, undesired_cols))
+#'
 #' @importFrom data.table :=
-remove_redundant <- function(df) {
-  df[, intersect(redundant_cols, names(df)) := NULL]
+remove_undesired <- function(df, undesired_cols) {
+  df[, intersect(undesired_cols, names(df)) := NULL]
 }

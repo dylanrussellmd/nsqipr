@@ -4,10 +4,16 @@
 \alias{nsqip_dir}
 \title{Runs the \code{nsqip} function in a single directory.}
 \usage{
-nsqip_dir(dir, rds, csv, dataframe)
+nsqip_dir(dir, rds, csv, datatable)
 }
 \arguments{
 \item{dir}{directory to which the \code{nsqip} function is being applied.}
+
+\item{rds}{write the resulting data frame to \code{.rds} file. Produces individual files for each \code{.txt} input}
+
+\item{csv}{write the resulting data frame to a \code{.csv} file. Produces individual files for each \code{.txt} input}
+
+\item{datatable}{return a data table?}
 }
 \description{
 Utilized by \code{nsqip} after all files are parsed and respective directories are created.

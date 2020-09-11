@@ -7,17 +7,20 @@
 setlower(df)
 }
 \arguments{
-\item{df}{a data frame to convert to lower case}
+\item{df}{a data table to convert to lower case}
 }
 \value{
-a data frame
+a data table
 }
 \description{
 Convert all variables to lower case
 }
+\details{
+This function \bold{modifies by reference}.
+}
 \examples{
 
-x <- data.frame(x = rep("APPLE", 10), y = rep("BANANA", 10), z = rep("CHERRY", 10))
+x <- data.table::data.table(x = rep("APPLE", 10), y = rep("BANANA", 10), z = rep("CHERRY", 10))
 setlower(x)
 x
 

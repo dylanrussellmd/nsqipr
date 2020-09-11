@@ -4,19 +4,20 @@
 \alias{nsqip}
 \title{Clean NSQIP data}
 \usage{
-nsqip(path, rds = TRUE, csv = TRUE, dataframe = FALSE)
+nsqip(path, rds = TRUE, csv = TRUE, datatable = FALSE)
 }
 \arguments{
 \item{path}{path to file or directory.}
 
-\item{return_df}{return a data frame.}
+\item{rds}{write the resulting data frame to \code{.rds} file. Produces individual files for each \code{.txt} input}
 
-\item{write_to_csv}{write the resulting data frame to a \code{.csv} file. Produces individual files for each \code{.txt} input}
+\item{csv}{write the resulting data frame to a \code{.csv} file. Produces individual files for each \code{.txt} input}
 
-\item{append}{writes the resulting data frames all to a single \code{.csv} file}
-
-\item{headers}{whether to include column headers in the generated \code{.csv} file}
+\item{datatable}{return a data table?}
+}
+\value{
+if \code{datatable} is TRUE, will return a data.table
 }
 \description{
-Converts a single NSQIP \code{.txt} or a directory of NSQIP \code{.txt} files into a standardized NSQIP data frame.
+Converts a single NSQIP \code{.txt} or a directory of NSQIP \code{.txt} files into a standardized NSQIP data table.
 }

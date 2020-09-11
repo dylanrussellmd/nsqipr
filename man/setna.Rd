@@ -7,15 +7,18 @@
 setna(df, val)
 }
 \arguments{
-\item{df}{a data frame to convert values to NA}
+\item{df}{a data table to convert values to NA}
 
 \item{val}{a character vector of values to set to NA}
 }
 \value{
-a data frame
+a data table
 }
 \description{
 Convert all strings matching vector to NA
+}
+\details{
+This function \bold{modifies by reference}.
 }
 \examples{
 

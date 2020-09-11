@@ -1,7 +1,7 @@
-output <- function(df, file, rds, csv, dataframe, progbar) {
+output <- function(df, file, rds, csv, datatable, progbar) {
   output_rds(df, file, rds, progbar)
   output_csv(df, file, csv, progbar)
-  output_dataframe(df, file, dataframe, progbar)
+  output_datatable(df, file, datatable, progbar)
 }
 
 output_rds <- function(df, file, rds, progbar) {
@@ -18,7 +18,7 @@ output_csv <- function(df, file, csv, progbar) {
   }
 }
 
-output_dataframe <- function(df, file, dataframe, progbar) {
+output_datatable <- function(df, file, datatable, progbar) {
 
 }
 
