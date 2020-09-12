@@ -1,6 +1,6 @@
-output <- function(df, file, rds, csv, datatable, progbar) {
-  output_rds(df, file, rds, progbar)
+output <- function(df, file, csv, rds, datatable, progbar) {
   output_csv(df, file, csv, progbar)
+  output_rds(df, file, rds, progbar)
   output_datatable(df, file, datatable, progbar)
 }
 

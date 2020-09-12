@@ -14,7 +14,11 @@ numeric_cols <- c("prsodm","prbun","prcreat","pralbum","prbili","prsgot","pralkp
 
 factor_cols <- c("fnstatus1","fnstatus2","typeintoc","airtra","opnote","attend","wound_closure","transt","readmsuspreason1","readmunrelsusp1","readmsuspreason2","readmunrelsusp2","readmsuspreason3","readmunrelsusp3","readmsuspreason4","readmunrelsusp4","readmsuspreason5","readmunrelsusp5","dischdest","anesthes","anesthes_other","surgspec")
 
-redundant_cols <- c("race_new","readmission","unplanreadmission","reoperation", "aaa_andiam_unk", "col_steroid_unk","col_oral_antibiotic_unk","col_chemo_unk","col_margins_unk","col_ileus_unk","col_mech_bowel_prep_unk", "pan_jaundice_unk", "pan_chemo_unk", "pan_radio_unk","pan_drains_unk","pan_amylase_pod1_unk","pan_amylase_pod230_unk","pan_amylase_unk","pan_drain_removal_unk","pan_percdrainage")
+redundant_cols <- c("race_new","cpneumon","readmission","unplanreadmission","reoperation", "aaa_andiam_unk", "col_steroid_unk","col_oral_antibiotic_unk","col_chemo_unk","col_margins_unk","col_ileus_unk","col_mech_bowel_prep_unk", "pan_jaundice_unk", "pan_chemo_unk", "pan_radio_unk","pan_drains_unk","pan_amylase_pod1_unk","pan_amylase_pod230_unk","pan_amylase_unk","pan_drain_removal_unk","pan_percdrainage")
+
+coalesce_in_cols <- c("pnapatos","readmission1","unplannedreadmission1","reoperation1")
+
+coalesce_out_cols <- c("cpneumon","readmission","unplanreadmission","reoperation")
 
 ## ----- INDIVIDUAL PUF/TARGETED COLUMN DEFINITIONS ----
 # THESE SHOULD HAVE ALL COLUMNS INCLUDING REDUNDANT COLUMSN AND COLUMNS ADDED BY THE UNIQUE COLUMN FUNCTIONS

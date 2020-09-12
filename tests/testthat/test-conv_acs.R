@@ -29,8 +29,8 @@ testthat::test_that("check_comaneurograft works", {
                               neurodef = c(NA, NA, NA), nneurodef = c(NA_integer_, NA_integer_, NA_integer_), dneurodef = c(NA_integer_, NA_integer_, NA_integer_),
                               othgrafl = c(NA, NA, NA), nothgrafl = c(NA_integer_, NA_integer_, NA_integer_), dothgrafl = c(NA_integer_, NA_integer_, NA_integer_),
                               distraction = c("Test","test","test"))
-  conv_pufyear(x, "acs_nsqip_puf12.txt")
-  conv_pufyear(y, "acs_nsqip_puf12.txt")
+  get_pufyear(x, "acs_nsqip_puf12.txt")
+  get_pufyear(y, "acs_nsqip_puf12.txt")
   testthat::expect_equal(check_comaneurograft(x), y)
 
   x <- data.table::data.table(coma = c(TRUE, TRUE, FALSE), cnscoma = c(TRUE, TRUE, FALSE), ncnscoma = c(1,2,3), dcnscoma = c(1,2,3),
@@ -41,8 +41,8 @@ testthat::test_that("check_comaneurograft works", {
                               neurodef = c(TRUE, TRUE, FALSE), nneurodef = c(1,2,3), dneurodef = c(1,2,3),
                               othgrafl = c(TRUE, TRUE, FALSE), nothgrafl = c(1,2,3), dothgrafl = c(1,2,3),
                               distraction = c("Test","test","test"))
-  conv_pufyear(x, "acs_nsqip_puf10.txt")
-  conv_pufyear(y, "acs_nsqip_puf10.txt")
+  get_pufyear(x, "acs_nsqip_puf10.txt")
+  get_pufyear(y, "acs_nsqip_puf10.txt")
   testthat::expect_equal(check_comaneurograft(x), y)
 })
 

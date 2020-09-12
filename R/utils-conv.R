@@ -304,13 +304,13 @@ remove_undesired <- function(df, undesired_cols) {
   invisible(df)
 }
 
-#' Coalesce two columns
+#' Coalesce two vector
 #'
 #' A simple wrapper around \code{\link[data.table:fcoalesce]{fcoalesce}}.
 #'
-#' @param new the newer column to be coalesced into. Will take priority if both
+#' @param new the newer vector to be coalesced into. Will take priority if both
 #' columns are have values at the same position.
-#' @param old the older column to be coalesced.
+#' @param old the older vector to be coalesced.
 #'
 #' @return a vector of the type of \code{new}
 #' @keywords internal
@@ -323,4 +323,45 @@ remove_undesired <- function(df, undesired_cols) {
 coalesce <- function(new, old) {
   data.table::fcoalesce(new, old)
 }
-#TODO THIS NEEDS TESTING WRITTEN
+
+#' Coalesce two columns
+#'
+#' @param df a data table with the desired columns to coalesce
+#' @param coalesce_in_cols a character vector of column names representing the columns to be coalesced into and that take precedence
+#' @param coalesce_out_cols a character vector of column names representing the columns to be coalesced out of
+#'
+#' @details This function \bold{modifies by reference}.
+#' The \code{coalesce_in_cols} columns will take precedence over the values in the \code{coalesce_out_cols} columns if both
+#' columns contain data. The data is coalesced into the \code{coalesce_in_cols} so that the data in the \code{coalesce_out_cols} is
+#' not altered. The \code{coalesce_out_cols} columns are not removed.
+#'
+#' If \code{df} does not contain any \code{coalesce_out_cols} columns, no changes to \code{df} are made. If \code{df}
+#' contains \code{coalesce_out_cols} columns but no \code{coalesce_in_cols}, the \code{coalesce_out_cols} columns are simply
+#' renamed to their counterpart \code{coalesce_in_cols} columns. For this reason, \code{coalesce_in_cols} and
+#' \code{coalesce_out_cols} must be the same length and matching indices between the two vectors represent respective columns
+#' to be coalesced into and out of.
+#'
+#' @return a data table
+#' @keywords internal
+#'
+#' @examples
+#' x <- data.table::data.table(a = c(NA, TRUE, FALSE), b = c(NA, TRUE, FALSE),
+#' c = c(NA, TRUE, FALSE), d = c(NA, TRUE, FALSE),
+#' A = c(TRUE, NA, TRUE), B = c(TRUE, NA, TRUE))
+#' coalesce_in_cols <- c("A","B","C","D")
+#' coalesce_out_cols <- c("a","b","c","d")
+#' coalesce_cols(x, coalesce_in_cols, coalesce_out_cols)
+#' x
+#'
+coalesce_cols <- function(df, coalesce_in_cols, coalesce_out_cols) {
+  stopifnot("coalesce_in_cols and coalesce_out_cols must be the same length" = length(coalesce_in_cols) == length(coalesce_out_cols))
+  for(j in intersect(coalesce_out_cols, names(df))) {
+    in_name <- coalesce_in_cols[which(coalesce_out_cols == j)]
+    if(in_name %in% names(df)) {
+      data.table::set(df, j = in_name, value = coalesce(df[[in_name]], df[[j]]))
+    } else {
+      data.table::setnames(df, j, in_name, skip_absent = TRUE)
+    }
+  }
+  invisible(df)
+}

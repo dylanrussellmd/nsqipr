@@ -175,3 +175,15 @@ testthat::test_that("remove_undesired is not creating copies", {
   untracemem(x)
 })
 
+testthat::test_that("coalesce_cols and coalesce works", {
+   x <- data.table::data.table(a = c(NA, TRUE, FALSE), b = c(NA, TRUE, FALSE), c = c(NA, TRUE, FALSE), d = c(NA, TRUE, FALSE), A = c(TRUE, NA, TRUE), B = c(TRUE, NA, TRUE))
+   coalesce_in_cols <- c("A","B","C","D")
+   coalesce_out_cols <- c("a","b","c","d")
+   coalesce_cols(x, coalesce_in_cols, coalesce_out_cols)
+   testthat::expect_equal(names(x), c("a","b","C","D","A","B"))
+   testthat::expect_true(all(x[["A"]]) & all(x[["B"]]))
+   testthat::expect_equal(x[["a"]], c(NA, TRUE, FALSE))
+   testthat::expect_equal(x[["b"]], c(NA, TRUE, FALSE))
+   testthat::expect_equal(x[["C"]], c(NA, TRUE, FALSE))
+   testthat::expect_equal(x[["D"]], c(NA, TRUE, FALSE))
+})

@@ -4,14 +4,14 @@
 \alias{nsqip}
 \title{Clean NSQIP data}
 \usage{
-nsqip(path, rds = TRUE, csv = TRUE, datatable = FALSE)
+nsqip(path, csv = TRUE, rds = TRUE, datatable = FALSE)
 }
 \arguments{
 \item{path}{path to file or directory.}
 
-\item{rds}{write the resulting data frame to \code{.rds} file. Produces individual files for each \code{.txt} input}
-
 \item{csv}{write the resulting data frame to a \code{.csv} file. Produces individual files for each \code{.txt} input}
+
+\item{rds}{write the resulting data frame to \code{.rds} file. Produces individual files for each \code{.txt} input}
 
 \item{datatable}{return a data table?}
 }
