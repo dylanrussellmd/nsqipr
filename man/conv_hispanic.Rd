@@ -25,7 +25,7 @@ Add or update hispanic ethnicity column
 \details{
 \code{ethnicity_hispanic} was not added until the 2008 NSQIP PUF when \code{race} was revised to
 \code{race_new}. Data regarding hispanic ethnicity was hard coded directly into the old \code{race} variable
-(such as "Hispanic, white"). In order to marry early and later datasets, this information must be extracted
+(such as "Hispanic, White"). In order to marry early and later datasets, this information must be extracted
 from \code{race} and a new \code{ethnicity_hispanic} column created.
 
 If the data provided already has a \code{ethnicity_hispanic} column present, this column is simply converted
@@ -37,13 +37,13 @@ into a logical vector.
 }}
 
 \examples{
-x <- data.table::data.table(race = c("hispanic, white", "white, not of hispanic origin","hispanic, black","black, not of hispanic origin",
-"american indian or alaska native","asian","native hawaiian or pacific islander","asian or pacific islander"))
+x <- data.table::data.table(race = c("Hispanic, White", "White, Not of Hispanic Origin","Hispanic, Black","Black, Not of Hispanic Origin",
+"American Indian or Alaska Native","Asian","Native Hawaiian or Pacific Islander","Asian or Pacific Islander"))
 conv_hispanic(x)
 x
 
-x <- data.table::data.table(race = c("hispanic, white", "white, not of hispanic origin","white","hispanic, black", "black, not of hispanic origin","black or african american",
-+ "american indian or alaska native","asian","native hawaiian or pacific islander","asian or pacific islander"),
+x <- data.table::data.table(race = c("Hispanic, White", "White, Not of Hispanic Origin","White","Hispanic, Black", "Black, Not of Hispanic Origin","Black or African American",
++ "American Indian or Alaska Native","Asian","Native Hawaiian or Pacific Islander","Asian or Pacific Islander"),
 + ethnicity_hispanic = c(NA, NA, "yes", NA, NA, NA, NA, NA, NA, NA))
 conv_hispanic(x)
 x

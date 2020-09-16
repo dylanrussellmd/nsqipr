@@ -2,68 +2,68 @@ conv_acs_cols <- function(df, filename, factor_cols) {
   get_pufyear(df, filename)
   data.table::setnames(df, "race_new","race", skip_absent = TRUE)
   conv_hispanic(df)
-  conv_(df, "race", conv_race)
-  conv_(df, "sex", conv_sex)
-  conv_(df, "inout", conv_inout)
-  conv_(df, "diabetes", insulin, newcol = "insulin")
-  conv_(df, "diabetes", conv_notno)
-  conv_(df, "dyspnea", when_dyspnea, newcol = "when_dyspnea")
-  conv_(df, "dyspnea", conv_notno)
-  conv_(df, "prsepis", type_prsepis, newcol = "type_prsepis")
-  conv_(df, "prsepis", conv_notno)
+   conv_(df, "race", conv_race)
+   conv_(df, "sex", conv_sex)
+   conv_(df, "inout", conv_inout)
+   conv_(df, "diabetes", insulin, newcol = "insulin")
+   conv_(df, "diabetes", conv_notno)
+   conv_(df, "dyspnea", when_dyspnea, newcol = "when_dyspnea")
+   conv_(df, "dyspnea", conv_notno)
+   conv_(df, "prsepis", type_prsepis, newcol = "type_prsepis")
+   conv_(df, "prsepis", conv_notno)
   check_comaneurograft(df)
 }
 
-fnstatus1 <- list(Independent = "independent",
-                 `Partially dependent` = "partially dependent",
-                 `Totally dependent` = "totally dependent")
+fnstatus1 <- list(Independent = "Independent",
+                 `Partially dependent` = "Partially Dependent",
+                 `Totally dependent` = "Totally Dependent")
 fnstatus2 <- fnstatus1
-typeintoc <- list(`Cardiac arrest requiring CPR` = "cardiac arrest requiring cpr",
-                  `Myocardial infarction` = "myocardial infarction",
-                  `Unplanned intubation` = "unplanned intubation")
-airtra <- list(None = "none",
-               `Lip laceration or hematoma` = "lip laceration or hematoma",
-               `Tooth chipped, loosened, or lost` = "tooth chipped, loosened or lost",
-               `Tongue laceration or hematoma` = "tongue laceration or hematoma",
-               `Pharyngeal laceration` = "pharyngeal laceration",
-               `Laryngeal laceration` = "laryngeal laceration",
-               `Failure to intubate` = "failure to intubate")
-opnote <- list(Attending = "attending",
-               Resident = "resident")
-attend <- list(`Attending alone` = "attending alone",
-               `Attending and resident in OR` = c("attending in or","attending & resident in or"),
-               `Attending in OR suite` = "attending in or suite",
-               `Attending not present, but available` = "attending not present, but available")
-wound_closure <- list(`All layers of incision (deep and superficial) fully closed` = "all layers of incision (deep and superficial) fully closed",
-                      `Only deep layers closed; superficial left open` = "only deep layers closed; superficial left open",
-                      `No layers of incision are surgically closed` = "no layers of incision are surgically closed")
-transt <- list(`Acute care hospital` = c("from acute care hospital inpatient","acute care hospital","va acute care hospital"),
-               `Admitted from home` = c("not transferred (admitted from home)","admitted directly from home"),
-               `Chronic care facility` = c("nursing home - chronic care - intermediate care","chronic care facility","va chronic care facility"),
-               `Outside emergency department` = "outside emergency department",
-               Other = c("transfer from other","other"))
-readmsuspreason1 <- list(`Superficial incisional SSI` = "superficial incisional ssi",
-                         `Deep incisional SSI` = "deep incisional ssi",
-                         `Organ-space SSI` = "organ/space ssi",
-                         `Wound disruption` = "wound disruption",
-                         Pneumonia = "pneumonia",
-                         `Unplanned intubation` = "unplanned intubation",
-                         `Pulmonary embolism` = "pulmonary embolism",
-                         `On ventilator > 48 hours` = "on ventilator > 48 hours",
-                         `Progressive renal insufficiency` = "progressive renal insufficiency",
-                         `Acute renal failure` = "acute renal failure",
-                         `Urinary tract infection` = "urinary tract infection",
-                         `Cerebrovascular accident` = "cva",
-                         `Cardiac arrest requiring CPR` = "cardiac arrest requiring cpr",
-                         `Myocardial infarction` = "myocardial infarction",
-                         `Bleeding requiring transfusion (within 72 hours of surgery start time)` = "bleeding requiring transfusion (72h of surgery start time)",
-                         `Vein thrombosis requiring therapy` = c("vein thrombosis requiring therapy","dvt requiring therapy"),
-                         Sepsis = "sepsis",
-                         `Septic shock` = "septic shock",
-                         Other = c("other (list icd 9 code)","other (list icd 10 code)"),
-                         `C. difficile` = "c. diff",
-                         `Graft/prosthesis/flap failure` = "graft/prosthesis/flap failure",
-                         `Peripheral nerve injury` = "peripheral nerve injury")
+typeintoc <- list(`Cardiac arrest requiring CPR` = "Cardiac Arrest Requiring CPR",
+                  `Myocardial infarction` = "Myocardial Infarction",
+                  `Unplanned intubation` = "Unplanned Intubation")
+airtra <- list(None = "None",
+               `Lip laceration or hematoma` = "Lip laceration or hematoma",
+               `Tooth chipped, loosened, or lost` = "Tooth chipped, loosened or lost",
+               `Tongue laceration or hematoma` = "Tongue laceration or hematoma",
+               `Pharyngeal laceration` = "Pharyngeal laceration",
+               `Laryngeal laceration` = "Laryngeal laceration",
+               `Failure to intubate` = "Failure to intubate")
+opnote <- list(Attending = "Attending",
+               Resident = "Resident")
+attend <- list(`Attending alone` = "Attending Alone",
+               `Attending and resident in OR` = c("Attending in OR","Attending & Resident in OR"),
+               `Attending in OR suite` = "Attending in OR Suite",
+               `Attending not present, but available` = "Attending Not Present, but Available")
+wound_closure <- list(`All layers of incision (deep and superficial) fully closed` = "All layers of incision (deep and superficial) fully closed",
+                      `Only deep layers closed; superficial left open` = "Only deep layers closed; superficial left open",
+                      `No layers of incision are surgically closed` = "No layers of incision are surgically closed")
+transt <- list(`Acute care hospital` = c("From acute care hospital inpatient","Acute Care Hospital","VA Acute Care Hospital"),
+               `Admitted from home` = c("Not transferred (admitted from home)","Admitted directly from home"),
+               `Chronic care facility` = c("Nursing home - Chronic care - Intermediate care","Chronic Care Facility","VA Chronic Care Facility"),
+               `Outside emergency department` = "Outside emergency department",
+               Other = c("Transfer from other","Other"))
+readmsuspreason1 <- list(`Superficial incisional SSI` = "Superficial Incisional SSI",
+                         `Deep incisional SSI` = "Deep Incisional SSI",
+                         `Organ-space SSI` = "Organ/Space SSI",
+                         `Wound disruption` = "Wound Disruption",
+                         Pneumonia = "Pneumonia",
+                         `Unplanned intubation` = "Unplanned Intubation",
+                         `Pulmonary embolism` = "Pulmonary Embolism",
+                         `On ventilator > 48 hours` = "On Ventilator > 48 hours",
+                         `Progressive renal insufficiency` = "Progressive Renal Insufficiency",
+                         `Acute renal failure` = "Acute Renal Failure",
+                         `Urinary tract infection` = "Urinary Tract Infection",
+                         `Cerebrovascular accident` = "CVA",
+                         `Cardiac arrest requiring CPR` = "Cardiac Arrest Requiring CPR",
+                         `Myocardial infarction` = "Myocardial Infarction",
+                         `Bleeding requiring transfusion (within 72 hours of surgery start time)` = "Bleeding Requiring Transfusion (72h of surgery start time)",
+                         `Vein thrombosis requiring therapy` = c("Vein Thrombosis Requiring Therapy","DVT Requiring Therapy"),
+                         Sepsis = "Sepsis",
+                         `Septic shock` = "Septic Shock",
+                         Other = c("Other (list ICD 9 code)","Other (list icd 10 code)"),
+                         `C. difficile` = "C. diff",
+                         `Graft/prosthesis/flap failure` = "Graft/Prosthesis/Flap Failure",
+                         `Peripheral nerve injury` = "Peripheral Nerve Injury")
 readmunrelsusp1 <- readmsuspreason1
 readmsuspreason2 <- readmsuspreason1
 readmunrelsusp2 <- readmsuspreason1
@@ -73,40 +73,40 @@ readmsuspreason4 <- readmsuspreason1
 readmunrelsusp4 <- readmsuspreason1
 readmsuspreason5 <- readmsuspreason1
 readmunrelsusp5 <- readmsuspreason1
-dischdest <- list(`Skilled care, not home` = "skilled care, not home",
-                  `Unskilled facility, not home` = "unskilled facility not home",
-                  `Facility which was home` = "facility which was home",
-                  Home = "home",
-                  `Separate acute care` = "separate acute care",
-                  Rehab = "rehab",
-                  Expired = "expired",
-                  `Against medical advice (AMA)` = "against medical advice (ama)",
-                  `Multi-level senior community` = "multi-level senior community",
-                  Hospice = "hospice")
-anesthes <- list(`Epidural` = "epidural",
-                 `General` = "general",
-                 `Local` = "local",
-                 `Monitored anesthesia care` = c("mac/iv sedation","monitored anesthesia care"),
-                 `None` = "none",
-                 `Other` = "other",
-                 `Regional` = "regional",
-                 `Spinal` = "spinal")
-anesthes_other <- anesthes
-surgspec <- list(`Cardiac surgery` = "cardiac surgery",
-                 `General surgery` = "general surgery",
-                 `Gynecology` = "gynecology",
-                 `Neurosurgery` = "neurosurgery",
-                 `Orthopedics` = "orthopedics",
-                 `Otolaryngology (ENT)` = "otolaryngology (ent)",
-                 `Plastics` = "plastics",
-                 `Thoracic` = "thoracic",
-                 `Urology` = "urology",
-                 `Vascular` = "vascular",
-                 `Interventional radiologist` = "interventional radiologist",
-                 `Ophthalmology` = "ophthalmology",
-                 `Podiatry` = "podiatry",
-                 `Oral surgery` = "oral surgery",
-                 `Other` = "other")
+dischdest <- list(`Skilled care, not home` = "Skilled Care, Not Home",
+                  `Unskilled facility, not home` = "Unskilled Facility Not Home",
+                  `Facility which was home` = "Facility Which was Home",
+                  Home = "Home",
+                  `Separate acute care` = "Separate Acute Care",
+                  Rehab = "Rehab",
+                  Expired = "Expired",
+                  `Against medical advice (AMA)` = "Against Medical Advice (AMA)",
+                  `Multi-level senior community` = "Multi-level Senior Community",
+                  Hospice = "Hospice")
+anesthes <- list(`Epidural` = "Epidural",
+                 `General` = "General",
+                 `Local` = "Local",
+                 `Monitored anesthesia care` = c("MAC/IV Sedation","Monitored Anesthesia Care"),
+                 `None` = "None",
+                 `Other` = "Other",
+                 `Regional` = "Regional",
+                 `Spinal` = "Spinal")
+#anesthes_other <- anesthes #anesthes_other will need to be converted to long :(
+surgspec <- list(`Cardiac surgery` = "Cardiac Surgery",
+                 `General surgery` = "General Surgery",
+                 `Gynecology` = "Gynecology",
+                 `Neurosurgery` = "Neurosurgery",
+                 `Orthopedics` = "Orthopedics",
+                 `Otolaryngology (ENT)` = "Otolaryngology (ENT)",
+                 `Plastics` = "Plastics",
+                 `Thoracic` = "Thoracic",
+                 `Urology` = "Urology",
+                 `Vascular` = "Vascular",
+                 `Interventional radiologist` = "Interventional Radiologist",
+                 `Ophthalmology` = "Ophthalmology",
+                 `Podiatry` = "Podiatry",
+                 `Oral surgery` = "Oral surgery",
+                 `Other` = "Other")
 
 #' Remove coma, neuro deficit, and graft columns after 2010
 #'
@@ -149,7 +149,7 @@ check_comaneurograft <- function(df) {
 #'
 #' @details \code{ethnicity_hispanic} was not added until the 2008 NSQIP PUF when \code{race} was revised to
 #' \code{race_new}. Data regarding hispanic ethnicity was hard coded directly into the old \code{race} variable
-#' (such as "Hispanic, white"). In order to marry early and later datasets, this information must be extracted
+#' (such as "Hispanic, White"). In order to marry early and later datasets, this information must be extracted
 #' from \code{race} and a new \code{ethnicity_hispanic} column created.
 #'
 #' If the data provided already has a \code{ethnicity_hispanic} column present, this column is simply converted
@@ -159,19 +159,19 @@ check_comaneurograft <- function(df) {
 #' @keywords internal
 #'
 #' @examples
-#' x <- data.table::data.table(race = c("hispanic, white", "white, not of hispanic origin","hispanic, black","black, not of hispanic origin",
-#' "american indian or alaska native","asian","native hawaiian or pacific islander","asian or pacific islander"))
+#' x <- data.table::data.table(race = c("Hispanic, White", "White, Not of Hispanic Origin","Hispanic, Black","Black, Not of Hispanic Origin",
+#' "American Indian or Alaska Native","Asian","Native Hawaiian or Pacific Islander","Asian or Pacific Islander"))
 #' conv_hispanic(x)
 #' x
 #'
-#' x <- data.table::data.table(race = c("hispanic, white", "white, not of hispanic origin","white","hispanic, black", "black, not of hispanic origin","black or african american",
-#' + "american indian or alaska native","asian","native hawaiian or pacific islander","asian or pacific islander"),
+#' x <- data.table::data.table(race = c("Hispanic, White", "White, Not of Hispanic Origin","White","Hispanic, Black", "Black, Not of Hispanic Origin","Black or African American",
+#' + "American Indian or Alaska Native","Asian","Native Hawaiian or Pacific Islander","Asian or Pacific Islander"),
 #' + ethnicity_hispanic = c(NA, NA, "yes", NA, NA, NA, NA, NA, NA, NA))
 #' conv_hispanic(x)
 #' x
 #'
 conv_hispanic <- function(df) {
-  if("ethnicity_hispanic" %in% names(df)) {
+  if("ethnicity_hispanic" %chin% names(df)) {
     vec <- conv_hispanic_helper(df)
   } else {
     vec <- stringi::stri_detect_regex(df[["race"]], "^hispanic,", opts_regex = list(case_insensitive = TRUE))
@@ -181,9 +181,9 @@ conv_hispanic <- function(df) {
 
 #' @describeIn conv_hispanic A helper function for updating the \code{ethnicity_hispanic} column
 conv_hispanic_helper <- function(df) {
-  ifelse((df[["race"]] %in% c("white","black or african american") | is.na(df[["race"]])), # only PUFs after RACE_NEW was introduced should have these possible races.
+  ifelse((df[["race"]] %chin% c("White","Black or African American") | is.na(df[["race"]])), # only PUFs after RACE_NEW was introduced should have these possible races.
          conv_yesno(df[["ethnicity_hispanic"]]),
-         ifelse(df[["race"]] %in% c("american indian or alaska native","asian","native hawaiian or pacific islander","asian or pacific islander"),
+         ifelse(df[["race"]] %chin% c("American Indian or Alaska Native","Asian","Native Hawaiian or Pacific Islander","Asian or Pacific Islander"),
                 FALSE,
                 stringi::stri_detect_regex(df[["race"]], "^hispanic,", opts_regex = list(case_insensitive = TRUE))))
 }
@@ -192,7 +192,7 @@ conv_hispanic_helper <- function(df) {
 #' Convert race to factor
 #'
 #' @param vec a character vector of races to be converted to a factor
-#' @param pacific whether to consider "asian or pacific islander" as part of the "Native Hawaiian or Pacific islander"
+#' @param pacific whether to consider "Asian or Pacific Islander" as part of the "Native Hawaiian or Pacific islander"
 #' level or part of the "Asian" level.
 #'
 #' @details 2005-2007 NSQIP PUFs included a race called "Asian or Pacific islander". Later PUFs split these into "Asian" and
@@ -204,24 +204,24 @@ conv_hispanic_helper <- function(df) {
 #'
 #' @keywords internal
 #' @examples
-#' x <- c("white","black or african american","asian or pacific islander")
+#' x <- c("White","Black or African American","Asian or Pacific Islander")
 #' conv_race(x)
 #' x
 #'
-#' x <- c("white","black or african american","asian or pacific islander")
+#' x <- c("White","Black or African American","Asian or Pacific Islander")
 #' conv_race(x, pacific = "hawaiian")
 #' x
 conv_race <- function(vec, pacific = "asian") {
-  asian <- list(White = c("hispanic, white", "white, not of hispanic origin","white"),
-                Black = c("hispanic, black","black, not of hispanic origin", "black or african american"),
-                `American Indian or Alaska native` = "american indian or alaska native",
-                `Asian` = c("asian", "asian or pacific islander"),
-                `Native Hawaiian or Pacific islander` = "native hawaiian or pacific islander")
-  hawaiian <- list(White = c("hispanic, white", "white, not of hispanic origin","white"),
-                   Black = c("hispanic, black","black, not of hispanic origin", "black or african american"),
-                   `American Indian or Alaska native` = "american indian or alaska native",
-                   `Asian` = "asian",
-                   `Native Hawaiian or Pacific islander` = c("native hawaiian or pacific islander","asian or pacific islander"))
+  asian <- list(White = c("Hispanic, White", "White, Not of Hispanic Origin","White"),
+                Black = c("Hispanic, Black","Black, Not of Hispanic Origin", "Black or African American"),
+                `American Indian or Alaska native` = "American Indian or Alaska Native",
+                `Asian` = c("Asian", "Asian or Pacific Islander"),
+                `Native Hawaiian or Pacific islander` = "Native Hawaiian or Pacific Islander")
+  hawaiian <- list(White = c("Hispanic, White", "White, Not of Hispanic Origin","White"),
+                   Black = c("Hispanic, Black","Black, Not of Hispanic Origin", "Black or African American"),
+                   `American Indian or Alaska native` = "American Indian or Alaska Native",
+                   `Asian` = "Asian",
+                   `Native Hawaiian or Pacific islander` = c("Native Hawaiian or Pacific Islander","Asian or Pacific Islander"))
 
   levels <- switch(pacific,
                     "asian" = asian,
@@ -250,16 +250,16 @@ conv_sex <- function(vec) {
 #'
 #' @param vec a character vector of values to convert
 #'
-#' @details If "inpatient", will result in true. If given NA, will return NA.
+#' @details If "Inpatient", will result in true. If given NA, will return NA.
 #'
 #' @return an integer vector
 #' @keywords internal
 #'
 #' @examples
-#  conv_inout(c("inpatient", "outpatient", NA))
+#  conv_inout(c("Inpatient", "Outpatient", NA))
 #'
 conv_inout <- function(vec) {
-  stringi::stri_detect_fixed(vec, "inpatient", opts_fixed = list(case_insensitive = TRUE))
+  stringi::stri_detect_fixed(vec, "Inpatient", opts_fixed = list(case_insensitive = TRUE))
 }
 
 #' Convert age to integer
@@ -311,7 +311,7 @@ insulin <- function(vec) {
 #  when_dyspnea(c("at rest","moderate exertion", NA))
 #'
 when_dyspnea <- function(vec) {
-  vec %^% list(`At rest` = "at rest", `Moderate exertion` = "moderate exertion")
+  vec %^% list(`At rest` = "AT REST", `Moderate exertion` = "MODERATE EXERTION")
 }
 
 #' Parse a column for type of sepsis
@@ -331,5 +331,5 @@ when_dyspnea <- function(vec) {
 #  type_prsepis(c("sirs","sepsis", "septic shock", NA))
 #'
 type_prsepis <- function(vec) {
-  vec %^% list(`SIRS` = "sirs", `Sepsis` = "sepsis", `Septic shock` = "septic shock")
+  vec %^% list(`SIRS` = "SIRS", `Sepsis` = "Sepsis", `Septic shock` = "Septic Shock")
 }

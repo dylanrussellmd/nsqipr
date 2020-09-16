@@ -16,11 +16,20 @@ output_csv <- function(df, file, csv, progbar) {
     tick(progbar, "writing .csv for", file)
     data.table::fwrite(df, file = paste(tools::file_path_sans_ext(file), "_clean.csv", sep = ""), showProgress = FALSE)
   }
+  return(NULL)
 }
 
 output_datatable <- function(df, file, datatable, progbar) {
-
+  #if(write_to_csv & !append) vroom::vroom_write(df, path = paste(tools::file_path_sans_ext(file), "_clean.csv", sep = ""), delim = ",", na = "", col_names = headers)
+  #if(write_to_csv & append) vroom::vroom_write(df, path = file.path(dirname(file),paste(parse_filename(file),"full_clean.csv", sep = "_")), delim = ",", na = "", col_names = FALSE, append = TRUE)
 }
 
-#if(write_to_csv & !append) vroom::vroom_write(df, path = paste(tools::file_path_sans_ext(file), "_clean.csv", sep = ""), delim = ",", na = "", col_names = headers)
-#if(write_to_csv & append) vroom::vroom_write(df, path = file.path(dirname(file),paste(parse_filename(file),"full_clean.csv", sep = "_")), delim = ",", na = "", col_names = FALSE, append = TRUE)
+combine <- function(lst) {
+  x <- data.table::rbindlist(lst[1:2], fill = TRUE)
+  lst <- lst[c(-1, -2)]
+  while(length(lst) > 0) {
+    x <- data.table::rbindlist(c(x, lst[1]), fill = TRUE)
+    lst <- lst[-1]
+  }
+  return(x)
+}

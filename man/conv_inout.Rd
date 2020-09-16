@@ -16,7 +16,7 @@ an integer vector
 Convert inout to logical
 }
 \details{
-If "inpatient", will result in true. If given NA, will return NA.
+If "Inpatient", will result in true. If given NA, will return NA.
 }
 \examples{
 

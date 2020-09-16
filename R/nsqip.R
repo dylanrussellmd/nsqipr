@@ -16,8 +16,9 @@ nsqip <- function(path, csv = TRUE, rds = TRUE, datatable = FALSE) {
   usethis::ui_info("This could take a while (10-15 minutes depending on how many files)! Don't worry, its working...")
   files <- get_file_or_dir(path) # returns a character vector of matching file(s)
   dirs <- parse_files(files) # Creates directories and moves files into them
-  lapply(dirs, nsqip_dir, csv, rds, datatable) # Runs nsqip_dir over each directory
+  df <- lapply(dirs, nsqip_dir, csv, rds, datatable) # Runs nsqip_dir over each directory
   usethis::ui_done("All files in {usethis::ui_path(path)} cleaned and converted!")
   usethis::ui_todo("If you had any problems, please open an issue at {usethis::ui_value('github.com/dylanrussellmd/nsqipr')}!")
+  return(df)
 }
 

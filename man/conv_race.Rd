@@ -9,7 +9,7 @@ conv_race(vec, pacific = "asian")
 \arguments{
 \item{vec}{a character vector of races to be converted to a factor}
 
-\item{pacific}{whether to consider "asian or pacific islander" as part of the "Native Hawaiian or Pacific islander"
+\item{pacific}{whether to consider "Asian or Pacific Islander" as part of the "Native Hawaiian or Pacific islander"
 level or part of the "Asian" level.}
 }
 \value{
@@ -25,11 +25,11 @@ Convert race to factor
 "Native Hawaiian or Pacific islander", \code{pacific} should be set to "hawaiian".
 }
 \examples{
-x <- c("white","black or african american","asian or pacific islander")
+x <- c("White","Black or African American","Asian or Pacific Islander")
 conv_race(x)
 x
 
-x <- c("white","black or african american","asian or pacific islander")
+x <- c("White","Black or African American","Asian or Pacific Islander")
 conv_race(x, pacific = "hawaiian")
 x
 }

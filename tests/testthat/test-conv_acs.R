@@ -7,17 +7,18 @@ testthat::test_that("conv_age works", {
 })
 
 testthat::test_that("insulin works", {
-  testthat::expect_equal(insulin(c("no","non-insulin","insulin",NA)), c(FALSE, FALSE, TRUE ,NA))
+  testthat::expect_equal(insulin(c("NO","NON-INSULIN","INSULIN", "ORAL", NA)), c(FALSE, FALSE, TRUE,FALSE,NA))
+  testthat::expect_equal(insulin(c("no","non-insulin","insulin", "oral", NA)), c(FALSE, FALSE, TRUE,FALSE,NA))
 })
 
 testthat::test_that("when_dyspnea works", {
-  testthat::expect_equal(sort(levels(when_dyspnea(c("at rest","moderate exertion", NA)))), sort(levels(factor(c("At rest","Moderate exertion", NA)))))
-  testthat::expect_equal(as.character(when_dyspnea(c("at rest","moderate exertion", NA))), as.character(factor(c("At rest","Moderate exertion", NA))))
+  testthat::expect_equal(sort(levels(when_dyspnea(c("AT REST","MODERATE EXERTION", NA)))), sort(levels(factor(c("At rest","Moderate exertion", NA)))))
+  testthat::expect_equal(as.character(when_dyspnea(c("AT REST","MODERATE EXERTION", NA))), as.character(factor(c("At rest","Moderate exertion", NA))))
 })
 
 testthat::test_that("type_prsepis works", {
-  testthat::expect_equal(sort(levels(type_prsepis(c("sirs","sepsis", "septic shock", NA)))), sort(levels(factor(c("SIRS","Sepsis","Septic shock",NA)))))
-  testthat::expect_equal(as.character(type_prsepis(c("sirs","sepsis", "septic shock", NA))), as.character(factor(c("SIRS","Sepsis","Septic shock",NA))))
+  testthat::expect_equal(sort(levels(type_prsepis(c("SIRS","Sepsis", "Septic Shock", NA)))), sort(levels(factor(c("SIRS","Sepsis","Septic shock",NA)))))
+  testthat::expect_equal(as.character(type_prsepis(c("SIRS","Sepsis", "Septic Shock", NA))), as.character(factor(c("SIRS","Sepsis","Septic shock",NA))))
 })
 
 testthat::test_that("check_comaneurograft works", {
@@ -47,24 +48,24 @@ testthat::test_that("check_comaneurograft works", {
 })
 
 testthat::test_that("conv_hispanic and conv_hispanic_helper work", {
-  x <- data.table::data.table(race = c("hispanic, white", "white, not of hispanic origin","hispanic, black","black, not of hispanic origin",
-  "american indian or alaska native","asian","native hawaiian or pacific islander","asian or pacific islander"))
-  y <- data.table::data.table(race = c("hispanic, white", "white, not of hispanic origin","hispanic, black","black, not of hispanic origin",
-                                       "american indian or alaska native","asian","native hawaiian or pacific islander","asian or pacific islander"),
+  x <- data.table::data.table(race = c("Hispanic, White", "White, Not of Hispanic Origin","Hispanic, Black","Black, Not of Hispanic Origin",
+  "American Indian or Alaska Native","Asian","Native Hawaiian or Pacific Islander","Asian or Pacific Islander"))
+  y <- data.table::data.table(race = c("Hispanic, White", "White, Not of Hispanic Origin","Hispanic, Black","Black, Not of Hispanic Origin",
+                                       "American Indian or Alaska Native","Asian","Native Hawaiian or Pacific Islander","Asian or Pacific Islander"),
                               ethnicity_hispanic = c(TRUE, FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE))
   testthat::expect_equal(conv_hispanic(x), y)
 
-  x <- data.table::data.table(race = c("hispanic, white", "white, not of hispanic origin","white","hispanic, black", "black, not of hispanic origin","black or african american",
-                                       "american indian or alaska native","asian","native hawaiian or pacific islander","asian or pacific islander"),
+  x <- data.table::data.table(race = c("Hispanic, White", "White, Not of Hispanic Origin","White","Hispanic, Black","Black, Not of Hispanic Origin", "Black or African American",
+                                       "American Indian or Alaska Native","Asian","Native Hawaiian or Pacific Islander","Asian or Pacific Islander"),
                               ethnicity_hispanic = c(NA, NA, "yes", NA, NA, NA, NA, NA, NA, NA))
-  y <- data.table::data.table(race = c("hispanic, white", "white, not of hispanic origin","white","hispanic, black","black, not of hispanic origin","black or african american",
-                                              "american indian or alaska native","asian","native hawaiian or pacific islander","asian or pacific islander"),
+  y <- data.table::data.table(race = c("Hispanic, White", "White, Not of Hispanic Origin","White","Hispanic, Black","Black, Not of Hispanic Origin", "Black or African American",
+                                       "American Indian or Alaska Native","Asian","Native Hawaiian or Pacific Islander","Asian or Pacific Islander"),
                                      ethnicity_hispanic = c(TRUE, FALSE, TRUE, TRUE, FALSE, NA, FALSE, FALSE, FALSE, FALSE))
   testthat::expect_equal(conv_hispanic(x), y)
 })
 
 testthat::test_that("conv_race works", {
-  x <- c("white","black or african american","asian or pacific islander")
+  x <- c("White","Black or African American","Asian or Pacific Islander")
   testthat::expect_equal(sort(levels(conv_race(x, pacific = "hawaiian"))), sort(levels(factor(c("White","Black","Native Hawaiian or Pacific islander","American Indian or Alaska native","Asian")))))
   testthat::expect_equal(as.character(conv_race(x, pacific = "hawaiian")), as.character(factor(c("White","Black","Native Hawaiian or Pacific islander"))))
   testthat::expect_equal(sort(levels(conv_race(x))), sort(levels(factor(c("White","Black","Native Hawaiian or Pacific islander","American Indian or Alaska native","Asian")))))

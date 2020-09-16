@@ -16,27 +16,6 @@ setlowernames <- function(df) {
   data.table::setnames(df, stringi::stri_trans_tolower(names(df)))
 }
 
-#' Convert all variables to lower case
-#'
-#' @param df a data table to convert to lower case
-#' @return a data table
-#' @keywords internal
-#'
-#' @details This function \bold{modifies by reference}.
-#'
-#' @examples
-#'
-#' x <- data.table::data.table(x = rep("APPLE", 10), y = rep("BANANA", 10), z = rep("CHERRY", 10))
-#' setlower(x)
-#' x
-#'
-setlower <- function(df) {
-  for(j in seq_along(df)){
-    data.table::set(df, j=j, value=stringi::stri_trans_tolower(df[[j]]))
-  }
-  invisible(df)
-}
-
 #' Convert all strings matching vector to NA
 #'
 #' @param df a data table to convert values to NA
@@ -48,16 +27,16 @@ setlower <- function(df) {
 #'
 #' @examples
 #'
-#' xx <- data.table::data.table(x = rep("unknown", 10), y = rep("unknown/not reported", 10), z = rep("null", 10),
-#' xx = rep("not documented", 10), yy = rep("none/not documented", 10), zz = rep("not entered", 10),
-#' xxx = rep("-99", 10), yyy = rep("test", 10))
+#' x <- data.table::data.table(x = c(rep("unknown", 10), rep("test", 10)), y = c(rep("unknown/not reported", 10), rep("test", 10)), z = c(rep("null", 10), rep("test", 10)),
+#' xx = c(rep("not documented", 10), rep("test", 10)), yy = c(rep("none/not documented", 10), rep("test", 10)), zz = c(rep("not entered", 10), rep("test", 10)),
+#' xxx = c(rep("-99", 10), rep("test", 10)), yyy = c(rep("test", 10), rep("test", 10)))
 #'
 #' setna(x, c("unknown", "unknown/not reported", "null", "n/a", "not documented", "none/not documented", "not entered","-99"))
 #' x
 #'
 setna <- function(df, val) {
   for(j in seq_along(df)){
-    data.table::set(df, i=which(df[[j]] %in% val), j=j, value=NA)
+    data.table::set(df, i=which(df[[j]] %qsin% val), j=j, value=NA)
   }
   invisible(df)
 }
@@ -166,7 +145,7 @@ conv_complication <- function(vec) {
 #' lapply(x , conv_numscale)
 #'
 conv_numscale <- function(vec) {
-  as.integer(stringi::stri_extract_first_regex(vec,"^.*?\\d"))
+  as.integer(stringi::stri_extract_first_regex(vec,"^.*?\\d", opts_regex = list(case_insensitive = TRUE)))
 }
 
 
@@ -231,7 +210,9 @@ get_pufyear <- function(df, filename) {
 #' c("apple","cherry","pork") %^% list(fruit = c("apple", "banana", "cherry"), meat = c("steak", "chicken", "pork"))
 #'
 `%^%` <- function(lhs, rhs) {
-  `levels<-`(factor(stringi::stri_replace_all_fixed(lhs,"  ", " ")), rhs)
+  x <- factor(stringi::stri_replace_all_fixed(lhs,"  ", " "))
+  levels(x) <- rhs
+  return(x)
 }
 
 #' Convert factor columns

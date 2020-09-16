@@ -22,9 +22,9 @@ This function \bold{modifies by reference}.
 }
 \examples{
 
-xx <- data.table::data.table(x = rep("unknown", 10), y = rep("unknown/not reported", 10), z = rep("null", 10),
-xx = rep("not documented", 10), yy = rep("none/not documented", 10), zz = rep("not entered", 10),
-xxx = rep("-99", 10), yyy = rep("test", 10))
+x <- data.table::data.table(x = c(rep("unknown", 10), rep("test", 10)), y = c(rep("unknown/not reported", 10), rep("test", 10)), z = c(rep("null", 10), rep("test", 10)),
+xx = c(rep("not documented", 10), rep("test", 10)), yy = c(rep("none/not documented", 10), rep("test", 10)), zz = c(rep("not entered", 10), rep("test", 10)),
+xxx = c(rep("-99", 10), rep("test", 10)), yyy = c(rep("test", 10), rep("test", 10)))
 
 setna(x, c("unknown", "unknown/not reported", "null", "n/a", "not documented", "none/not documented", "not entered","-99"))
 x

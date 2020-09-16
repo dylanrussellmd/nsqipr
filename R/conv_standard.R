@@ -8,10 +8,16 @@
 #' @keywords internal
 #'
 nsqip_dir <- function(dir, csv, rds, datatable) {
-   lapply(fs::dir_ls(dir), function(file) {
+  df <- data.table::data.table()
+  # for(f in fs::dir_ls(dir)) {
+  #   df = data.table::rbindlist(list(df, conv_to_standard(f, csv, rds, datatable, progbar)), fill=T)
+  # }
+
+  df <- lapply(fs::dir_ls(dir), function(file) {
      conv_to_standard(file, csv, rds, datatable, progbar)
   })
   usethis::ui_done('Successfully cleaned all files in {usethis::ui_path(dir)}.')
+  return(df)
 }
 
 # TODO: Figure out how to append CSVs while keeping first row as headers.
@@ -20,7 +26,7 @@ conv_to_standard <- function(file, csv, rds, datatable, progbar) {
   filename <- fs::path_file(file)
   tick(progbar, "reading", filename, 0)
 
-  df <- data.table::fread(file, sep = "\t", colClasses = character(), showProgress = FALSE)
+  df <- data.table::fread(file, sep = "\t", colClasses = "character", showProgress = FALSE)
   setup(df, filename, progbar)
   conv_type_cols(df, filename, progbar)
   conv_special_cols(df, filename, progbar)
@@ -31,21 +37,15 @@ conv_to_standard <- function(file, csv, rds, datatable, progbar) {
   tick(progbar, "completed", filename)
   usethis::ui_done('Successfully cleaned {usethis::ui_path(filename)}.')
 
-  return(NULL)
-
-# Need to work in (or at least make it possible to) outputting tidy long data. In addition, should probably split into two tables (one patient, one procedures, one by case id)
-#  df1 %>% rename(othercpt0 = cpt, otherproc0 = prncptx, wrvu0 = workrvu) %>% pivot_longer(cols = c(starts_with("othercpt"), starts_with("otherproc"), starts_with("otherwrvu")), names_to = c(".value", "procedure"), names_pattern = "^other([a-z]*)(\\d)$", names_repair = "unique", values_drop_na = TRUE, names_transform = list(procedure = as.integer)) %>% mutate(procedure = procedure + 1) %>% select(caseid,procedure, cpt, proc, wrvu) %>% View()
+  return(df)
 
 }
 
 setup <- function(df, filename, progbar) {
   tick(progbar, "converting names to lower case in", filename)
   setlowernames(df)
-  tick(progbar, "converting values to lower case in", filename)
-  setlower(df)
   tick(progbar, "setting NA values in", filename)
   setna(df, c("unknown", "unknown/not reported", "null", "n/a", "not documented", "none/not documented", "not entered","-99"))
-  gc()
 }
 
 conv_type_cols <- function(df, filename, progbar) {
@@ -61,7 +61,6 @@ conv_type_cols <- function(df, filename, progbar) {
   conv_(df, yes_no_cols, conv_yesno)
   tick(progbar, "converting date columns of", filename)
   conv_(df, date_cols, conv_date)
-  gc()
 }
 
 
@@ -74,13 +73,11 @@ conv_special_cols <- function(df, filename, progbar) {
                "puf_tar_aie" = `conv_aie_cols`,
                "puf_tar_pan" = `conv_pan_cols`)
   fn(df, filename)
-  gc()
 }
 
 conv_factor_cols <- function(df, filename, progbar) {
   tick(progbar, "converting factor columns of", filename)
   conv_factor(df, factor_cols)
-  gc()
 }
 
 conv_order_cols <- function(df, filename, progbar) {
@@ -90,7 +87,6 @@ conv_order_cols <- function(df, filename, progbar) {
   colorder(df, col_order)
   tick(progbar, "removing redundant columns from", filename)
   remove_undesired(df, redundant_cols)
-  gc()
 }
 
 
