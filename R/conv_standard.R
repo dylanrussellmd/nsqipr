@@ -8,11 +8,6 @@
 #' @keywords internal
 #'
 nsqip_dir <- function(dir, csv, rds, datatable) {
-  df <- data.table::data.table()
-  # for(f in fs::dir_ls(dir)) {
-  #   df = data.table::rbindlist(list(df, conv_to_standard(f, csv, rds, datatable, progbar)), fill=T)
-  # }
-
   df <- lapply(fs::dir_ls(dir), function(file) {
      conv_to_standard(file, csv, rds, datatable, progbar)
   })
@@ -38,7 +33,6 @@ conv_to_standard <- function(file, csv, rds, datatable, progbar) {
   usethis::ui_done('Successfully cleaned {usethis::ui_path(filename)}.')
 
   return(df)
-
 }
 
 setup <- function(df, filename, progbar) {
