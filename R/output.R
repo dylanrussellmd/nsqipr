@@ -1,35 +1,45 @@
-output <- function(df, file, csv, rds, datatable, progbar) {
-  output_csv(df, file, csv, progbar)
-  output_rds(df, file, rds, progbar)
-  output_datatable(df, file, datatable, progbar)
+output <- function(df, file, filename, csv, rds, longtables, progbar) {
+  output_rds(df, file, filename, rds, progbar)
+  output_csv(df, file, filename, csv, progbar)
+  output_longtables(longtables, file, filename, csv, rds, progbar)
 }
 
-output_rds <- function(df, file, rds, progbar) {
+output_rds <- function(df, file, filename, rds, progbar) {
   if(rds) {
-    tick(progbar, "writing .rds for", file)
+    tick(progbar, "writing main .rds for", filename)
     saveRDS(df, file = paste(tools::file_path_sans_ext(file), "_clean.rds", sep = ""))
   }
 }
 
-output_csv <- function(df, file, csv, progbar) {
-  if(csv) {
-    tick(progbar, "writing .csv for", file)
-    data.table::fwrite(df, file = paste(tools::file_path_sans_ext(file), "_clean.csv", sep = ""), showProgress = FALSE)
+output_csv <- function(df, file, filename, csv, progbar) {
+  if(!is.na(csv)) {
+    if(csv == "indiv" | csv == "both") {
+      tick(progbar, "writing main .csv for", filename)
+      data.table::fwrite(df, file = paste(tools::file_path_sans_ext(file), "_clean.csv", sep = ""), showProgress = FALSE)
+    }
+    if(csv == "append" | csv == "both") {
+      tick(progbar, "appending to full main .csv:", filename)
+      data.table::fwrite(df, file = fs::path(fs::path_dir(file), paste(basename(dirname(file)), "_full_clean.csv", sep = "")), showProgress = FALSE, append = TRUE)
+    }
   }
-  return(NULL)
 }
 
-output_datatable <- function(df, file, datatable, progbar) {
-  #if(write_to_csv & !append) vroom::vroom_write(df, path = paste(tools::file_path_sans_ext(file), "_clean.csv", sep = ""), delim = ",", na = "", col_names = headers)
-  #if(write_to_csv & append) vroom::vroom_write(df, path = file.path(dirname(file),paste(parse_filename(file),"full_clean.csv", sep = "_")), delim = ",", na = "", col_names = FALSE, append = TRUE)
-}
-
-combine <- function(lst) {
-  x <- data.table::rbindlist(lst[1:2], fill = TRUE)
-  lst <- lst[c(-1, -2)]
-  while(length(lst) > 0) {
-    x <- data.table::rbindlist(c(x, lst[1]), fill = TRUE)
-    lst <- lst[-1]
-  }
-  return(x)
+output_longtables <- function(longtables, file, filename, csv, rds, progbar) {
+  tick(progbar, "writing supplementary tables for", filename)
+  lapply(longtables, function(x) {
+    if(isFullDT(x)) {
+      name <- names(x)[[3]]
+      if(!is.na(csv)) {
+        if(csv == "indiv" | csv == "both") {
+          data.table::fwrite(x, file = paste(tools::file_path_sans_ext(file),"_", name ,".csv", sep = ""), showProgress = FALSE)
+        }
+        if(csv == "append" | csv == "both") {
+          data.table::fwrite(x, file = fs::path(fs::path_dir(file), paste(basename(dirname(file)),"_full_", name ,".csv", sep = "")), showProgress = FALSE, append = TRUE)
+        }
+      }
+      if(rds) {
+        saveRDS(x, file = paste(tools::file_path_sans_ext(file),"_", name ,".rds", sep = ""))
+      }
+    }
+  })
 }

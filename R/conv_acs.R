@@ -1,19 +1,34 @@
-conv_acs_cols <- function(df, filename, factor_cols) {
+#' Convert ACS NSQIP PUF columns
+#'
+#' @param df a data table to be cleaned
+#' @param filename the name of the file from which the data table has been read in
+#'
+#' @details If the file being processed is an ACS NSQIP PUF (i.e., not a targeted data set),
+#' it will be processed by this function. This function determines how data cleaning steps specific
+#' to ACS NSQIP PUF files should proceed.
+#'
+#' @keywords internal
+#'
+conv_acs_cols <- function(df, filename) {
   get_pufyear(df, filename)
-  data.table::setnames(df, "race_new","race", skip_absent = TRUE)
+  #data.table::setnames(df, "race_new","race", skip_absent = TRUE)
   conv_hispanic(df)
-   conv_(df, "race", conv_race)
-   conv_(df, "sex", conv_sex)
-   conv_(df, "inout", conv_inout)
-   conv_(df, "diabetes", insulin, newcol = "insulin")
-   conv_(df, "diabetes", conv_notno)
-   conv_(df, "dyspnea", when_dyspnea, newcol = "when_dyspnea")
-   conv_(df, "dyspnea", conv_notno)
-   conv_(df, "prsepis", type_prsepis, newcol = "type_prsepis")
-   conv_(df, "prsepis", conv_notno)
+  conv_(df, "race", conv_race)
+  conv_(df, "sex", conv_sex)
+  conv_(df, "inout", conv_inout)
+  conv_(df, "diabetes", insulin, newcol = "insulin")
+  conv_(df, "diabetes", conv_notno)
+  conv_(df, "dyspnea", when_dyspnea, newcol = "when_dyspnea")
+  conv_(df, "dyspnea", conv_notno)
+  conv_(df, "prsepis", type_prsepis, newcol = "type_prsepis")
+  conv_(df, "prsepis", conv_notno)
   check_comaneurograft(df)
+  make_readm_cols(df)
+  make_reop_cols(df)
+  make_anesthes_other_cols(df)
 }
 
+#### ---- FACTOR LISTS (THESE DEFINE THE FACTOR LEVELS FOR VARIOUS COLUMNS) ---- ####
 fnstatus1 <- list(Independent = "Independent",
                  `Partially dependent` = "Partially Dependent",
                  `Totally dependent` = "Totally Dependent")
@@ -91,7 +106,14 @@ anesthes <- list(`Epidural` = "Epidural",
                  `Other` = "Other",
                  `Regional` = "Regional",
                  `Spinal` = "Spinal")
-#anesthes_other <- anesthes #anesthes_other will need to be converted to long :(
+anesthes_other1 <- anesthes
+anesthes_other2 <- anesthes
+anesthes_other3 <- anesthes
+anesthes_other4 <- anesthes
+anesthes_other5 <- anesthes
+anesthes_other6 <- anesthes
+anesthes_other7 <- anesthes
+anesthes_other8 <- anesthes
 surgspec <- list(`Cardiac surgery` = "Cardiac Surgery",
                  `General surgery` = "General Surgery",
                  `Gynecology` = "Gynecology",
@@ -107,6 +129,97 @@ surgspec <- list(`Cardiac surgery` = "Cardiac Surgery",
                  `Podiatry` = "Podiatry",
                  `Oral surgery` = "Oral surgery",
                  `Other` = "Other")
+
+#### ---- LONG COLUMNS ---- ####
+readmission <- paste("readmission", 1:5, sep = "")
+readmpodays <- paste("readmpodays", 1:5, sep = "")
+readmrelated <- paste("readmrelated", 1:5, sep = "")
+readmsuspreason <- paste("readmsuspreason", 1:5, sep = "")
+readmrelicd9 <- paste("readmrelicd9", 1:5, sep = "")
+readmrelicd10 <- paste("readmrelicd10", 1:5, sep = "")
+unplannedreadmission <- paste("unplannedreadmission", 1:5, sep = "")
+readmunrelsusp <- paste("readmunrelsusp", 1:5, sep = "")
+readmunrelicd9 <- paste("readmunrelicd9", 1:5, sep = "")
+readmunrelicd10 <- paste("readmunrelicd10", 1:5, sep = "")
+readm_cols <- c(readmission, readmpodays, readmrelated, readmsuspreason, readmrelicd9, readmrelicd10, unplannedreadmission, readmunrelsusp, readmunrelicd9, readmunrelicd10)
+
+reoperations <- paste("reoperation", 1:3, sep = "")
+retorpodays <- c("retorpodays","retor2podays", "retor3podays")
+reoporcpt1 <- c("reoporcpt1","reopor2cpt1","reopor3cpt1")
+retorrelated <- c("retorrelated","retor2related","retor3related")
+reoporicd91 <- c("reoporicd91","reopor2icd91","reopor3icd91")
+reoporicd10 <- c("reopor1icd101", "reopor2icd101", "reopor3icd101")
+reop_cols <- c(reoperations, retorpodays, reoporcpt1, retorrelated, reoporicd91, reoporicd10)
+
+anesthes_other_cols = paste("anesthes_other", 1:8, sep = "")
+
+proc <- c("prncptx", paste("otherproc", 1:10, sep = ""), paste("concurr", 1:10, sep = ""))
+cpt <- c("cpt", paste("othercpt", 1:10, sep = ""), paste("concpt", 1:10, sep = ""))
+wrvu <- c("workrvu", paste("otherwrvu", 1:10, sep = ""), paste("conwrvu", 1:10, sep = ""))
+cpt_cols <- c(proc, cpt, wrvu)
+
+#### ---- FUNCTIONS ---- ####
+
+#' Create readmission columns for long conversion
+#'
+#' @param df a data table to add the columns to
+#'
+#' @details First checks if the data table contains any of the readmission columns.
+#' If so, the rest are created as needed. New columns are set to a value of NA.
+#'
+#' @keywords internal
+#'
+#' @examples
+#' x <- data.table::data.table(readmission1 = TRUE)
+#' make_readm_cols(x)
+#' x
+#'
+make_readm_cols <- function(df) {
+  if(length(intersect(readm_cols, names(df))) > 0) {
+    for(j in setdiff(readm_cols, names(df))) data.table::set(df, j = j, value = NA)
+  }
+}
+
+#' Create reoperation columns for long conversion
+#'
+#' @param df a data table to add the columns to
+#'
+#' @details First checks if the data table contains any of the reoperation columns.
+#' If so, the rest are created as needed. New columns are set to a value of NA.
+#'
+#' @keywords internal
+#'
+#' @examples
+#' x <- data.table::data.table(reoperation1 = TRUE)
+#' make_reop_cols(x)
+#' x
+#'
+make_reop_cols <- function(df) {
+  if(length(intersect(reop_cols, names(df))) > 0) {
+    for(j in setdiff(reop_cols, names(df))) data.table::set(df, j = j, value = NA)
+  }
+}
+
+#' Create reoperation columns for long conversion
+#'
+#' @param df a data table to add the columns to
+#'
+#' @details First checks if the data table contains an "anesthes_other" column.
+#' If so, the column is split into 8 columns according to the regex pattern ",\\s?".
+#'
+#' @keywords internal
+#'
+#' @examples
+#' x <- data.table::data.table(anesthes_other = c("General","General, Spinal", "General, Spinal, MAC/IV Sedation", NA))
+#' make_anesthes_other_cols(x)
+#' x
+#'
+make_anesthes_other_cols <- function(df) {
+  if("anesthes_other" %qsin% names(df)) {
+    mat <- stringi::stri_split_regex(df[["anesthes_other"]], ",\\s?", simplify = NA, n = 8, omit_empty = TRUE, opts_regex = list(case_insensitive = TRUE))
+    for(j in seq_along(anesthes_other_cols)) data.table::set(df, j = anesthes_other_cols[[j]], value = mat[, j])
+  }
+}
 
 #' Remove coma, neuro deficit, and graft columns after 2010
 #'

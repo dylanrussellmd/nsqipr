@@ -4,20 +4,20 @@
 \alias{nsqip}
 \title{Clean NSQIP data}
 \usage{
-nsqip(path, csv = TRUE, rds = TRUE, datatable = FALSE)
+nsqip(path, csv = "indiv", rds = TRUE)
 }
 \arguments{
 \item{path}{path to file or directory.}
 
-\item{csv}{write the resulting data frame to a \code{.csv} file. Produces individual files for each \code{.txt} input}
+\item{csv}{write the resulting data frame to a \code{.csv} file. See details for options.}
 
-\item{rds}{write the resulting data frame to \code{.rds} file. Produces individual files for each \code{.txt} input}
-
-\item{datatable}{return a data table?}
-}
-\value{
-if \code{datatable} is TRUE, will return a data.table
+\item{rds}{a logical value. Write the resulting data frame to \code{.rds} file. Produces individual files for each \code{.txt} input.}
 }
 \description{
 Converts a single NSQIP \code{.txt} or a directory of NSQIP \code{.txt} files into a standardized NSQIP data table.
+}
+\details{
+\code{csv} may be set to "indiv", "append", "both", or NA. If "indiv", a CSV file will be output for each input file.
+If "append", a single CSV file will be created appending all input files into a single output file. "Both" will enact the
+effects of both "indiv" and "append". NA will produce no CSV files.
 }

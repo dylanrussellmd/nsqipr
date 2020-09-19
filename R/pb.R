@@ -6,9 +6,9 @@
 #'
 #' @keywords internal
 #'
-pb <- function(csv, rds, datatable) {
+pb <- function(csv, rds) {
   progress::progress_bar$new(
-    format = "(:spin)  :preface :what [:bar] :current/:total", total = 14 + csv + rds + datatable, show_after = 0)
+    format = "(:spin)  :preface :what [:bar] :current/:total", total = 17 + (csv == "indiv" | csv == "both") + (csv == "append" | csv == "both") + rds, show_after = 0)
 }
 
 #' Increment a progress bar

@@ -7,39 +7,46 @@
 #'
 #' @keywords internal
 #'
-nsqip_dir <- function(dir, csv, rds, datatable) {
-  df <- lapply(fs::dir_ls(dir), function(file) {
-     conv_to_standard(file, csv, rds, datatable, progbar)
+nsqip_dir <- function(dir, csv, rds) {
+  files <- fs::dir_ls(dir)
+  cols <- collect_column_names(files)
+  df <- lapply(files, function(file) {
+     conv_to_standard(file, cols, csv, rds, progbar)
   })
   usethis::ui_done('Successfully cleaned all files in {usethis::ui_path(dir)}.')
-  return(df)
+  invisible(NULL)
 }
 
 # TODO: Figure out how to append CSVs while keeping first row as headers.
-conv_to_standard <- function(file, csv, rds, datatable, progbar) {
-  progbar <- pb(csv, rds, datatable)
+conv_to_standard <- function(file, cols, csv, rds, progbar) {
+  progbar <- pb(csv, rds)
   filename <- fs::path_file(file)
   tick(progbar, "reading", filename, 0)
 
   df <- data.table::fread(file, sep = "\t", colClasses = "character", showProgress = FALSE)
-  setup(df, filename, progbar)
+  setup(df, filename, progbar, cols)
   conv_type_cols(df, filename, progbar)
   conv_special_cols(df, filename, progbar)
   conv_factor_cols(df, filename, progbar)
+  longtables <- conv_long_tables(df, filename, progbar)
   conv_order_cols(df, filename, progbar)
-  output(df, file, csv, rds, datatable, progbar)
+  output(df, file, filename, csv, rds, longtables, progbar)
 
   tick(progbar, "completed", filename)
   usethis::ui_done('Successfully cleaned {usethis::ui_path(filename)}.')
 
-  return(df)
+  invisible(NULL)
 }
 
-setup <- function(df, filename, progbar) {
+setup <- function(df, filename, progbar, cols) {
   tick(progbar, "converting names to lower case in", filename)
   setlowernames(df)
+  tick(progbar, "adding missing columns to", filename)
+  addmissingcolumns(df, cols)
   tick(progbar, "setting NA values in", filename)
   setna(df, c("unknown", "unknown/not reported", "null", "n/a", "not documented", "none/not documented", "not entered","-99"))
+  tick(progbar, "coalescing old and new columns", filename)
+  coalesce_cols(df, coalesce_in_cols, coalesce_out_cols)
 }
 
 conv_type_cols <- function(df, filename, progbar) {
@@ -74,13 +81,15 @@ conv_factor_cols <- function(df, filename, progbar) {
   conv_factor(df, factor_cols)
 }
 
+conv_long_tables <- function(df, filename, progbar) {
+  tick(progbar, "creating long tables for", filename)
+  long_funcs <- c(make_cpt_long, make_reop_long, make_readm_long, make_anesthes_other_long)
+  lapply(long_funcs, function(f) f(df))
+}
+
 conv_order_cols <- function(df, filename, progbar) {
-  tick(progbar, "coalescing old and new columns", filename)
-  coalesce_cols(df, coalesce_in_cols, coalesce_out_cols)
   tick(progbar, "ordering columns of", filename)
   colorder(df, col_order)
   tick(progbar, "removing redundant columns from", filename)
   remove_undesired(df, redundant_cols)
 }
-
-

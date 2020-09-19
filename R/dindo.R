@@ -1,3 +1,12 @@
+#### ---- DINDO-CLAVIEN DEFINITIONS ---- ####
+dindo_1 <- c("supinfec","wndinfd","dehis","renainsf")
+dindo_2 <- c("orgspcssi","oupneumo","urninfec","pulembol","othbleed","othdvt","othsysep","othcdiff")
+dindo_3 <- c("returnor")
+dindo_4 <- c("reintub","failwean","oprenafl","cnscva","cdarrest","cdmi","othseshock","cnscoma","neurodef")
+dindo_5 <- c("yrdeath")
+
+#### ---- FUNCTIONS ---- ####
+
 #' Check if a boolean is TRUE and not NA
 #'
 #' This represent a key assumption about the Dindo classification sorting. If a complication is missing (NA), it is considered FALSE

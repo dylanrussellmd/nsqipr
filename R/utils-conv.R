@@ -1,3 +1,7 @@
+addmissingcolumns <- function(df, cols) {
+  for(j in setdiff(cols, names(df))) data.table::set(df, j=j, value=NA_character_)
+}
+
 #' Convert column names to lower case
 #'
 #' @param df a data table to convert names to lower case
