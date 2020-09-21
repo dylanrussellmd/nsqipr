@@ -22,7 +22,7 @@ Matches the regex pattern \code{"^.*?\\d"}. NA will return NA.
 
 x <- data.frame(x = rep("1 - test", 10), y = rep("2- test", 10), z = rep("  3 test", 10),
 xx = rep("4            5", 10), yy = rep(NA, 10))
-lapply(x , conv_numscale)
+lapply(x , nsqipr:::conv_numscale)
 
 }
 \keyword{internal}

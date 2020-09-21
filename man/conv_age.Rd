@@ -20,6 +20,7 @@ NSQIP encodes anyone over the age of 90 as "90+". This converts all "90+" to 90.
 If given NA, will return NA.
 }
 \examples{
+nsqipr:::conv_age(c("18","45","90+",NA))
 
 }
 \keyword{internal}

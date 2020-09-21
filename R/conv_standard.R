@@ -17,13 +17,12 @@ nsqip_dir <- function(dir, csv, rds) {
   invisible(NULL)
 }
 
-# TODO: Figure out how to append CSVs while keeping first row as headers.
 conv_to_standard <- function(file, cols, csv, rds, progbar) {
   progbar <- pb(csv, rds)
   filename <- fs::path_file(file)
   tick(progbar, "reading", filename, 0)
 
-  df <- data.table::fread(file, sep = "\t", colClasses = "character", showProgress = FALSE)
+  df <- data.table::fread(file, sep = "\t", colClasses = "character", showProgress = FALSE, na.strings = na_strings)
   setup(df, filename, progbar, cols)
   conv_type_cols(df, filename, progbar)
   conv_special_cols(df, filename, progbar)
@@ -43,8 +42,6 @@ setup <- function(df, filename, progbar, cols) {
   setlowernames(df)
   tick(progbar, "adding missing columns to", filename)
   addmissingcolumns(df, cols)
-  tick(progbar, "setting NA values in", filename)
-  setna(df, c("unknown", "unknown/not reported", "null", "n/a", "not documented", "none/not documented", "not entered","-99"))
   tick(progbar, "coalescing old and new columns", filename)
   coalesce_cols(df, coalesce_in_cols, coalesce_out_cols)
 }

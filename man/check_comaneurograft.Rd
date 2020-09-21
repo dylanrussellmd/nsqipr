@@ -20,19 +20,24 @@ According to NSQIP, Graft failure, Coma, and Peripheral Nerve Injury should not 
 considered accurate for any PUF after 2010 (see the \link[https://www.facs.org/quality-programs/acs-nsqip/participant-use]{NSQIP} website).
 }
 \examples{
-x <- data.table::data.table(coma = c(TRUE, TRUE, FALSE), cnscoma = c(TRUE, TRUE, FALSE), ncnscoma = c(1,2,3), dcnscoma = c(1,2,3),
-                            neurodef = c(TRUE, TRUE, FALSE), nneurodef = c(1,2,3), dneurodef = c(1,2,3),
-                            othgrafl = c(TRUE, TRUE, FALSE), nothgrafl = c(1,2,3), dothgrafl = c(1,2,3),
-                            distraction = c("Test","test","test"))
-get_pufyear(x, "acs_nsqip_puf12.txt")
-check_comagraftpn(x)
+x <- data.table::data.table(
+coma = c(TRUE, TRUE, FALSE),
+cnscoma = c(TRUE, TRUE, FALSE),
+ncnscoma = c(1,2,3),
+dcnscoma = c(1,2,3),
+neurodef = c(TRUE, TRUE, FALSE),
+nneurodef = c(1,2,3),
+dneurodef = c(1,2,3),
+othgrafl = c(TRUE, TRUE, FALSE),
+nothgrafl = c(1,2,3),
+dothgrafl = c(1,2,3),
+distraction = c("Test","test","test")
+)
 
-x <- data.table::data.table(coma = c(TRUE, TRUE, FALSE), cnscoma = c(TRUE, TRUE, FALSE), ncnscoma = c(1,2,3), dcnscoma = c(1,2,3),
-                            neurodef = c(TRUE, TRUE, FALSE), nneurodef = c(1,2,3), dneurodef = c(1,2,3),
-                            othgrafl = c(TRUE, TRUE, FALSE), nothgrafl = c(1,2,3), dothgrafl = c(1,2,3),
-                            distraction = c("Test","test","test"))
-get_pufyear(x, "acs_nsqip_puf10.txt")
-check_comagraftpn(x)
+nsqipr:::get_pufyear(x, "acs_nsqip_puf10.txt")
+nsqipr:::check_comaneurograft(x)
+nsqipr:::get_pufyear(x, "acs_nsqip_puf12.txt")
+nsqipr:::check_comaneurograft(x)
 
 }
 \keyword{internal}

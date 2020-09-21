@@ -17,11 +17,11 @@ Will return TRUE if the object supplied is a non-empty data.table.
 Otherwise, returns FALSE.
 }
 \examples{
-isFullDT(NULL)
-isFullDT("test")
-isFullDT(NA)
-isFullDT(data.table::data.table())
-isFullDT(data.table::data.table(test = numeric(), test2 = logical(), test3 = character()))
-isFullDT(data.table::data.table(test = 1, test2 = TRUE, test3 = "character"))
+nsqipr:::isFullDT(NULL)
+nsqipr:::isFullDT("test")
+nsqipr:::isFullDT(NA)
+nsqipr:::isFullDT(data.table::data.table())
+nsqipr:::isFullDT(data.table::data.table(test = numeric(), test2 = logical(), test3 = character()))
+nsqipr:::isFullDT(data.table::data.table(test = 1, test2 = TRUE, test3 = "character"))
 
 }

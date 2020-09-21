@@ -21,7 +21,7 @@ A simple wrapper around \code{\link[data.table:fcoalesce]{fcoalesce}}.
 \examples{
 x = c(11L, NA, 13L, NA, 15L, NA)
 y = c(NA, 12L, 5L, NA, NA, NA)
-coalesce(x, y)
+nsqipr:::coalesce(x, y)
 
 }
 \keyword{internal}

@@ -22,8 +22,8 @@ Matches the year of the file from the file name using a regular expression.
 Requires that the original file names \bold{are not changed}.
 }
 \examples{
-data.table::data.table(x = rep("name", 10))
-get_pufyear(x, "acs_nsqip_puf12.txt")
+x <- data.table::data.table(x = rep("name", 10))
+nsqipr:::get_pufyear(x, "acs_nsqip_puf12.txt")
 x$pufyear < "2013"
 x$pufyear > "2005-2006"
 

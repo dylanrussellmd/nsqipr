@@ -18,7 +18,7 @@ If so, the rest are created as needed. New columns are set to a value of NA.
 }
 \examples{
 x <- data.table::data.table(readmission1 = TRUE)
-make_readm_cols(x)
+nsqipr:::make_readm_cols(x)
 x
 
 }

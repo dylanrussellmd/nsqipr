@@ -22,7 +22,7 @@ Matches the case-insensitive fixed string \code{"yes"}. NA will return NA.
 
 x <- data.frame(x = rep("yes", 10), y = rep("YES", 10), z = rep("no", 10),
 xx = rep("NO", 10), yy = rep(NA, 10))
-lapply(x , conv_yesno)
+lapply(x , nsqipr:::conv_yesno)
 
 }
 \keyword{internal}

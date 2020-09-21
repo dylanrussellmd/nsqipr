@@ -37,15 +37,23 @@ into a logical vector.
 }}
 
 \examples{
-x <- data.table::data.table(race = c("Hispanic, White", "White, Not of Hispanic Origin","Hispanic, Black","Black, Not of Hispanic Origin",
-"American Indian or Alaska Native","Asian","Native Hawaiian or Pacific Islander","Asian or Pacific Islander"))
-conv_hispanic(x)
+x <- data.table::data.table(
+race = c("Hispanic, White", "White, Not of Hispanic Origin","Hispanic, Black",
+"Black, Not of Hispanic Origin", "American Indian or Alaska Native","Asian",
+"Native Hawaiian or Pacific Islander","Asian or Pacific Islander")
+)
+
+nsqipr:::conv_hispanic(x)
 x
 
-x <- data.table::data.table(race = c("Hispanic, White", "White, Not of Hispanic Origin","White","Hispanic, Black", "Black, Not of Hispanic Origin","Black or African American",
-+ "American Indian or Alaska Native","Asian","Native Hawaiian or Pacific Islander","Asian or Pacific Islander"),
-+ ethnicity_hispanic = c(NA, NA, "yes", NA, NA, NA, NA, NA, NA, NA))
-conv_hispanic(x)
+x <- data.table::data.table(
+race = c("Hispanic, White", "White, Not of Hispanic Origin","White","Hispanic, Black",
+"Black, Not of Hispanic Origin","Black or African American", "American Indian or Alaska Native",
+"Asian", "Native Hawaiian or Pacific Islander","Asian or Pacific Islander"),
+ethnicity_hispanic = c(NA, NA, "yes", NA, NA, NA, NA, NA, NA, NA)
+)
+
+nsqipr:::conv_hispanic(x)
 x
 
 }

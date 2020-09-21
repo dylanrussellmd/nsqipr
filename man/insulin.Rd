@@ -16,11 +16,12 @@ a logical vector
 Parse a column for insulin usage
 }
 \details{
-NSQIP encodes the \code{diabetes} column as either "no", "non-insulin", or "insulin".
+NSQIP encodes the \code{diabetes} column as either "no", "non-insulin", "oral", or "insulin".
 This function checks that the value is both \bold{not} "no" and also equal to "insulin". Returns
-FALSE if either "no" or "non-insulin". If given NA, will return NA.
+FALSE if either "oral" or "non-insulin". Returns NA if \code{diabetes} is either "no" or NA.
 }
 \examples{
+ nsqipr:::insulin(c("no","non-insulin","oral","insulin",NA))
 
 }
 \keyword{internal}

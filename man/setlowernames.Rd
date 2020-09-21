@@ -20,8 +20,8 @@ This function \bold{modifies by reference}.
 }
 \examples{
 
-x <- data.table(X = NA, Y = NA, Z = NA)
-setlowernames(x)
+x <- data.table::data.table(X = NA, Y = NA, Z = NA)
+nsqipr:::setlowernames(x)
 names(x)
 
 }

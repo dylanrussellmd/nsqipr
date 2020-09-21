@@ -9,7 +9,7 @@ colorder(df, col_order)
 \arguments{
 \item{df}{a data table to be ordered}
 
-\item{col_order}{a character vector of column names in the desired order}
+\item{col_order}{a character vector of column names in the desired order.}
 }
 \value{
 a data table
@@ -24,7 +24,7 @@ to \code{col_order}, it will simply skip over it without error.
 \examples{
 x <- data.table::data.table(c = c(1,2,3), b = c(1,2,3), a = c(1,2,3))
 col_order <- c("a","b","c")
-colorder(x, col_order)
+nsqipr:::colorder(x, col_order)
 identical(names(x), col_order)
 
 }

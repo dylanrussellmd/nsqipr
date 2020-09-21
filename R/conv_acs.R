@@ -11,9 +11,9 @@
 #'
 conv_acs_cols <- function(df, filename) {
   get_pufyear(df, filename)
-  #data.table::setnames(df, "race_new","race", skip_absent = TRUE)
   conv_hispanic(df)
   conv_(df, "race", conv_race)
+  conv_(df, "age", conv_age)
   conv_(df, "sex", conv_sex)
   conv_(df, "inout", conv_inout)
   conv_(df, "diabetes", insulin, newcol = "insulin")
@@ -127,7 +127,7 @@ surgspec <- list(`Cardiac surgery` = "Cardiac Surgery",
                  `Interventional radiologist` = "Interventional Radiologist",
                  `Ophthalmology` = "Ophthalmology",
                  `Podiatry` = "Podiatry",
-                 `Oral surgery` = "Oral surgery",
+                 `Oral surgery` = "Oral Surgery",
                  `Other` = "Other")
 
 #### ---- LONG COLUMNS ---- ####
@@ -171,7 +171,7 @@ cpt_cols <- c(proc, cpt, wrvu)
 #'
 #' @examples
 #' x <- data.table::data.table(readmission1 = TRUE)
-#' make_readm_cols(x)
+#' nsqipr:::make_readm_cols(x)
 #' x
 #'
 make_readm_cols <- function(df) {
@@ -191,7 +191,7 @@ make_readm_cols <- function(df) {
 #'
 #' @examples
 #' x <- data.table::data.table(reoperation1 = TRUE)
-#' make_reop_cols(x)
+#' nsqipr:::make_reop_cols(x)
 #' x
 #'
 make_reop_cols <- function(df) {
@@ -210,8 +210,10 @@ make_reop_cols <- function(df) {
 #' @keywords internal
 #'
 #' @examples
-#' x <- data.table::data.table(anesthes_other = c("General","General, Spinal", "General, Spinal, MAC/IV Sedation", NA))
-#' make_anesthes_other_cols(x)
+#' x <- data.table::data.table(
+#' anesthes_other = c("General","General, Spinal", "General, Spinal, MAC/IV Sedation", NA)
+#' )
+#' nsqipr:::make_anesthes_other_cols(x)
 #' x
 #'
 make_anesthes_other_cols <- function(df) {
@@ -232,19 +234,24 @@ make_anesthes_other_cols <- function(df) {
 #' @keywords internal
 #'
 #' @examples
-#' x <- data.table::data.table(coma = c(TRUE, TRUE, FALSE), cnscoma = c(TRUE, TRUE, FALSE), ncnscoma = c(1,2,3), dcnscoma = c(1,2,3),
-#'                             neurodef = c(TRUE, TRUE, FALSE), nneurodef = c(1,2,3), dneurodef = c(1,2,3),
-#'                             othgrafl = c(TRUE, TRUE, FALSE), nothgrafl = c(1,2,3), dothgrafl = c(1,2,3),
-#'                             distraction = c("Test","test","test"))
-#' get_pufyear(x, "acs_nsqip_puf12.txt")
-#' check_comagraftpn(x)
+#' x <- data.table::data.table(
+#' coma = c(TRUE, TRUE, FALSE),
+#' cnscoma = c(TRUE, TRUE, FALSE),
+#' ncnscoma = c(1,2,3),
+#' dcnscoma = c(1,2,3),
+#' neurodef = c(TRUE, TRUE, FALSE),
+#' nneurodef = c(1,2,3),
+#' dneurodef = c(1,2,3),
+#' othgrafl = c(TRUE, TRUE, FALSE),
+#' nothgrafl = c(1,2,3),
+#' dothgrafl = c(1,2,3),
+#' distraction = c("Test","test","test")
+#' )
 #'
-#' x <- data.table::data.table(coma = c(TRUE, TRUE, FALSE), cnscoma = c(TRUE, TRUE, FALSE), ncnscoma = c(1,2,3), dcnscoma = c(1,2,3),
-#'                             neurodef = c(TRUE, TRUE, FALSE), nneurodef = c(1,2,3), dneurodef = c(1,2,3),
-#'                             othgrafl = c(TRUE, TRUE, FALSE), nothgrafl = c(1,2,3), dothgrafl = c(1,2,3),
-#'                             distraction = c("Test","test","test"))
-#' get_pufyear(x, "acs_nsqip_puf10.txt")
-#' check_comagraftpn(x)
+#' nsqipr:::get_pufyear(x, "acs_nsqip_puf10.txt")
+#' nsqipr:::check_comaneurograft(x)
+#' nsqipr:::get_pufyear(x, "acs_nsqip_puf12.txt")
+#' nsqipr:::check_comaneurograft(x)
 #'
 check_comaneurograft <- function(df) {
   if(unique(df[["pufyear"]]) > 2010) {
@@ -272,15 +279,23 @@ check_comaneurograft <- function(df) {
 #' @keywords internal
 #'
 #' @examples
-#' x <- data.table::data.table(race = c("Hispanic, White", "White, Not of Hispanic Origin","Hispanic, Black","Black, Not of Hispanic Origin",
-#' "American Indian or Alaska Native","Asian","Native Hawaiian or Pacific Islander","Asian or Pacific Islander"))
-#' conv_hispanic(x)
+#' x <- data.table::data.table(
+#' race = c("Hispanic, White", "White, Not of Hispanic Origin","Hispanic, Black",
+#' "Black, Not of Hispanic Origin", "American Indian or Alaska Native","Asian",
+#' "Native Hawaiian or Pacific Islander","Asian or Pacific Islander")
+#' )
+#'
+#' nsqipr:::conv_hispanic(x)
 #' x
 #'
-#' x <- data.table::data.table(race = c("Hispanic, White", "White, Not of Hispanic Origin","White","Hispanic, Black", "Black, Not of Hispanic Origin","Black or African American",
-#' + "American Indian or Alaska Native","Asian","Native Hawaiian or Pacific Islander","Asian or Pacific Islander"),
-#' + ethnicity_hispanic = c(NA, NA, "yes", NA, NA, NA, NA, NA, NA, NA))
-#' conv_hispanic(x)
+#' x <- data.table::data.table(
+#' race = c("Hispanic, White", "White, Not of Hispanic Origin","White","Hispanic, Black",
+#' "Black, Not of Hispanic Origin","Black or African American", "American Indian or Alaska Native",
+#' "Asian", "Native Hawaiian or Pacific Islander","Asian or Pacific Islander"),
+#' ethnicity_hispanic = c(NA, NA, "yes", NA, NA, NA, NA, NA, NA, NA)
+#' )
+#'
+#' nsqipr:::conv_hispanic(x)
 #' x
 #'
 conv_hispanic <- function(df) {
@@ -318,11 +333,11 @@ conv_hispanic_helper <- function(df) {
 #' @keywords internal
 #' @examples
 #' x <- c("White","Black or African American","Asian or Pacific Islander")
-#' conv_race(x)
+#' nsqipr:::conv_race(x)
 #' x
 #'
 #' x <- c("White","Black or African American","Asian or Pacific Islander")
-#' conv_race(x, pacific = "hawaiian")
+#' nsqipr:::conv_race(x, pacific = "hawaiian")
 #' x
 conv_race <- function(vec, pacific = "asian") {
   asian <- list(White = c("Hispanic, White", "White, Not of Hispanic Origin","White"),
@@ -353,7 +368,7 @@ conv_race <- function(vec, pacific = "asian") {
 #' @keywords internal
 #'
 #' @examples
-#  conv_sex(c("male","MALE","female","FEMALE",NA))
+#'  nsqipr:::conv_sex(c("male","MALE","female","FEMALE",NA))
 #'
 conv_sex <- function(vec) {
   stringi::stri_detect_regex(vec, "^male", opts_regex = list(case_insensitive = TRUE))
@@ -369,7 +384,7 @@ conv_sex <- function(vec) {
 #' @keywords internal
 #'
 #' @examples
-#  conv_inout(c("Inpatient", "Outpatient", NA))
+#'  nsqipr:::conv_inout(c("Inpatient", "Outpatient", NA))
 #'
 conv_inout <- function(vec) {
   stringi::stri_detect_fixed(vec, "Inpatient", opts_fixed = list(case_insensitive = TRUE))
@@ -386,7 +401,7 @@ conv_inout <- function(vec) {
 #' @keywords internal
 #'
 #' @examples
-#  conv_age(c("18","45","90+",NA))
+#' nsqipr:::conv_age(c("18","45","90+",NA))
 #'
 conv_age <- function(vec) {
   as.integer(ifelse(stringi::stri_detect_fixed(vec, "90+", opts_fixed = list(case_insensitive = TRUE)), "90", vec))
@@ -396,18 +411,19 @@ conv_age <- function(vec) {
 #'
 #' @param vec a character vector of values to convert
 #'
-#' @details NSQIP encodes the \code{diabetes} column as either "no", "non-insulin", or "insulin".
+#' @details NSQIP encodes the \code{diabetes} column as either "no", "non-insulin", "oral", or "insulin".
 #' This function checks that the value is both \bold{not} "no" and also equal to "insulin". Returns
-#' FALSE if either "no" or "non-insulin". If given NA, will return NA.
+#' FALSE if either "oral" or "non-insulin". Returns NA if \code{diabetes} is either "no" or NA.
 #'
 #' @return a logical vector
 #' @keywords internal
 #'
 #' @examples
-#  insulin(c("no","non-insulin","insulin",NA))
+#'  nsqipr:::insulin(c("no","non-insulin","oral","insulin",NA))
 #'
 insulin <- function(vec) {
-  conv_notno(vec) & stringi::stri_detect_regex(vec, "^insulin$", opts_regex = list(case_insensitive = TRUE))
+  ifelse(stringi::stri_detect_regex(vec, "^no$", opts_regex = list(case_insensitive = TRUE)), NA,
+                                    conv_notno(vec) & stringi::stri_detect_regex(vec, "^insulin$", opts_regex = list(case_insensitive = TRUE)))
 }
 
 #' Parse a column for type of dyspnea
@@ -421,7 +437,7 @@ insulin <- function(vec) {
 #' @keywords internal
 #'
 #' @examples
-#  when_dyspnea(c("at rest","moderate exertion", NA))
+#'  nsqipr:::when_dyspnea(c("at rest","moderate exertion", NA))
 #'
 when_dyspnea <- function(vec) {
   vec %^% list(`At rest` = "AT REST", `Moderate exertion` = "MODERATE EXERTION")
@@ -441,7 +457,7 @@ when_dyspnea <- function(vec) {
 #' @keywords internal
 #'
 #' @examples
-#  type_prsepis(c("sirs","sepsis", "septic shock", NA))
+#'  nsqipr:::type_prsepis(c("sirs","sepsis", "septic shock", NA))
 #'
 type_prsepis <- function(vec) {
   vec %^% list(`SIRS` = "SIRS", `Sepsis` = "Sepsis", `Septic shock` = "Septic Shock")

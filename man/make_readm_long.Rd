@@ -77,8 +77,8 @@ readmunrelsusp5 = c("Reason", NA, NA, NA),
 readmunrelicd95 = c("111", NA, NA, NA),
 readmunrelicd105 = c("1111",NA,NA,NA))
 
-make_readm_long(x)
-make_reop_long(x, TRUE)
+nsqipr:::make_readm_long(x)
+nsqipr:::make_reop_long(x, TRUE)
 
 }
 \keyword{internal}

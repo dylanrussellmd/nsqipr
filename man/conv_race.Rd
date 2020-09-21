@@ -26,11 +26,11 @@ Convert race to factor
 }
 \examples{
 x <- c("White","Black or African American","Asian or Pacific Islander")
-conv_race(x)
+nsqipr:::conv_race(x)
 x
 
 x <- c("White","Black or African American","Asian or Pacific Islander")
-conv_race(x, pacific = "hawaiian")
+nsqipr:::conv_race(x, pacific = "hawaiian")
 x
 }
 \keyword{internal}

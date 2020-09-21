@@ -23,6 +23,7 @@ This function factors the vector for the levels "SIRS", "Sepsis", and "Septic sh
 It is not spelled \code{prsepsis}.
 }
 \examples{
+ nsqipr:::type_prsepis(c("sirs","sepsis", "septic shock", NA))
 
 }
 \keyword{internal}

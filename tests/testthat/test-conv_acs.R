@@ -7,8 +7,8 @@ testthat::test_that("conv_age works", {
 })
 
 testthat::test_that("insulin works", {
-  testthat::expect_equal(insulin(c("NO","NON-INSULIN","INSULIN", "ORAL", NA)), c(FALSE, FALSE, TRUE,FALSE,NA))
-  testthat::expect_equal(insulin(c("no","non-insulin","insulin", "oral", NA)), c(FALSE, FALSE, TRUE,FALSE,NA))
+  testthat::expect_equal(insulin(c("NO","NON-INSULIN","INSULIN", "ORAL", NA)), c(NA, FALSE, TRUE,FALSE,NA))
+  testthat::expect_equal(insulin(c("no","non-insulin","insulin", "oral", NA)), c(NA, FALSE, TRUE,FALSE,NA))
 })
 
 testthat::test_that("when_dyspnea works", {

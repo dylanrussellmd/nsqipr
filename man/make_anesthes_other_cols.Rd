@@ -17,8 +17,10 @@ First checks if the data table contains an "anesthes_other" column.
 If so, the column is split into 8 columns according to the regex pattern ",\\s?".
 }
 \examples{
-x <- data.table::data.table(anesthes_other = c("General","General, Spinal", "General, Spinal, MAC/IV Sedation", NA))
-make_anesthes_other_cols(x)
+x <- data.table::data.table(
+anesthes_other = c("General","General, Spinal", "General, Spinal, MAC/IV Sedation", NA)
+)
+nsqipr:::make_anesthes_other_cols(x)
 x
 
 }

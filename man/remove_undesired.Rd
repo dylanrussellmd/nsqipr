@@ -24,7 +24,7 @@ This function \bold{modifies by reference}.
 x <- data.table::data.table(a = c(1,2,3), b = c(1,2,3), c = c(1,2,3))
 orignames <- names(x)
 undesired_cols <- c("a","b", "d")
-remove_undesired(x, undesired_cols)
+nsqipr:::remove_undesired(x, undesired_cols)
 identical(names(x), setdiff(orignames, undesired_cols))
 
 }

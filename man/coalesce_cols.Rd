@@ -37,7 +37,7 @@ c = c(NA, TRUE, FALSE), d = c(NA, TRUE, FALSE),
 A = c(TRUE, NA, TRUE), B = c(TRUE, NA, TRUE))
 coalesce_in_cols <- c("A","B","C","D")
 coalesce_out_cols <- c("a","b","c","d")
-coalesce_cols(x, coalesce_in_cols, coalesce_out_cols)
+nsqipr:::coalesce_cols(x, coalesce_in_cols, coalesce_out_cols)
 x
 
 }

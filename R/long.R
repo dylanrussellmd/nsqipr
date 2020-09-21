@@ -33,8 +33,8 @@
 #' reopor3icd91 = c("K56.69","T82.868A", NA, NA),
 #' reopor3icd101 = c("K56.59", "T82.868A", NA, NA))
 #'
-#' make_reop_long(x)
-#' make_reop_long(x, TRUE)
+#' nsqipr:::make_reop_long(x)
+#' nsqipr:::make_reop_long(x, TRUE)
 #'
 make_reop_long <- function(df, removeFALSE = FALSE) {
   if(length(intersect(reop_cols, names(df))) > 0) {
@@ -119,8 +119,8 @@ make_reop_long <- function(df, removeFALSE = FALSE) {
 #' readmunrelicd95 = c("111", NA, NA, NA),
 #' readmunrelicd105 = c("1111",NA,NA,NA))
 #'
-#' make_readm_long(x)
-#' make_reop_long(x, TRUE)
+#' nsqipr:::make_readm_long(x)
+#' nsqipr:::make_reop_long(x, TRUE)
 #'
 make_readm_long <- function(df, removeFALSE = FALSE) {
   if(length(intersect(readm_cols, names(df))) > 0) {
@@ -173,7 +173,7 @@ make_readm_long <- function(df, removeFALSE = FALSE) {
 #' anesthes_other7 = c(NA, NA, NA, NA),
 #' anesthes_other8 = c(NA, NA, NA, NA))
 #'
-#' make_anesthes_other_long(x)
+#' nsqipr:::make_anesthes_other_long(x)
 #'
 make_anesthes_other_long <- function(df) {
   if("anesthes_other" %qsin% names(df)) {

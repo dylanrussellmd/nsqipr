@@ -18,14 +18,14 @@ a logical vector of length \code{length(str)}
 Quick case-insensitive search of strings in a character vector
 }
 \details{
-Utilizes \code{data.table::\verb{\%chin\%}} to rapidly complete a case-insensitive search
+Utilizes \code{data.table::\%chin\%} to rapidly complete a case-insensitive search
 through a character vector to return a logical vector of string detections.
 Will always return TRUE or FALSE for each position of \code{str} regardless of NA missing values
 in either provided vector. NA in \code{str} will never match an NA value in \code{vec}.
 }
 \examples{
 x <- c("apple","banana","cherry",NA)
-"apple" \%qsin\% x
-c("APPLE","BANANA","coconut", NA) \%qsin\% x
+nsqipr:::`\%qsin\%`("apple",x) # could also use "apple" \%qsin\% x
+nsqipr:::`\%qsin\%`(c("APPLE","BANANA","coconut", NA), x)
 
 }

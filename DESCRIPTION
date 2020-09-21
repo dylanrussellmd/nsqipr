@@ -23,20 +23,14 @@ URL: https://github.com/dylanrussellmd/nsqipr
 BugReports: https://github.com/dylanrussellmd/nsqipr/issues
 Language: en-US
 Imports: 
-    stringr,
-    readr,
     magrittr,
     usethis,
-    dplyr,
-    tibble,
-    lubridate,
-    purrr,
     tools,
     utils,
     progress,
-    furniture,
     fs,
-    vroom,
-    data.table
+    data.table,
+    stringi,
+    rlang
 Depends: 
     R (>= 3.5.0)

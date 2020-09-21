@@ -15,7 +15,10 @@ lhs \%^\% rhs
 A pipe that allows easy conversion of a vector into a factor with specified levels.
 }
 \examples{
-c("apple","cherry","pork") \%^\% list(fruit = c("apple", "banana", "cherry"), meat = c("steak", "chicken", "pork"))
+nsqipr:::`\%^\%`(
+c("apple","cherry","pork"),
+list(fruit = c("apple", "banana", "cherry"), meat = c("steak", "chicken", "pork"))
+)
 
 }
 \keyword{internal}

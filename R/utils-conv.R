@@ -1,3 +1,21 @@
+#' Add missing columns
+#'
+#' @param df a data table
+#' @param cols a character vector of all possible columns
+#'
+#' @details This function \bold{modifies by reference}.
+#' This function compares a data tables columns to a character vector of all
+#' possible column names. Any columns not present in \code{df} that are present in \code{cols}
+#' are added to \code{df} with a value of \code{NA_character}.
+#'
+#' @keywords internal
+#' @return a data table
+#'
+#' @examples
+#' x <- data.table::data.table(a = c(1,2,3))
+#' cols <- c("a","b","c")
+#' nsqipr:::addmissingcolumns(x, cols)
+#' x
 addmissingcolumns <- function(df, cols) {
   for(j in setdiff(cols, names(df))) data.table::set(df, j=j, value=NA_character_)
 }
@@ -12,37 +30,12 @@ addmissingcolumns <- function(df, cols) {
 #'
 #' @examples
 #'
-#' x <- data.table(X = NA, Y = NA, Z = NA)
-#' setlowernames(x)
+#' x <- data.table::data.table(X = NA, Y = NA, Z = NA)
+#' nsqipr:::setlowernames(x)
 #' names(x)
 #'
 setlowernames <- function(df) {
   data.table::setnames(df, stringi::stri_trans_tolower(names(df)))
-}
-
-#' Convert all strings matching vector to NA
-#'
-#' @param df a data table to convert values to NA
-#' @param val a character vector of values to set to NA
-#' @return a data table
-#' @keywords internal
-#'
-#' @details This function \bold{modifies by reference}.
-#'
-#' @examples
-#'
-#' x <- data.table::data.table(x = c(rep("unknown", 10), rep("test", 10)), y = c(rep("unknown/not reported", 10), rep("test", 10)), z = c(rep("null", 10), rep("test", 10)),
-#' xx = c(rep("not documented", 10), rep("test", 10)), yy = c(rep("none/not documented", 10), rep("test", 10)), zz = c(rep("not entered", 10), rep("test", 10)),
-#' xxx = c(rep("-99", 10), rep("test", 10)), yyy = c(rep("test", 10), rep("test", 10)))
-#'
-#' setna(x, c("unknown", "unknown/not reported", "null", "n/a", "not documented", "none/not documented", "not entered","-99"))
-#' x
-#'
-setna <- function(df, val) {
-  for(j in seq_along(df)){
-    data.table::set(df, i=which(df[[j]] %qsin% val), j=j, value=NA)
-  }
-  invisible(df)
 }
 
 #' Apply a given function to specified columns in a data table
@@ -58,15 +51,15 @@ setna <- function(df, val) {
 #'
 #' @examples
 #' x <- data.table::data.table(x = rep("APPLE", 10), y = rep("BANANA", 10), z = rep("CHERRY", 10))
-#' conv_(x, c("x","y"), tolower)
+#' nsqipr:::conv_(x, c("x","y"), tolower)
 #' x
 #'
 #' x <- data.table::data.table(x = rep("APPLE", 10), y = rep("BANANA", 10), z = rep("CHERRY", 10))
-#' conv_(x, c("x","y"), tolower, c("X","Y"))
+#' nsqipr:::conv_(x, c("x","y"), tolower, newcol =  c("X","Y"))
 #' x
 #'
 #' x <- data.table::data.table(x = rep("APPLE", 10), y = rep("BANANA", 10), z = rep("CHERRY", 10))
-#' conv_(x, "x", paste, "JUICE", sep = " ", newcol = "drink")
+#' nsqipr:::conv_(x, "x", paste, "JUICE", sep = " ", newcol = "drink")
 #'
 conv_ <- function(df, cols, f, ..., newcol) {
   if(missing(newcol)) {
@@ -89,7 +82,7 @@ conv_ <- function(df, cols, f, ..., newcol) {
 #'
 #' x <- data.frame(x = rep("yes", 10), y = rep("YES", 10), z = rep("no", 10),
 #' xx = rep("NO", 10), yy = rep(NA, 10))
-#' lapply(x , conv_yesno)
+#' lapply(x , nsqipr:::conv_yesno)
 #'
 conv_yesno <- function(vec) {
   stringi::stri_detect_fixed(vec, "yes", opts_fixed = list(case_insensitive = TRUE))
@@ -108,11 +101,11 @@ conv_yesno <- function(vec) {
 #'
 #' x <- data.frame(x = rep("no", 10), y = rep("NO", 10), z = rep("yes", 10),
 #' xx = rep("", 10), yy = rep(NA, 10), zz = rep("NONE", 10))
-#' lapply(x, conv_notno)
+#' lapply(x, nsqipr:::conv_notno)
 #'
 conv_notno <- function(vec) {
-  !stringi::stri_detect_fixed(vec, "no", opts_fixed = list(case_insensitive = TRUE)) &
-    !stringi::stri_detect_fixed(vec, "none", opts_fixed = list(case_insensitive = TRUE))
+  !stringi::stri_detect_regex(vec, "^no$", opts_regex = list(case_insensitive = TRUE)) &
+    !stringi::stri_detect_regex(vec, "^none$", opts_regex = list(case_insensitive = TRUE))
 }
 
 #' Convert complication columns to logicals
@@ -126,9 +119,15 @@ conv_notno <- function(vec) {
 #' @keywords internal
 #' @examples
 #'
-#' x <- data.frame(x = rep("no complication", 10), y = rep("NO COMPLICATION", 10), z = rep("complication", 10),
-#' xx = rep("", 10), yy = rep(NA, 10))
-#' lapply(x , conv_complication)
+#' x <- data.frame(
+#' x = rep("no complication", 10),
+#' y = rep("NO COMPLICATION", 10),
+#' z = rep("complication", 10),
+#' xx = rep("", 10),
+#' yy = rep(NA, 10)
+#' )
+#'
+#' lapply(x , nsqipr:::conv_complication)
 #'
 conv_complication <- function(vec) {
   !stringi::stri_detect_fixed(vec, "no complication", opts_fixed = list(case_insensitive = TRUE))
@@ -146,7 +145,7 @@ conv_complication <- function(vec) {
 #'
 #' x <- data.frame(x = rep("1 - test", 10), y = rep("2- test", 10), z = rep("  3 test", 10),
 #' xx = rep("4            5", 10), yy = rep(NA, 10))
-#' lapply(x , conv_numscale)
+#' lapply(x , nsqipr:::conv_numscale)
 #'
 conv_numscale <- function(vec) {
   as.integer(stringi::stri_extract_first_regex(vec,"^.*?\\d", opts_regex = list(case_insensitive = TRUE)))
@@ -164,7 +163,7 @@ conv_numscale <- function(vec) {
 #' @examples
 #'
 #' x <- c("2000", "1900", "2020", "1950")
-#' conv_date(x)
+#' nsqipr:::conv_date(x)
 #'
 conv_date <- function(vec) {
   as.Date(vec,"%Y")
@@ -185,8 +184,8 @@ conv_date <- function(vec) {
 #' @keywords internal
 #'
 #' @examples
-#' data.table::data.table(x = rep("name", 10))
-#' get_pufyear(x, "acs_nsqip_puf12.txt")
+#' x <- data.table::data.table(x = rep("name", 10))
+#' nsqipr:::get_pufyear(x, "acs_nsqip_puf12.txt")
 #' x$pufyear < "2013"
 #' x$pufyear > "2005-2006"
 #'
@@ -211,7 +210,10 @@ get_pufyear <- function(df, filename) {
 #' @param rhs  a named list specifying how to rename the levels
 #'
 #' @examples
-#' c("apple","cherry","pork") %^% list(fruit = c("apple", "banana", "cherry"), meat = c("steak", "chicken", "pork"))
+#' nsqipr:::`%^%`(
+#' c("apple","cherry","pork"),
+#' list(fruit = c("apple", "banana", "cherry"), meat = c("steak", "chicken", "pork"))
+#' )
 #'
 `%^%` <- function(lhs, rhs) {
   x <- factor(stringi::stri_replace_all_fixed(lhs,"  ", " "))
@@ -239,7 +241,7 @@ get_pufyear <- function(df, filename) {
 #' foods <- list(fruit = c("apple", "banana", "cherry"), meat = c("steak","chicken","pork"))
 #' drinks <- list(`non-alcoholic` = c("milk","water","oj"), alcoholic = c("beer","vodka","rum"))
 #' factor_cols <- c("foods", "drinks")
-#' conv_factor(x)
+#' nsqipr:::conv_factor(x, factor_cols)
 #' x
 #'
 conv_factor <- function(df, factor_cols) {
@@ -250,7 +252,7 @@ conv_factor <- function(df, factor_cols) {
 #' Set data table columns to a specified order
 #'
 #' @param df a data table to be ordered
-#' @param col_order a character vector of column names in the desired order
+#' @param col_order a character vector of column names in the desired order.
 #' @return a data table
 #'
 #' @details This function \bold{modifies by reference}. If a column that is not present is supplied
@@ -260,7 +262,7 @@ conv_factor <- function(df, factor_cols) {
 #' @examples
 #' x <- data.table::data.table(c = c(1,2,3), b = c(1,2,3), a = c(1,2,3))
 #' col_order <- c("a","b","c")
-#' colorder(x, col_order)
+#' nsqipr:::colorder(x, col_order)
 #' identical(names(x), col_order)
 #'
 colorder <- function(df, col_order) {
@@ -280,7 +282,7 @@ colorder <- function(df, col_order) {
 #' x <- data.table::data.table(a = c(1,2,3), b = c(1,2,3), c = c(1,2,3))
 #' orignames <- names(x)
 #' undesired_cols <- c("a","b", "d")
-#' remove_undesired(x, undesired_cols)
+#' nsqipr:::remove_undesired(x, undesired_cols)
 #' identical(names(x), setdiff(orignames, undesired_cols))
 #'
 #' @importFrom data.table :=
@@ -303,7 +305,7 @@ remove_undesired <- function(df, undesired_cols) {
 #' @examples
 #' x = c(11L, NA, 13L, NA, 15L, NA)
 #' y = c(NA, 12L, 5L, NA, NA, NA)
-#' coalesce(x, y)
+#' nsqipr:::coalesce(x, y)
 #'
 coalesce <- function(new, old) {
   data.table::fcoalesce(new, old)
@@ -335,7 +337,7 @@ coalesce <- function(new, old) {
 #' A = c(TRUE, NA, TRUE), B = c(TRUE, NA, TRUE))
 #' coalesce_in_cols <- c("A","B","C","D")
 #' coalesce_out_cols <- c("a","b","c","d")
-#' coalesce_cols(x, coalesce_in_cols, coalesce_out_cols)
+#' nsqipr:::coalesce_cols(x, coalesce_in_cols, coalesce_out_cols)
 #' x
 #'
 coalesce_cols <- function(df, coalesce_in_cols, coalesce_out_cols) {

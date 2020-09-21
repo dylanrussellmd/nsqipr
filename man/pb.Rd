@@ -7,7 +7,9 @@
 pb(csv, rds)
 }
 \arguments{
-\item{write_to_csv}{boolean value indicating if the user would like to write to a CSV.}
+\item{csv}{character vector indicating if the user would like to write to a CSV.}
+
+\item{rds}{logical vector indicating if the user would like to write an RDS.}
 }
 \description{
 This function creates a progress bar for use with the \code{nsqip} function.

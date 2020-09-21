@@ -31,7 +31,7 @@ x <- data.table::data.table(foods = c("apple","banana","cherry","steak","chicken
 foods <- list(fruit = c("apple", "banana", "cherry"), meat = c("steak","chicken","pork"))
 drinks <- list(`non-alcoholic` = c("milk","water","oj"), alcoholic = c("beer","vodka","rum"))
 factor_cols <- c("foods", "drinks")
-conv_factor(x)
+nsqipr:::conv_factor(x, factor_cols)
 x
 
 }

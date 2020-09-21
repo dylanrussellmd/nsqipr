@@ -1,3 +1,11 @@
+testthat::test_that("addmissingcolumns works", {
+  x <- data.table::data.table(a = c(1,2,3))
+  cols <- c("a","b","c")
+  addmissingcolumns(x, cols)
+  testthat::expect_equal(x[["b"]], c(rep(NA_character_, 3)))
+  testthat::expect_equal(x[["c"]], c(rep(NA_character_, 3)))
+})
+
 testthat::test_that("setlowernames works", {
   x <- data.table::data.table(X = NA, Y = NA, Z = NA)
   testthat::expect_equal(names(setlowernames(x)), c("x","y","z"))
@@ -7,37 +15,6 @@ testthat::test_that("setlowernames is not creating copies", {
   x <- data.table::data.table(X = NA, Y = NA, Z = NA)
   tracemem(x)
   testthat::expect_identical(testthat::capture_output(setlowernames(x)), "")
-  untracemem(x)
-})
-
-testthat::test_that("setlower works", {
-  x <- data.table::data.table(x = rep("APPLE", 10), y = rep("BANANA", 10), z = rep("CHERRY", 10))
-  testthat::expect_identical(setlower(x), data.table::data.table(x = rep("apple", 10), y = rep("banana", 10), z = rep("cherry", 10)))
-})
-
-testthat::test_that("setlower is not creating copies", {
-  x <- data.table::data.table(x = rep("APPLE", 10), y = rep("BANANA", 10), z = rep("CHERRY", 10))
-  tracemem(x)
-  testthat::expect_identical(testthat::capture_output(setlower(x)), "")
-  untracemem(x)
-})
-
-testthat::test_that("setna works", {
-  x <- data.table::data.table(x = rep("unknown", 10), y = rep("unknown/not reported", 10), z = rep("null", 10),
-                              xx = rep("not documented", 10), yy = rep("none/not documented", 10), zz = rep("not entered", 10),
-                              xxx = rep("-99", 10), yyy = rep("test", 10))
-  testthat::expect_identical(setna(x, c("unknown", "unknown/not reported", "null", "n/a", "not documented", "none/not documented", "not entered","-99")),
-                             data.table::data.table(x = rep(NA_character_, 10), y = rep(NA_character_, 10), z = rep(NA_character_, 10),
-                                                    xx = rep(NA_character_, 10), yy = rep(NA_character_), zz = rep(NA_character_),
-                                                    xxx = rep(NA_character_, 10), yyy = rep("test", 10)))
-})
-
-testthat::test_that("setna is not creating copies", {
-  x <- data.table::data.table(x = rep("unknown", 10), y = rep("unknown/not reported", 10), z = rep("null", 10),
-                              xx = rep("not documented", 10), yy = rep("none/not documented", 10), zz = rep("not entered", 10),
-                              xxx = rep("-99", 10), yyy = rep("test", 10))
-  tracemem(x)
-  testthat::expect_identical(testthat::capture_output(setna(x, c("unknown", "unknown/not reported", "null", "n/a", "not documented", "none/not documented", "not entered","-99"))), "")
   untracemem(x)
 })
 
@@ -79,12 +56,13 @@ testthat::test_that("conv_yesno works", {
 })
 
 testthat::test_that("conv_notno works", {
-  x <- data.table::data.table(x = rep("no", 10), y = rep("NO", 10), z = rep("yes", 10), xx = rep("", 10), yy = rep(NA, 10), zz = rep("NONE", 10))
+  x <- data.table::data.table(x = rep("no", 10), y = rep("NO", 10), z = rep("yes", 10), xx = rep("", 10), yy = rep(NA, 10), zz = rep("NONE", 10), a = rep("NON-INSULIN", 10))
   testthat::expect_true(all(!conv_notno(x$x)))
   testthat::expect_true(all(!conv_notno(x$y)))
   testthat::expect_true(all(!conv_notno(x$zz)))
   testthat::expect_true(all(conv_notno(x$z)))
   testthat::expect_true(all(conv_notno(x$xx)))
+  testthat::expect_true(all(conv_notno(x$a)))
   testthat::expect_true(all(is.na(conv_notno(x$yy))))
 })
 

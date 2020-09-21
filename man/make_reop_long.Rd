@@ -45,8 +45,8 @@ retor3related = c(TRUE, TRUE, NA, NA),
 reopor3icd91 = c("K56.69","T82.868A", NA, NA),
 reopor3icd101 = c("K56.59", "T82.868A", NA, NA))
 
-make_reop_long(x)
-make_reop_long(x, TRUE)
+nsqipr:::make_reop_long(x)
+nsqipr:::make_reop_long(x, TRUE)
 
 }
 \keyword{internal}

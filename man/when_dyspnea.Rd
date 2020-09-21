@@ -20,6 +20,7 @@ NSQIP encodes the \code{dyspnea} column as either "no", "at rest", or "moderate 
 This function factors the vector for the levels "At rest" and "Moderate exertion".
 }
 \examples{
+ nsqipr:::when_dyspnea(c("at rest","moderate exertion", NA))
 
 }
 \keyword{internal}

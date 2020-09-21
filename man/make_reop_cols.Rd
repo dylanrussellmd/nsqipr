@@ -18,7 +18,7 @@ If so, the rest are created as needed. New columns are set to a value of NA.
 }
 \examples{
 x <- data.table::data.table(reoperation1 = TRUE)
-make_reop_cols(x)
+nsqipr:::make_reop_cols(x)
 x
 
 }

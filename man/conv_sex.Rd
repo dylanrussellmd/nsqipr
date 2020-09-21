@@ -19,6 +19,7 @@ Convert sex to logical
 if "male", will result in TRUE. If given NA, will return NA.
 }
 \examples{
+ nsqipr:::conv_sex(c("male","MALE","female","FEMALE",NA))
 
 }
 \keyword{internal}

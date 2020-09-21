@@ -19,6 +19,7 @@ Convert inout to logical
 If "Inpatient", will result in true. If given NA, will return NA.
 }
 \examples{
+ nsqipr:::conv_inout(c("Inpatient", "Outpatient", NA))
 
 }
 \keyword{internal}

@@ -40,7 +40,7 @@ anesthes_other6 = c(NA, NA, NA, NA),
 anesthes_other7 = c(NA, NA, NA, NA),
 anesthes_other8 = c(NA, NA, NA, NA))
 
-make_anesthes_other_long(x)
+nsqipr:::make_anesthes_other_long(x)
 
 }
 \keyword{internal}

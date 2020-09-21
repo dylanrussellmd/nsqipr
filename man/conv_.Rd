@@ -26,14 +26,14 @@ provided data table, this will simply return the original data.table unmodified 
 }
 \examples{
 x <- data.table::data.table(x = rep("APPLE", 10), y = rep("BANANA", 10), z = rep("CHERRY", 10))
-conv_(x, c("x","y"), tolower)
+nsqipr:::conv_(x, c("x","y"), tolower)
 x
 
 x <- data.table::data.table(x = rep("APPLE", 10), y = rep("BANANA", 10), z = rep("CHERRY", 10))
-conv_(x, c("x","y"), tolower, c("X","Y"))
+nsqipr:::conv_(x, c("x","y"), tolower, newcol =  c("X","Y"))
 x
 
 x <- data.table::data.table(x = rep("APPLE", 10), y = rep("BANANA", 10), z = rep("CHERRY", 10))
-conv_(x, "x", paste, "JUICE", sep = " ", newcol = "drink")
+nsqipr:::conv_(x, "x", paste, "JUICE", sep = " ", newcol = "drink")
 
 }

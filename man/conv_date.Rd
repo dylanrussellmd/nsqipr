@@ -21,7 +21,7 @@ Formats dates via \code{as.Date(vec, "\%Y")}
 \examples{
 
 x <- c("2000", "1900", "2020", "1950")
-conv_date(x)
+nsqipr:::conv_date(x)
 
 }
 \keyword{internal}

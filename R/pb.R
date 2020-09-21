@@ -2,13 +2,20 @@
 #'
 #' This function creates a progress bar for use with the \code{nsqip} function.
 #'
-#' @param write_to_csv boolean value indicating if the user would like to write to a CSV.
+#' @param csv character vector indicating if the user would like to write to a CSV.
+#' @param rds logical vector indicating if the user would like to write an RDS.
 #'
 #' @keywords internal
 #'
 pb <- function(csv, rds) {
+  csv <- if(is.na(csv)) {
+    0
+  } else {
+    (csv == "indiv" | csv == "both") + (csv == "append" | csv == "both")
+  }
+  totalticks <- 16 + csv + rds
   progress::progress_bar$new(
-    format = "(:spin)  :preface :what [:bar] :current/:total", total = 17 + (csv == "indiv" | csv == "both") + (csv == "append" | csv == "both") + rds, show_after = 0)
+        format = "(:spin)  :preface :what [:bar] :current/:total", total = totalticks, show_after = 0)
 }
 
 #' Increment a progress bar

@@ -21,9 +21,15 @@ Any string that does not match will return TRUE. NA will return NA.
 }
 \examples{
 
-x <- data.frame(x = rep("no complication", 10), y = rep("NO COMPLICATION", 10), z = rep("complication", 10),
-xx = rep("", 10), yy = rep(NA, 10))
-lapply(x , conv_complication)
+x <- data.frame(
+x = rep("no complication", 10),
+y = rep("NO COMPLICATION", 10),
+z = rep("complication", 10),
+xx = rep("", 10),
+yy = rep(NA, 10)
+)
+
+lapply(x , nsqipr:::conv_complication)
 
 }
 \keyword{internal}
