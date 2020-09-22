@@ -14,7 +14,7 @@
 #'
 #' @export
 #'
-nsqip <- function(path, csv = "indiv", rds = TRUE) {
+nsqip <- function(path, csv = "both", rds = TRUE) {
 
   usethis::ui_info("This could take a while (10-15 minutes depending on how many files)! Don't worry, its working...")
   files <- get_file_or_dir(path) # returns a character vector of matching file(s)

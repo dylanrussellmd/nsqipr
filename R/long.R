@@ -146,7 +146,7 @@ make_readm_long <- function(df, removeFALSE = FALSE) {
 #'
 #' @param df a data.table
 #'
-#' @details The data contained in the 8 "anesthes_other" columns created by make_anesthes_other_cols
+#' @details The data contained in the 8 "anesthes_other" columns created by \code{make_anesthes_other_cols}
 #' are converted into a long format.
 #'
 #' If "anesthes_other" is a column in \code{df}, it will be broken into a long format with
@@ -223,6 +223,99 @@ make_cpt_long <- function(df) {
     data.table::set(melted, j = "nproc", value = as.integer(melted[["nproc"]]))
     data.table::set(melted, j = "primarysurg", value = melted[["nproc"]] <= 11)
     data.table::set(melted, j = "nproc", value = data.table::rowid(melted[["caseid"]]))
+    data.table::setorder(melted, caseid)
+    return(melted)
+  }
+}
+
+#' Convert pan_percdrainage column from wide to long format
+#'
+#' @param df a data.table
+#'
+#' @details The data contained in the 4 "pan_percdrainage" columns created by \code{make_pan_percdrainage_cols}
+#' are converted into a long format.
+#'
+#' If "pan_percdrainager" is a column in \code{df}, it will be broken into a long format with
+#' \code{caseid} as the ID variable for joining back to the main table. This is because the targeted pancreatectomy
+#' datasets input multiple values into a single "pan_percdrainage" column. For example,
+#' "Yes-other, Yes-bile, Yes-pus" may be an entry in the raw data set. This makes
+#' parsing for patients that had purulent percutaneous drainage at any point, for example, very difficult.
+#'
+#' Note that this does not alter the "pan_percdrainage" column.
+#'
+#' @return a data.table
+#'
+#' @keywords internal
+#' @examples
+#' x <- data.table::data.table(caseid = 1:15,
+#' pan_percdrainage = c("Yes-other", "Yes-bile", "Yes-pus", "Yes-amylase-rich fluid",
+#' "Yes-amylase-rich fluid,Yes-pus", "Yes-bile,Yes-other", "Yes-amylase-rich fluid,Yes-pus,Yes-other",
+#' "Yes-amylase-rich fluid,Yes-bile,Yes-other", "Yes-pus,Yes-bile", "Yes-pus,Yes-other",
+#' "Yes-amylase-rich fluid,Yes-pus,Yes-bile", "Yes-amylase-rich fluid,Yes-other",
+#' "Yes-amylase-rich fluid,Yes-pus,Yes-bile,Yes-other", "Yes-amylase-rich fluid,Yes-bile",
+#' "Yes-pus,Yes-bile,Yes-other"))
+#'
+#' nsqipr:::make_pan_percdrainage_cols(x)
+#' nsqipr:::make_pan_percdrainage_long(x)
+#'
+make_pan_percdrainage_long <- function(df) {
+  if("pan_percdrainage" %qsin% names(df)) {
+    long <- suppressWarnings(data.table::melt(df, id.vars = "caseid",
+                                              measure.vars = pan_percdrainage_cols,
+                                              variable.name = "npercdrainage",
+                                              value.name = "percdrainage",
+                                              na.rm = TRUE,
+                                              variable.factor = FALSE,
+                                              value.factor = TRUE))
+    data.table::set(long, j = "npercdrainage", value = stringi::stri_extract_all_regex(long[["npercdrainage"]], "\\d", simplify = TRUE))
+    data.table::set(long, j = "npercdrainage", value = as.integer(long[["npercdrainage"]]))
+    data.table::setorder(long, caseid)
+    return(long)
+  }
+}
+
+#' Convert amylase columns from wide to long format
+#'
+#' @param df a data.table
+#'
+#' @details The data contained in the 3 amylase columns of the targeted pancreatectomy
+#' dataset ("pan_amylase_pod1", "pan_amylase_pod230", and "damylase") are converted into a
+#' long format. This reduces the total number of columns from 3 to 2 and makes the data
+#' more intuitive.
+#'
+#' If both "pan_amylase_pod1" and "pan_amylase_pod230" are columns in \code{df},
+#' it will be broken into a long format with \code{caseid} as the ID variable
+#' for joining back to the main table. The amylase values from both "pan_amylase_pod1"
+#' and "pan_amylase_pod230" are placed in the "amylase" column". The POD on which
+#' this value was acquired (either 1 if from "pan_amylase_pod1" column or set equal
+#' to the value of the "damylase" column) is placed in the "pod" column.
+#'
+#' Note that this does not alter the original columns.
+#'
+#' @return a data.table
+#'
+#' @keywords internal
+#' @examples
+#' x <- data.table::data.table(caseid = 1:30,
+#' pan_amylase_pod1 = c(NA, sample(1:10000, 29)),
+#' pan_amylase_pod230 = c(NA, sample(1000:10000, 29)),
+#' damylase = c(NA, sample(2:30, 29)))
+#'
+#' nsqipr:::make_amylase_long(x)
+#'
+make_amylase_long <- function(df) {
+  if(all(pan_amylase_cols %qsin% names(df))) {
+    melted <- suppressWarnings(data.table::melt(df, id.vars = c("caseid", "damylase"),
+                                                measure.vars = pan_amylase_cols,
+                                                variable.name = "pod",
+                                                value.name = "amylase",
+                                                variable.factor = FALSE,
+                                                value.factor = FALSE,
+                                                na.rm = TRUE))
+    data.table::set(melted, j = c("damylase","pod"), value = list(
+                        ifelse(melted[["pod"]] == "pan_amylase_pod1", 1, melted[["damylase"]]),
+                        NULL))
+    data.table::setnames(melted, "damylase","pod")
     data.table::setorder(melted, caseid)
     return(melted)
   }

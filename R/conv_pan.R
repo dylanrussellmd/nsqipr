@@ -1,263 +1,370 @@
-conv_pan_cols <- function(df) {
-  df %>%
-    dplyr::mutate(
-      pufyear = tryCatch(conv_pufyear(caseid), error = function(e) return(NULL)),
-      pan_lapthor = tryCatch(conv_pan_lapthor(pan_lapthor), error = function(e) return(NULL)),
-      pan_biliarystent = tryCatch(conv_pan_biliarystent(pan_biliarystent), error = function(e) return(NULL)),
-      pan_open_assist = tryCatch(conv_pan_open_assist(pan_approach), error = function(e) return(NULL)),
-      pan_unplanned_conversion = tryCatch(conv_pan_unplanned_conversion(pan_approach), error = function(e) return(NULL)),
-      pan_approach = tryCatch(conv_pan_approach(pan_approach), error = function(e) return(NULL)),
-      pan_ductsize = tryCatch(conv_pan_ductsize(pan_ductsize), error = function(e) return(NULL)),
-      pan_glandtext = tryCatch(conv_pan_glandtext(pan_glandtext), error = function(e) return(NULL)),
-      pan_reconstruction = tryCatch(conv_pan_reconstruction(pan_reconstruction), error = function(e) return(NULL)),
-      pan_gastduo = tryCatch(conv_pan_gastduo(pan_gastduo), error = function(e) return(NULL)),
-      pan_drains_type = tryCatch(conv_pan_drains_type(pan_drains_type), error = function(e) return(NULL)),
-      pan_resection = tryCatch(conv_pan_resection(pan_resection), error = function(e) return(NULL)),
-      pan_fistula_intervention = tryCatch(conv_pan_fistula_intervention(pan_fistula), error = function(e) return(NULL)),
-      pan_fistula_type = tryCatch(conv_pan_fistula_type(pan_fistula), error = function(e) return(NULL)),
-      pan_fistula = tryCatch(conv_pan_fistula(pan_fistula), error = function(e) return(NULL)),
-      pan_delgastric_20140315 = tryCatch(conv_pan_delgastric_20140315(pan_delgastric_20140315), error = function(e) return(NULL)),
-      pan_percdrainage_amylase = tryCatch(conv_pan_percdrainage_amylase(pan_percdrainage), error = function(e) return(NULL)),
-      pan_percdrainage_bile = tryCatch(conv_pan_percdrainage_bile(pan_percdrainage), error = function(e) return(NULL)),
-      pan_percdrainage_pus = tryCatch(conv_pan_percdrainage_pus(pan_percdrainage), error = function(e) return(NULL)),
-      pan_percdrainage_other = tryCatch(conv_pan_percdrainage_other(pan_percdrainage), error = function(e) return(NULL)),
-      pan_malig_histologic = tryCatch(conv_pan_malig_histologic(pan_malig_histologic), error = function(e) return(NULL)),
-      pan_tstage = tryCatch(conv_pan_tstage(pan_tstage), error = function(e) return(NULL)),
-      pan_nstage = tryCatch(conv_pan_nstage(pan_nstage), error = function(e) return(NULL)),
-      pan_mstage = tryCatch(conv_pan_mstage(pan_mstage), error = function(e) return(NULL)),
-      pan_benign_histologic = tryCatch(conv_pan_benign_histologic(pan_benign_histologic), error = function(e) return(NULL)),
-      pan_benign_tumorsize = tryCatch(conv_pan_benign_tumorsize(pan_benign_tumorsize), error = function(e) return(NULL)),
-      pan_intra_antibiotics = tryCatch(conv_pan_intra_antibiotics(pan_intra_antibiotics), error = function(e) return(NULL)),
-      pan_oincis_type = tryCatch(conv_pan_oincis_type(pan_oincis_type), error = function(e) return(NULL)),
-      pan_drainsys_type = tryCatch(conv_pan_drainsys_type(pan_drainsys_type), error = function(e) return(NULL))
-    )
+#' Convert targeted pancreatectomy columns
+#'
+#' @param df a data table to be cleaned
+#' @param filename the name of the file from which the data table has been read in
+#'
+#' @details If the file being processed is a targeted pancreatectomy data set,
+#' it will be processed by this function. This function determines how data cleaning steps specific
+#' to targeted pancreatectomy files should proceed.
+#'
+#' @keywords internal
+#'
+conv_pan_cols <- function(df, filename) {
+  get_pufyear(df, filename)
+  conv_(df, "pan_approach", conv_pan_open_assist, newcol = "pan_open_assist")
+  conv_(df, "pan_approach", conv_pan_unplanned_conversion, newcol = "pan_unplanned_conversion")
+  conv_(df, "pan_fistula", conv_pan_fistula_type, newcol = "pan_fistula_type")
+  conv_(df, "pan_fistula", conv_pan_fistula_intervention, newcol = "pan_fistula_intervention")
+  conv_(df, "pan_fistula", conv_pan_fistula)
+  conv_(df, "pan_delgastric_20140315", conv_notno, newcol = "pan_delgastric")
+  conv_(df, "pan_delgastric_20140315", conv_pan_delgastric, newcol = "pan_delgastric_tx")
+  make_pan_percdrainage_cols(df)
+  data.table::setnames(df, "pan_percdrain_20140315", "pan_percdrain") # Ugly, and maybe needs to be more elegantly applied.
 }
 
-conv_pan_drainsys_type <- function(vec) {
-  c(`Closed` = "closed",
-    `Open` = "open",
-    `Closed and open` = "closed and open"
-    ) %>% fact(vec)
+#### ---- FACTOR LISTS (THESE DEFINE THE FACTOR LEVELS FOR VARIOUS COLUMNS) ----
+pan_drainsys_type <- list(
+  `Closed` = "Closed",
+  `Open` = "Open",
+  `Closed and open` = "Closed and Open"
+)
+pan_oincis_type <- list(
+  `Subcostal type` = "Subcostal type",
+  `Upper midline` = "Upper midline",
+  `Other` = "Other"
+)
+pan_intra_antibiotics <- list(
+  `1st generation cephalosporin` = "1st generation cephalosporin",
+  `2nd or 3rd generation cephalosporin` = "2nd or 3rd generation cephalosporin",
+  `Broad spectrum` = "Broad spectrum",
+  `Other` = "Other"
+)
+pan_benign_tumorsize <- list(
+  `<2 cm` = "<2 cm",
+  `2-5 cm` = "2-5 cm",
+  `>5 cm` = ">5 cm"
+)
+pan_benign_histologic <- list(
+  `Chronic pancreatitis` = "Chronic pancreatitis",
+  `IPMN-noninvasive` = "IPMN-noninvasive",
+  `Mucinous cystic neoplasm` = "Mucinous cystic neoplasm",
+  `Neuroendocrine w/ no metastases` = "Neuroendocrine w/ no metastases",
+  `Serous cystadenoma` = "Serous cystadenoma",
+  `Solid pseudopapillary neoplasm` = "Solid pseudopapillary neoplasm",
+  `Other` = "Other"
+)
+pan_mstage <- list(
+  `M0/Mx` = "M0/Mx",
+  `M1` = "M1"
+)
+pan_tstage <- list(
+  `T0` = "T0",
+  `T1` = "T1",
+  `T2` = "T2",
+  `T3` = "T3",
+  `T4` = "T4",
+  `Tis` = "Tis",
+  `Tx` = "Tx"
+)
+pan_nstage <- list(
+  `N0` = "N0",
+  `N1` = "N1",
+  `Nx` = "Nx"
+)
+pan_malig_histologic <- list(
+  `Ampullary carcinoma` = "Ampullary carcinoma",
+  `Cystadenocarcinoma` = "Cystadenocarcinoma",
+  `Distal cholangiocarcinoma` = "Distal cholangiocarcinoma",
+  `Duodenal carcinoma` = "Duodenal carcinoma",
+  `IPMN-invasive` = "IPMN-invasive",
+  `Neuroendocrine-functioning` = "Neuroendocrine-functioning",
+  `Neuroendocrine-nonfunctioning` = "Neuroendocrine-nonfunctioning",
+  `Pancreatic adenocarcinoma` = "Pancreatic adenocarcinoma",
+  `Other` = "Other type"
+)
+pan_resection <- list(
+  `Vein` = "Vein",
+  `Artery` = "Artery",
+  `Vein and artery` = "Vein and artery",
+  `Not performed` = "Not performed"
+)
+pan_drains_type <- list(
+  `Pancreatic anastomosis` = "Pancreatic anastomosis",
+  `Biliary anastomosis` = "Biliary anastomosis",
+  `Pancreatic and biliary anastomosis` = "Pancreatic & Biliary Anastomosis",
+  `Pancreatic parenchyma` = "Pancreatic parenchyma"
+)
+pan_gastduo <- list(
+  `Antecolic fashion` = "Antecolic fashion",
+  `Retrocolic fasion` = "Retrocolic fashion",
+  `Not performed` = "Not performed"
+)
+pan_reconstruction <- list(
+  `Pancreaticogastrostomy` = "Pancreaticogastrostomy",
+  `Pancreaticojejunal invagination` = "Pancreaticojejunal invagination",
+  `Pancreaticojejunal duct-to-mucosal` = "Pancreaticojejunal duct-to-mucosal",
+  `Not performed` = "Not performed"
+)
+pan_glandtext <- list(
+  `Soft` = "Soft",
+  `Intermediate` = "Intermediate",
+  `Hard` = "Hard"
+)
+pan_ductsize <- list(
+  `<3 mm` = "<3 mm",
+  `3-6 mm` = "3-6 mm",
+  `>6 mm` = ">6 mm"
+)
+pan_approach <- list(
+  `Hybrid` = "Hybrid",
+  `Hybrid` = "Hybrid w/ open assist",
+  `Hybrid` = "Hybrid w/ unplanned conversion to open",
+  `Laparoscopic` = "Laparoscopic",
+  `Laparoscopic` = "Laparoscopic w/ open assist",
+  `Laparoscopic` = "Laparoscopic w/ unplanned conversion to open",
+  `Laparoscopic` = "Laparoscopic hand assisted",
+  `NOTES` = "NOTES",
+  `NOTES` = "NOTES w/ open assist",
+  `NOTES` = "NOTES w/ unplanned conversion to open",
+  `Open` = "Open",
+  `Open` = "Open (planned)",
+  `Other` = "Other",
+  `Other MIS` = "Other MIS approach",
+  `Other MIS` = "Other MIS approach w/ open assist",
+  `Other MIS` = "Other MIS approach w/ unplanned conversion to open",
+  `Robotic` = "Robotic",
+  `Robotic` = "Robotic w/ open assist",
+  `Robotic` = "Robotic w/ unplanned conversion to open",
+  `SILS` = "SILS",
+  `SILS` = "SILS w/ open assist",
+  `SILS` = "SILS w/ unplanned conversion to open"
+)
+pan_biliarystent <- list(
+  `No stent at time of surgery` = "No stent at time of surgery",
+  `Endoscopic stent` = "Endoscopic stent",
+  `Percutaneous stent` = "Percutaneous stent",
+  `Stent of other unknown type` = "Stent of other or unknown type"
+)
+pan_lapthor <- list(
+  `Laparoscopic` = "49329",
+  `Open` = "48999",
+  `Other` = "Other"
+)
+pan_percdrainage <- list(
+  `Other` = "Yes-other",
+  `Bile` = "Yes-bile",
+  `Pus` = "Yes-pus",
+  `Amylase-rich fluid` = "Yes-amylase-rich fluid"
+)
+pan_percdrainage1 <- pan_percdrainage
+pan_percdrainage2 <- pan_percdrainage
+pan_percdrainage3 <- pan_percdrainage
+pan_percdrainage4 <- pan_percdrainage
+
+#### ---- LONG COLUMNS ---- ####
+pan_percdrainage_cols = paste("pan_percdrainage", 1:4, sep = "")
+pan_amylase_cols <- c("pan_amylase_pod1", "pan_amylase_pod230")
+#### ---- FUNCTIONS ---- ####
+
+#' Create percutaneous drainage columns for long conversion
+#'
+#' @param df a data table to add the columns to
+#'
+#' @details First checks if the data table contains a "pan_percdrainage" column.
+#' If so, the column is split into 4 columns according to the regex pattern ",\\s?".
+#'
+#' @keywords internal
+#'
+#' @examples
+#' x <- data.table::data.table(
+#' pan_percdrainage = c("Yes-other", "Yes-bile", "Yes-pus", "Yes-amylase-rich fluid",
+#' "Yes-amylase-rich fluid,Yes-pus", "Yes-bile,Yes-other", "Yes-amylase-rich fluid,Yes-pus,Yes-other",
+#' "Yes-amylase-rich fluid,Yes-bile,Yes-other", "Yes-pus,Yes-bile", "Yes-pus,Yes-other",
+#' "Yes-amylase-rich fluid,Yes-pus,Yes-bile", "Yes-amylase-rich fluid,Yes-other",
+#' "Yes-amylase-rich fluid,Yes-pus,Yes-bile,Yes-other", "Yes-amylase-rich fluid,Yes-bile",
+#' "Yes-pus,Yes-bile,Yes-other")
+#' )
+#'
+#' nsqipr:::make_pan_percdrainage_cols(x)
+#' x
+#'
+make_pan_percdrainage_cols <- function(df) {
+  if("pan_percdrainage" %qsin% names(df)) {
+    mat <- stringi::stri_split_regex(df[["pan_percdrainage"]], ",\\s?", simplify = NA, n = 4, omit_empty = TRUE, opts_regex = list(case_insensitive = TRUE))
+    for(j in seq_along(pan_percdrainage_cols)) data.table::set(df, j = pan_percdrainage_cols[[j]], value = mat[, j])
+  }
 }
 
-conv_pan_oincis_type <- function(vec) {
-  c(`Subcostal type` = "subcostal type",
-    `Upper midline` = "upper midline",
-    `Other` = "other"
-    ) %>% fact(vec)
-}
-
-conv_pan_intra_antibiotics <- function(vec) {
-  c(`1st generation cephalosporin` = "1st generation cephalosporin",
-    `2nd or 3rd generation cephalosporin` = "2nd or 3rd generation cephalosporin",
-    `Broad spectrum` = "broad spectrum",
-    `Other` = "other"
-    ) %>% fact(vec)
-}
-
-conv_pan_benign_tumorsize <- function(vec) {
-  c(`<2 cm` = "<2 cm",
-    `2-5 cm` = "2-5 cm",
-    `>5 cm` = ">5 cm"
-    ) %>% fact(vec)
-}
-
-conv_pan_benign_histologic <- function(vec) {
-  c(`Chronic pancreatitis` = "chronic pancreatitis",
-    `IPMN-noninvasive` = "ipmn-noninvasive",
-    `Mucinous cystic neoplasm` = "mucinous cystic neoplasm",
-    `Neuroendocrine w/ no metastases` = "neuroendocrine w/ no metastases",
-    `Serous cystadenoma` = "serous cystadenoma",
-    `Solid pseudopapillary neoplasm` = "solid pseudopapillary neoplasm",
-    `Other` = "other"
-    ) %>% fact(vec)
-}
-
-conv_pan_mstage <- function(vec) {
-  c(`M0/Mx` = "m0/mx",
-    `M1` = "m1"
-  ) %>% fact(vec)
-}
-
-conv_pan_tstage <- function(vec) {
-  c(`T0` = "t0",
-    `T1` = "t1",
-    `T2` = "t2",
-    `T3` = "t3",
-    `T4` = "t4",
-    `Tis` = "tis",
-    `Tx` = "tx"
-  ) %>% fact(vec)
-}
-
-conv_pan_nstage <- function(vec) {
-  c(`N0` = "n0",
-    `N1` = "n1",
-    `Nx` = "nx"
-  ) %>% fact(vec)
-}
-
-conv_pan_malig_histologic <- function(vec) {
- c(`Ampullary carcinoma` = "ampullary carcinoma",
-   `Cystadenocarcinoma` = "cystadenocarcinoma",
-   `Distal cholangiocarcinoma` = "distal cholangiocarcinoma",
-   `Duodenal carcinoma` = "duodenal carcinoma",
-   `IPMN-invasive` = "ipmn-invasive",
-   `Neuroendocrine-functioning` = "neuroendocrine-functioning",
-   `Neuroendocrine-nonfunctioning` = "neuroendocrine-nonfunctioning",
-   `Pancreatic adenocarcinoma` = "pancreatic adenocarcinoma",
-   `Other` = "other type"
-   ) %>% fact(vec)
-}
-
-conv_pan_percdrainage_other <- function(vec) {
-  stringr::str_detect(vec, "other")
-}
-
-conv_pan_percdrainage_pus <- function(vec) {
-  stringr::str_detect(vec, "pus")
-}
-
-conv_pan_percdrainage_bile <- function(vec) {
-  stringr::str_detect(vec, "bile")
-}
-
-conv_pan_percdrainage_amylase <- function(vec) {
-  stringr::str_detect(vec, "amylase-rich")
-}
-
-conv_pan_delgastric_20140315 <- function(vec) {
-  c(`No oral intake by POD 14` = "yes-no oral intake by pod 14",
-    `Tube to external drainage/NG tube present/reinserted` = "yes-tube to external drainage/ng tube present/reinserted"
-    ) %>% fact(vec)
-}
-
-conv_pan_fistula_intervention <- function(vec) {
-  c(`NPO-TPN` = "yes-clinical diagnosis, npo-tpn",
-    `Drain continued >7 days` = "yes-clinical diagnosis, drain continued >7 days",
-    `Percutaneous drainage` = "yes-clinical diagnosis, percutaneous drainage performed",
-    `Reoperation` = "yes-clinical diagnosis, reoperation performed",
-    `Spontaneous wound drainage` = "yes-clinical diagnosis, spontaneous wound drainage",
-    `NPO-TPN` = "yes-persistent drainage, npo-tpn",
-    `Drain continued >7 days` = "yes-persistent drainage, drain continued >7 days",
-    `Percutaneous drainage` = "yes-persistent drainage, percutaneous drainage performed",
-    `Reoperation` = "yes-persistent drainage, reoperation performed"
-    ) %>% fact(vec)
-}
-
-conv_pan_fistula_type <- function(vec) {
-  c(`Biochemical leak only` = "biochemical leak only",
-    `Grade B POPF` = "yes-grade b popf present",
-    `Grade C POPF` = "yes-grade c popf present",
-    `Clinical diagnosis` = "yes-clinical diagnosis, npo-tpn",
-    `Clinical diagnosis` = "yes-clinical diagnosis, drain continued >7 days",
-    `Clinical diagnosis` = "yes-clinical diagnosis, percutaneous drainage performed",
-    `Clinical diagnosis` = "yes-clinical diagnosis, reoperation performed",
-    `Clinical diagnosis` = "yes-clinical diagnosis, spontaneous wound drainage",
-    `Persistent drainage` = "yes-persistent drainage, npo-tpn",
-    `Persistent drainage` = "yes-persistent drainage, drain continued >7 days",
-    `Persistent drainage` = "yes-persistent drainage, percutaneous drainage performed",
-    `Persistent drainage` = "yes-persistent drainage, reoperation performed"
-    ) %>% fact(vec)
-}
-
-conv_pan_fistula <- function(vec) {
-  stringr::str_detect(vec, "yes|biochemical leak only")
-}
-
-conv_pan_resection <- function(vec) {
-  c(`Vein` = "vein",
-    `Artery` = "artery",
-    `Vein and artery` = "vein and artery",
-    `Not performed` = "not performed"
-    ) %>% fact(vec)
-}
-
-conv_pan_drains_type <- function(vec) {
-  c(`Pancreatic anastomosis` = "pancreatic anastomosis",
-    `Biliary anastomosis` = "biliary anastomosis",
-    `Pancreatic and biliary anastomosis` = "pancreatic & biliary anastomosis",
-    `Pancreatic parenchyma` = "pancreatic parenchyma"
-    ) %>% fact(vec)
-}
-
-conv_pan_gastduo <- function(vec) {
-  c(`Antecolic fashion` = "antecolic fashion",
-    `Retrocolic fasion` = "retrocolic fashion",
-    `Not performed` = "not performed"
-    ) %>% fact(vec)
-}
-
-conv_pan_reconstruction <- function(vec) {
-  c(`Pancreaticogastrostomy` = "pancreaticogastrostomy",
-    `Pancreaticojejunal invagination` = "pancreaticojejunal invagination",
-    `Pancreaticojejunal duct-to-mucosal` = "pancreaticojejunal duct-to-mucosal",
-    `Not performed` = "not performed"
-    ) %>% fact(vec)
-}
-
-conv_pan_glandtext <- function(vec) {
-  c(`Soft` = "soft",
-    `Intermediate` = "intermediate",
-    `Hard` = "hard"
-    ) %>% fact(vec)
-}
-
-conv_pan_ductsize <- function(vec) {
-  c(`<3 mm` = "<3 mm",
-    `3-6 mm` = "3-6 mm",
-    `>6 mm` = ">6 mm"
-    ) %>% fact(vec)
-}
-
+#' Parse entries with open assist or hand assist
+#'
+#' @param vec a character vector to parse
+#'
+#' @details returns TRUE if either case-insensitive "w/ open assist" or
+#' "hand assisted" is detected in the character vector. Cases with an
+#' "open" or "open (planned)" approach will return NA.
+#'
+#' @return a logical vector
+#' @keywords internal
+#' @examples
+#' x <- c("Hybrid","Hybrid w/ open assist","Hybrid w/ unplanned conversion to open",
+#' "Laparoscopic","Laparoscopic w/ open assist","Laparoscopic w/ unplanned conversion to open",
+#' "Laparoscopic hand assisted","NOTES","NOTES w/ open assist","NOTES w/ unplanned conversion to open",
+#' "Open","Open (planned)","Other","Other MIS approach","Other MIS approach w/ open assist",
+#' "Other MIS approach w/ unplanned conversion to open","Robotic","Robotic w/ open assist",
+#' "Robotic w/ unplanned conversion to open","SILS","SILS w/ open assist",
+#' "SILS w/ unplanned conversion to open", NA)
+#'
+#' cbind(x, nsqipr:::conv_pan_open_assist(x))
+#'
 conv_pan_open_assist <- function(vec) {
-  stringr::str_detect(vec, "w/ open assist|hand assisted")
+  ifelse(stringi::stri_detect_regex(vec, "^Open", opts_regex = list(case_insensitive = TRUE)), NA,
+         stringi::stri_detect_regex(vec, "w/ open assist$|hand assisted$", opts_regex = list(case_insensitive = TRUE)))
 }
 
+#' Parse entries with unplanned conversion to open
+#'
+#' @param vec a character vector to parse
+#'
+#' @details returns TRUE if case-insensitive "w/ unplanned conversion to open"
+#' is detected in the character vector. Cases with an "open" or "open (planned)"
+#' approach will return NA.
+#'
+#' @return a logical vector
+#' @keywords internal
+#' @examples
+#' x <- c("Hybrid","Hybrid w/ open assist","Hybrid w/ unplanned conversion to open",
+#' "Laparoscopic","Laparoscopic w/ open assist","Laparoscopic w/ unplanned conversion to open",
+#' "Laparoscopic hand assisted","NOTES","NOTES w/ open assist","NOTES w/ unplanned conversion to open",
+#' "Open","Open (planned)","Other","Other MIS approach","Other MIS approach w/ open assist",
+#' "Other MIS approach w/ unplanned conversion to open","Robotic","Robotic w/ open assist",
+#' "Robotic w/ unplanned conversion to open","SILS","SILS w/ open assist",
+#' "SILS w/ unplanned conversion to open", NA)
+#'
+#' cbind(x, nsqipr:::conv_pan_unplanned_conversion(x))
+#'
 conv_pan_unplanned_conversion <- function(vec) {
-  stringr::str_detect(vec, "w/ unplanned conversion to open")
+  ifelse(stringi::stri_detect_regex(vec, "^Open", opts_regex = list(case_insensitive = TRUE)), NA,
+         stringi::stri_detect_regex(vec, "w/ unplanned conversion to open$", opts_regex = list(case_insensitive = TRUE)))
 }
 
-conv_pan_approach <- function(vec) {
-  c(`Hybrid` = "hybrid",
-    `Hybrid` = "hybrid w/ open assist",
-    `Hybrid` = "hybrid w/ unplanned conversion to open",
-    `Laparoscopic` = "laparoscopic",
-    `Laparoscopic` = "laparoscopic w/ open assist",
-    `Laparoscopic` = "laparoscopic w/ unplanned conversion to open",
-    `Laparoscopic` = "laparoscopic hand assisted",
-    `NOTES` = "notes",
-    `NOTES` = "notes w/ open assist",
-    `NOTES` = "notes w/ unplanned conversion to open",
-    `Open` = "open",
-    `Open` = "open (planned)",
-    `Other` = "other",
-    `Other MIS` = "other mis approach",
-    `Other MIS` = "other mis approach w/ open assist",
-    `Other MIS` = "other mis approach w/ unplanned conversion to open",
-    `Robotic` = "robotic",
-    `Robotic` = "robotic w/ open assist",
-    `Robotic` = "robotic w/ unplanned conversion to open",
-    `SILS` = "sils",
-    `SILS` = "sils w/ open assist",
-    `SILS` = "sils w/ unplanned conversion to open"
-  ) %>% fact(vec)
+#' Parse entries that indicate the presence of a fistula
+#'
+#' @param vec a character vector to parse
+#'
+#' @details returns TRUE if case-insensitive "yes" or "biochemical leak only'
+#' is detected in the character vector. Cases with an "open" or "open (planned)"
+#' approach will return NA.
+#'
+#' @return a logical vector
+#' @keywords internal
+#' @examples
+#' x <- c("No","No evidence of Biochemical Leak or POPF","Biochemical Leak only",
+#' "Yes, Grade B POPF present","Yes, Grade C POPF present","Yes-clinical diagnosis, NPO-TPN",
+#' "Yes-clinical diagnosis, drain continued >7 days",
+#' "Yes-clinical diagnosis, percutaneous drainage performed","Yes-clinical diagnosis, reoperation performed",
+#' "Yes-clinical diagnosis, spontaneous wound drainage","Yes-persistent drainage, NPO-TPN",
+#' "Yes-persistent drainage, drain continued >7 days",
+#' "Yes-persistent drainage, percutaneous drainage performed","Yes-persistent drainage, reoperation performed",
+#' NA)
+#'
+#' cbind(x, nsqipr:::conv_pan_fistula(x))
+#'
+conv_pan_fistula <- function(vec) {
+  stringi::stri_detect_regex(vec, "^yes|^biochemical leak only", opts_regex = list(case_insensitive = TRUE))
 }
 
-conv_pan_biliarystent <- function(vec) {
-  c(`No stent at time of surgery` = "no stent at time of surgery",
-    `Endoscopic stent` = "endoscopic stent",
-    `Percutaneous stent` = "percutaneous stent",
-    `Stent of other unknown type` = "stent of other or unknown type"
-    ) %>% fact(vec)
+#' Parse a column for type of fistula
+#'
+#' @param vec a character vector of values to convert
+#'
+#' @details NSQIP encodes the \code{pan_fistula} column as either a biochemica leak, a clinical diagnosis,
+#' persistent drainage, or a grade B or C POPF. This function extracts those values from character vectors
+#' and factors them.
+#'
+#' @return a factor vector
+#' @keywords internal
+#'
+#' @examples
+#' fistulas <- c("No", "Yes-persistent drainage, drain continued >7 days",
+#' "Yes-clinical diagnosis, drain continued >7 days", "Yes-persistent drainage, percutaneous drainage performed",
+#' "Yes-clinical diagnosis, percutaneous drainage performed", "Yes-persistent drainage, reoperation performed",
+#' "Unknown", "Yes-clinical diagnosis, reoperation performed", "Yes-clinical diagnosis, spontaneous wound drainage",
+#' "Yes-persistent drainage, NPO-TPN", "Yes-clinical diagnosis, NPO-TPN", "No evidence of Biochemical Leak or POPF",
+#' "Biochemical Leak only", "Yes, Grade B POPF present", "Yes, Grade C POPF present")
+#'
+#' nsqipr:::conv_pan_fistula_type(fistulas)
+#'
+conv_pan_fistula_type <- function(vec) {
+  vec %^% list(
+    `Biochemical leak only` = "Biochemical Leak only",
+    `Grade B POPF` = "Yes, Grade B POPF present",
+    `Grade C POPF` = "Yes, Grade C POPF present",
+    `Clinical diagnosis` = "Yes-clinical diagnosis, NPO-TPN",
+    `Clinical diagnosis` = "Yes-clinical diagnosis, drain continued >7 days",
+    `Clinical diagnosis` = "Yes-clinical diagnosis, percutaneous drainage performed",
+    `Clinical diagnosis` = "Yes-clinical diagnosis, reoperation performed",
+    `Clinical diagnosis` = "Yes-clinical diagnosis, spontaneous wound drainage",
+    `Persistent drainage` = "Yes-persistent drainage, NPO-TPN",
+    `Persistent drainage` = "Yes-persistent drainage, drain continued >7 days",
+    `Persistent drainage` = "Yes-persistent drainage, percutaneous drainage performed",
+    `Persistent drainage` = "Yes-persistent drainage, reoperation performed"
+  )
 }
 
-conv_pan_lapthor <- function(vec) { # This may potentially break in the future if additional CPT codes are added.
-  c(`Laparoscopic` = "49329",
-    `Open` = "48999",
-    `Other` = "other"
-    ) %>% fact(vec)
+#' Parse a column for type of fistula intervention
+#'
+#' @param vec a character vector of values to convert
+#'
+#' @details NSQIP encodes the \code{pan_fistula} column as having one of multiple interventions.
+#' This function extracts those values from character vectors and factors them.
+#'
+#' @return a factor vector
+#' @keywords internal
+#'
+#' @examples
+#' fistulas <- c("No", "Yes-persistent drainage, drain continued >7 days",
+#' "Yes-clinical diagnosis, drain continued >7 days", "Yes-persistent drainage, percutaneous drainage performed",
+#' "Yes-clinical diagnosis, percutaneous drainage performed", "Yes-persistent drainage, reoperation performed",
+#' "Unknown", "Yes-clinical diagnosis, reoperation performed", "Yes-clinical diagnosis, spontaneous wound drainage",
+#' "Yes-persistent drainage, NPO-TPN", "Yes-clinical diagnosis, NPO-TPN", "No evidence of Biochemical Leak or POPF",
+#' "Biochemical Leak only", "Yes, Grade B POPF present", "Yes, Grade C POPF present")
+#'
+#' nsqipr:::conv_pan_fistula_intervention(fistulas)
+#'
+conv_pan_fistula_intervention <- function(vec) {
+  vec %^% list(
+    `NPO-TPN` = "Yes-clinical diagnosis, NPO-TPN",
+    `Drain continued >7 days` = "Yes-clinical diagnosis, drain continued >7 days",
+    `Percutaneous drainage` = "Yes-clinical diagnosis, percutaneous drainage performed",
+    `Reoperation` = "Yes-clinical diagnosis, reoperation performed",
+    `Spontaneous wound drainage` = "Yes-clinical diagnosis, spontaneous wound drainage",
+    `NPO-TPN` = "Yes-persistent drainage, NPO-TPN",
+    `Drain continued >7 days` = "Yes-persistent drainage, drain continued >7 days",
+    `Percutaneous drainage` = "Yes-persistent drainage, percutaneous drainage performed",
+    `Reoperation` = "Yes-persistent drainage, reoperation performed"
+  )
 }
 
-
-
+#' Parse a column for type of delayed gastric emptying treatment
+#'
+#' @param vec a character vector of values to convert
+#'
+#' @details NSQIP encodes the \code{pan_delgastric_20140315} column as either no or
+#' having one of multiple interventions. This function extracts those values from
+#' character vectors and factors them.
+#'
+#' @return a factor vector
+#' @keywords internal
+#'
+#' @examples
+#' delgastric <- c("No", "Yes-no oral intake by POD 14",
+#' "Yes-tube to external drainage/NG tube present/reinserted")
+#'
+#' nsqipr:::conv_pan_delgastric(delgastric)
+#'
+conv_pan_delgastric <- function(vec) {
+  vec %^% list(
+    `No oral intake by POD 14` = "Yes-no oral intake by POD 14",
+    `Tube to external drainage/NG tube present/reinserted` = "Yes-tube to external drainage/NG tube present/reinserted"
+  )
+}

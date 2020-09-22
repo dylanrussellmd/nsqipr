@@ -264,8 +264,6 @@ check_comaneurograft <- function(df) {
 #' Add or update hispanic ethnicity column
 #'
 #' @param df a data.table to add to or update with an \code{ethnicity_hispanic} column
-#' @param race a character vector containing race
-#' @param ethnicity_hispanic a character vector containing "yes" and "no" values regarding hispanic ethnicity
 #'
 #' @details \code{ethnicity_hispanic} was not added until the 2008 NSQIP PUF when \code{race} was revised to
 #' \code{race_new}. Data regarding hispanic ethnicity was hard coded directly into the old \code{race} variable

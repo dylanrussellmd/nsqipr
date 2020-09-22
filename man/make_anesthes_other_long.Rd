@@ -16,7 +16,7 @@ a data.table
 Convert anesthes_other column from wide to long format
 }
 \details{
-The data contained in the 8 "anesthes_other" columns created by make_anesthes_other_cols
+The data contained in the 8 "anesthes_other" columns created by \code{make_anesthes_other_cols}
 are converted into a long format.
 
 If "anesthes_other" is a column in \code{df}, it will be broken into a long format with

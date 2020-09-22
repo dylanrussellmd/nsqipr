@@ -11,10 +11,6 @@ conv_hispanic_helper(df)
 }
 \arguments{
 \item{df}{a data.table to add to or update with an \code{ethnicity_hispanic} column}
-
-\item{race}{a character vector containing race}
-
-\item{ethnicity_hispanic}{a character vector containing "yes" and "no" values regarding hispanic ethnicity}
 }
 \value{
 a data table

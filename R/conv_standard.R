@@ -80,7 +80,7 @@ conv_factor_cols <- function(df, filename, progbar) {
 
 conv_long_tables <- function(df, filename, progbar) {
   tick(progbar, "creating long tables for", filename)
-  long_funcs <- c(make_cpt_long, make_reop_long, make_readm_long, make_anesthes_other_long)
+  long_funcs <- c(make_cpt_long, make_reop_long, make_readm_long, make_anesthes_other_long, make_pan_percdrainage_long, make_amylase_long)
   lapply(long_funcs, function(f) f(df))
 }
 

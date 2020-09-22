@@ -1,0 +1,31 @@
+caseid	pan_lapthor	pan_jaundice	pan_jaundice_unk	pan_biliarystent	pan_chemo	pan_chemo_unk	pan_radio	pan_radio_unk	pan_approach	pan_ductsize	pan_glandtext	pan_reconstruction	pan_gastduo	pan_drains	pan_drains_unk	pan_drains_type	pan_resection	pan_amylase_pod1	pan_amylase_pod1_unk	pan_amylase_pod230	pan_amylase_pod230_unk	damylase	pan_amylase_unk	ddrainremoval	pan_drain_removal_unk	pan_drain_pod30	pan_fistula	pan_delgastric_20140315	pan_percdrain_20140315	pan_percdrainage	pan_malig_histologic	pan_tstage	pan_nstage	pan_mstage	pan_benign_histologic	pan_benign_tumorsize	pan_intra_antibiotics	pan_oincis_type	pan_woundprot	pan_drainsys_type	pan_drainsys_suctn
+3113057	N/A	No	NULL	No stent at time of surgery	No	NULL	No	NULL	Open (planned)	Unknown	Unknown	Not performed	Retrocolic fashion	Yes	NULL	Type(s) cannot be determined	Not performed	-99	Yes	-99	Yes	-99	Yes	-99	Yes	NULL	No	NULL	NULL	NULL	N/A	N/A	N/A	N/A	N/A	N/A	1st generation cephalosporin	Subcostal type	Yes	Open	NULL
+3113184	Other	Yes	Yes	Endoscopic stent	Yes	Yes	Yes	Yes	Laparoscopic w/ open assist	3-6 mm	Soft	Pancreaticojejunal duct-to-mucosal	Unknown	No	Yes	NULL	Vein	8	NULL	10	NULL	7	NULL	7	NULL	Yes	Yes-persistent drainage, drain continued >7 days	No	No	Yes-other	Unknown	Unknown	Unknown	Unknown	Mucinous cystic neoplasm	2-5 cm	Broad spectrum	Upper midline	No	Closed	Yes
+3113189	49329	NULL		Percutaneous stent	NULL		NULL		Laparoscopic	<3 mm	Hard	Pancreaticojejunal invagination	Not performed	NULL		Pancreatic & Biliary Anastomosis	Artery	731		11		4		5			Yes-clinical diagnosis, drain continued >7 days	Yes-tube to external drainage/NG tube present/reinserted	Yes	Yes-bile	Pancreatic adenocarcinoma	T3	N1	M0/Mx	Other	>5 cm	2nd or 3rd generation cephalosporin	NULL	NULL	NULL	No
+3113232	48999			Stent of other or unknown type					Laparoscopic w/ unplanned conversion to open	>6 mm	Intermediate	Unknown	Antecolic fashion			Pancreatic anastomosis	Unknown	175		3		3		13			Yes-persistent drainage, percutaneous drainage performed	Yes-no oral intake by POD 14		Yes-pus	IPMN-invasive	T2	N0	M1	IPMN-noninvasive	Unknown	Other	Other		Closed and Open	Unknown
+3113360		Unknown		N/A	Unknown		Unknown		Robotic w/ unplanned conversion to open			Pancreaticogastrostomy		Unknown		Biliary anastomosis	Vein and artery	473		5		1		9			Yes-clinical diagnosis, percutaneous drainage performed	Unknown		Yes-amylase-rich fluid	Neuroendocrine-nonfunctioning	T4	Nx		Serous cystadenoma	<2 cm	Unknown	Unknown or N/A			
+3113446	NULL								Robotic				NULL			Pancreatic parenchyma		17136		17		5		6			Yes-persistent drainage, reoperation performed			Yes-amylase-rich fluid,Yes-pus	Other type	T1			Solid pseudopapillary neoplasm						
+3113553									Robotic w/ open assist									1499		8		6		4			Unknown			Yes-bile,Yes-other	Ampullary carcinoma	Tis			Chronic pancreatitis						
+3113598									Hybrid									30		121		2		12			Yes-clinical diagnosis, reoperation performed			Yes-amylase-rich fluid,Yes-pus,Yes-other	Distal cholangiocarcinoma	T0			Unknown						
+3113611									Hybrid w/ open assist									40000		39		9		8			Yes-clinical diagnosis, spontaneous wound drainage			Yes-amylase-rich fluid,Yes-bile,Yes-other	Duodenal carcinoma	Tx			Neuroendocrine w/ no metastases						
+3113670									Other MIS approach									85		387		22		10						Yes-pus,Yes-bile	Neuroendocrine-functioning										
+3113741									SILS									10		1422		8		26			Yes-persistent drainage, NPO-TPN			Yes-pus,Yes-other	Cystadenocarcinoma										
+3113765																		19645		1048		11		23			Yes-clinical diagnosis, NPO-TPN			Yes-amylase-rich fluid,Yes-pus,Yes-bile											
+3113813									Other									977		30		14		24			No evidence of Biochemical Leak or POPF			Yes-amylase-rich fluid,Yes-other											
+3113820									Hybrid w/ unplanned conversion to open									1909		80		27		3			Biochemical Leak only			Yes-amylase-rich fluid,Yes-pus,Yes-bile,Yes-other											
+3113846									Unknown									903		91		23		15			Yes, Grade B POPF present			Yes-amylase-rich fluid,Yes-bile											
+3113861									NOTES w/ unplanned conversion to open									5891		35		13		21			Yes, Grade C POPF present														
+3113896									Other MIS approach w/ open assist									2837		41		25		11						Yes-pus,Yes-bile,Yes-other											
+3114077									Other MIS approach w/ unplanned conversion to open									924		21		12		20																	
+3114078																		129		20		10		17																	
+3114314																		18440		2986		16		2																	
+3114351																		10982		21660		20		25																	
+3114357																		2460		58		0		28																	
+3114365																		5516		24200		17		16																	
+3114491																		159		89		24		14																	
+3114505																		14		13		19		19																	
+3114536																		40640		117		28		22																	
+3114603																		3585		15		26		27																	
+3114681																		485		2322		18		30																	
+3114715																		21		3026		30		18																	
+3114744																		364		4620		21		1																	

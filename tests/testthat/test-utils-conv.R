@@ -85,7 +85,7 @@ testthat::test_that("conv_numscale works", {
 })
 
 testthat::test_that("conv_date works", {
-  testthat::expect_equal(conv_date("2000"), as.Date("2000", "%Y"))
+  testthat::expect_equal(conv_date("2000"), as.Date("2000-1-1", "%Y-%m-%d"))
 })
 
 testthat::test_that("get_pufyear works", {

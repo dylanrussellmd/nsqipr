@@ -157,8 +157,6 @@ conv_numscale <- function(vec) {
 #' @param vec a character vector containing dates in the format "yyyy"
 #' @return a Date vector
 #'
-#' @details Formats dates via \code{as.Date(vec, "%Y")}
-#'
 #' @keywords internal
 #' @examples
 #'
@@ -166,7 +164,9 @@ conv_numscale <- function(vec) {
 #' nsqipr:::conv_date(x)
 #'
 conv_date <- function(vec) {
-  as.Date(vec,"%Y")
+  as.Date(ifelse(!is.na(vec),
+         paste(stringi::stri_extract_all_charclass(vec, "[0-9]"), 1, 1, sep = "-"),
+         NA))
 }
 
 #' Add a PUF year column
