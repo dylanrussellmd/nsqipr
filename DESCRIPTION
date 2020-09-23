@@ -19,7 +19,7 @@ Suggests:
     testthat,
     spelling
 VignetteBuilder: knitr
-URL: https://github.com/dylanrussellmd/nsqipr
+URL: https://github.com/dylanrussellmd/nsqipr, https://dylanrussellmd.github.io/nsqipr/
 BugReports: https://github.com/dylanrussellmd/nsqipr/issues
 Language: en-US
 Imports: 
@@ -36,4 +36,3 @@ Imports:
     stringr
 Depends: 
     R (>= 3.5.0)
-URL: https://dylanrussellmd.github.io/nsqipr/, https://github.com/dylanrussellmd/nsqipr
