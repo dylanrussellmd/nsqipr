@@ -1,0 +1,15 @@
+citHeader("To {cite} nsqipr in publications, please use the following:")
+
+citEntry(entry = "Unpublished",
+title = "Easy Interface with the NSQIP Database using {nsqipr}",
+author = as.person("Dylan Russell, MD"),
+note = "Version 0.0.0.9000",
+url = "https://github.com/dylanrussellmd/nsqipr",
+
+textVersion =
+paste("Dylan Rusell (2020).",
+"Easy Interface with the NSQIP Database using nsqipr.",
+"URL https://github.com/dylanrussellmd/nsqipr.")
+)
+
+citFooter("I have invested a significant amount of time and effort into {nsqipr}. Please cite my package in your paper if it was of any assistance!")
