@@ -6,4 +6,3 @@ inst/doc
 .Renviron
 .Rprofile
 gcloud-service-key.json
-docs
