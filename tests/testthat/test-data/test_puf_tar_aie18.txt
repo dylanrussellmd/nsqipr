@@ -1,0 +1,31 @@
+caseid	aie_proc	aie_sympt	aie_hrf_phys	aie_hrf_anat	aie_premed_aspirin	aie_premed_statin	aie_premed_betab	aie_prehemo	aie_ulp	aie_dulp	aie_bleeding	aie_dbleeding	aie_mi_stroke	aie_dmi_stroke	aie_wound	aie_dwound	aie_posthemo	aie_mostsevoutcome	aie_amputation	aie_mrtas
+1525973	Common iliac angioplasty/stenting	Critical limb ischemia: rest pain	Yes	Prior ipsilateral bypass involving currently treated segment	Yes	Yes	No	ABI  0.40 - 0.89	No		No		No		No		ABI  0.40 - 0.89	Patent treated arterial segment with stenosis	No	No
+1525978	Common and external iliac angioplasty/stenting	Critical limb ischemia: tissue loss	No	None/Not documented	No	No	Yes	ABI <= 0.39	Yes	24	Yes	14	Yes	2	Yes	27	"ABI not performed; ipsilateral pedal pulse ""palpable"""	Not documented	Yes	Yes
+1525992	Bilateral common iliac (kissing) angioplasty/stenting	Claudication	Unknown	Prior ipsilateral percutaneous intervention involving currently treated segment	Unknown	Unknown	Unknown	Not documented		0		2		4		11	None/Not documented	Patent treated arterial segment, no stenosis		
+1529058	External iliac angioplasty/stenting	Asymptomatic						"ABI not performed; ""not palpable"""		16		1		-99		18	"ABI not performed; ""not palpable"""	Death		
+1525950	Not documented	Not documented						"ABI not performed; ipsilateral pedal pulse ""palpable"""		2		0		19		6	ABI  0.90 - 1.29	Major Amputation		
+1526035	Aortic angioplasty/stenting							ABI  0.90 - 1.29		-99		3		20		14	ABI <= 0.39	New bypass in the treated arterial segment		
+1526011								"ABI >= 1.30; arteries ""noncompressible"", no toe pressure taken"		8		23		11		3	"ABI >= 1.30; arteries ""noncompressible"", toe pressure >= 30 mm Hg"	Reintervened treated arterial segment with stenosis		
+1543820	Common and internal iliac angioplasty/stenting							"ABI >= 1.30; arteries ""noncompressible"", toe pressure >= 30 mm Hg"		10		4		8		30	"ABI >= 1.30; arteries ""noncompressible"", toe pressure < 30 mm Hg"	Thrombosis with no planned intervention		
+1555009	Internal iliac angioplasty/stenting							"ABI >= 1.30; arteries ""noncompressible"", toe pressure < 30 mm Hg"		12		7		7		12	"ABI >= 1.30; arteries ""noncompressible"", no toe pressure taken"	Reintervened treated arterial segment with no stenosis		
+1560660										29		10		1		-99				
+1608126										26		-99		0		10	ABI not performed w/in 30 days; evidence of patient clinically well			
+1608138										1		5		12		21				
+1608142										15		15		6		22				
+1608209										7		18		27		19				
+1608115										11		6		30		24				
+1608208										27		24		3		4				
+1608187										19		8		25		7				
+1608179										17		28		26		13				
+1608175										3		9		5		29				
+1608149										21		11		15		5				
+1621176										5		26		23		26				
+1621178										14		21		14		20				
+1620620										28		30		16		9				
+1621213										20		12		28		16				
+1621214												20				28				
+1621276												16				23				
+1621193												13				1				
+1620593												29				0				
+1621191												27				15				
+1621321																8				

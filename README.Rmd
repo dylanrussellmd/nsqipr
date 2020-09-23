@@ -22,6 +22,7 @@ library(magrittr)
 <!-- badges: start -->
 [![Travis build status](https://travis-ci.com/dylanrussellmd/nsqipr.svg?token=HoLzyTtjbHZhKQ9MzmcE&branch=master)](https://travis-ci.com/dylanrussellmd/nsqipr)
 [![R build status](https://github.com/dylanrussellmd/nsqipr/workflows/R-CMD-check/badge.svg)](https://github.com/dylanrussellmd/nsqipr/actions)
+![Github All Releases](https://img.shields.io/github/downloads/dylanrussellmd/nsqipr/total?style=plastic)
 <!-- badges: end -->
 
 What would you like to see implemented in `nsqipr`? [Open an issue](https://github.com/doctortickle/nsqipr/issues)!  Are you interested in using or helping develop `nsqipr`? [Send me an email](dyl.russell@gmail.com)!
@@ -50,7 +51,7 @@ The data from ACS NSQIP<sup>&copy;</sup> is used to produce **approximately 400 
 
 ## Purpose
 
-ACS NSQIP<sup>&copy;</sup> requires that members request specific datasets for use in research. The files are then delivered as `.exe` executables avaiable for download for a limited duration of time. The archived files can be unzipped and contain a `.txt` tab-delimited file. Some will also contain a PDF version of the Participant Use File (**PUF**); these define the variables in the dataset. The `.txt` tab-delimited file must be read into R as a data frame and meticulously cleaned prior to being used for data analysis. Researchers often want to combine data across multiple years. This complicates data preparation as variables are removed or added every year and sometimes the same variable may be recorded differently in two different years.
+ACS NSQIP<sup>&copy;</sup> requires that members request specific datasets for use in research. The files are then delivered as `.exe` executables available for download for a limited duration of time. The archived files can be unzipped and contain a `.txt` tab-delimited file. Some will also contain a PDF version of the Participant Use File (**PUF**); these define the variables in the dataset. The `.txt` tab-delimited file must be read into R as a data frame and meticulously cleaned prior to being used for data analysis. Researchers often want to combine data across multiple years. This complicates data preparation as variables are removed or added every year and sometimes the same variable may be recorded differently in two different years.
 
 The purpose of `nsqipr` is to streamline this process. This package is geared towards those surgical interns, residents, and attendings who have limited experience with `R`, `SQL`, or "big data" analysis. It is also designed to be a useful tool for that experienced researcher or computer scientist making frequent use of ACS NSQIP<sup>&copy;</sup> PUFs.
 

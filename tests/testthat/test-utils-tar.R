@@ -1,0 +1,9 @@
+testthat::test_that("conv_open_assist works", {
+  test <- c("Endoscopic","Endoscopic w/ open assist","Endoscopic w/ unplanned conversion to open","Hybrid","Hybrid w/ open assist","Hybrid w/ unplanned conversion to open","Laparoscopic","Laparoscopic w/ open assist","Laparoscopic w/ unplanned conversion to open","Laparoscopic hand assisted","NOTES","NOTES w/ open assist","NOTES w/ unplanned conversion to open","Open","Open (planned)","Other","Other MIS approach","Other MIS approach w/ open assist","Other MIS approach w/ unplanned conversion to open","Robotic","Robotic w/ open assist","Robotic w/ unplanned conversion to open","SILS","SILS w/ open assist","SILS w/ unplanned conversion to open", NA)
+  testthat::expect_equal(conv_open_assist(test), c(FALSE, TRUE, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, FALSE, TRUE, FALSE, TRUE, FALSE, NA, NA, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, FALSE, NA))
+})
+
+testthat::test_that("conv_unplanned_conversion works", {
+  test <- c("Endoscopic","Endoscopic w/ open assist","Endoscopic w/ unplanned conversion to open","Hybrid","Hybrid w/ open assist","Hybrid w/ unplanned conversion to open","Laparoscopic","Laparoscopic w/ open assist","Laparoscopic w/ unplanned conversion to open","Laparoscopic hand assisted","NOTES","NOTES w/ open assist","NOTES w/ unplanned conversion to open","Open","Open (planned)","Other","Other MIS approach","Other MIS approach w/ open assist","Other MIS approach w/ unplanned conversion to open","Robotic","Robotic w/ open assist","Robotic w/ unplanned conversion to open","SILS","SILS w/ open assist","SILS w/ unplanned conversion to open", NA)
+  testthat::expect_equal(conv_unplanned_conversion(test), c(FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, TRUE, NA, NA, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, NA))
+})

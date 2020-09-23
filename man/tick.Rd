@@ -4,11 +4,9 @@
 \alias{tick}
 \title{Increment a progress bar}
 \usage{
-tick(df = NULL, pb, preface, file, len = 1)
+tick(pb, preface, file, len = 1)
 }
 \arguments{
-\item{df}{accepts a dummy variable that allows it to be used in a pipe.}
-
 \item{pb}{a progress bar object}
 
 \item{preface}{the desired preface text to a progress bar}

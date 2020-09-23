@@ -7,64 +7,86 @@
 #'
 #' @keywords internal
 #'
-nsqip_dir <- function(dir, return_df, write_to_csv, append, headers) {
-  progbar <- pb(write_to_csv)
-  tick(NULL, progbar, "reading", dir, 0)
-  dataframe <- fs::dir_ls(dir) %>%
-    purrr::map_dfr(function(x) {
-      vroom::vroom(x, col_types = vroom::cols(.default = "c"), progress = FALSE) %>%
-        set_up_df()
-  }) %>%
-  conv_to_standard(dir, return_df, write_to_csv, append, headers, progbar)
+nsqip_dir <- function(dir, csv, rds) {
+  files <- fs::dir_ls(dir)
+  cols <- collect_column_names(files)
+  df <- lapply(files, function(file) {
+     conv_to_standard(file, cols, csv, rds)
+  })
   usethis::ui_done('Successfully cleaned all files in {usethis::ui_path(dir)}.')
-  return(dataframe)
+  invisible(NULL)
 }
 
-# TODO: Figure out how to append CSVs while keeping first row as headers.
-conv_to_standard <- function(df, dir, return_df, write_to_csv, append, headers, progbar) {
+conv_to_standard <- function(file, cols, csv, rds) {
+  progbar <- pb(csv, rds)
+  filename <- fs::path_file(file)
+  tick(progbar, "reading", filename, 0)
 
-  df <- df %T>% tick(progbar, "converting generic columns of", dir) %>%
-    conv_type_cols() %T>% tick(progbar, "converting unique columns of", dir) %>%
-    conv_special_cols(dir) %T>% tick(progbar, "removing redundant columns of", dir) %>%
-    dplyr::select(!dplyr::any_of(redundant_cols)) %T>% tick(progbar, "ordering columns of", dir) %>%
-    dplyr::select(dplyr::any_of(col_order)) %T>% {if(write_to_csv) tick(NULL, progbar, "writing CSV for", dir) else .}
+  df <- data.table::fread(file, sep = "\t", colClasses = "character", showProgress = FALSE, na.strings = na_strings)
+  setup(df, filename, progbar, cols)
+  conv_type_cols(df, filename, progbar)
+  conv_special_cols(df, filename, progbar)
+  conv_factor_cols(df, filename, progbar)
+  longtables <- conv_long_tables(df, filename, progbar)
+  conv_order_cols(df, filename, progbar)
+  output(df, file, filename, csv, rds, longtables, progbar)
 
-  if(write_to_csv & !append) vroom::vroom_write(df, path = paste(tools::file_path_sans_ext(dir), "_clean.csv", sep = ""), delim = ",", na = "", col_names = headers)
-  if(write_to_csv & append) vroom::vroom_write(df, path = file.path(dirname(dir),paste(parse_filename(dir),"full_clean.csv", sep = "_")), delim = ",", na = "", col_names = FALSE, append = TRUE)
-  tick(NULL, progbar, "completed", dir)
-  if(return_df) return(df) else return(NULL)
+  tick(progbar, "completed", filename)
+  usethis::ui_done('Successfully cleaned {usethis::ui_path(filename)}.')
 
-# Need to work in (or at least make it possible to) outputting tidy long data. In addition, should probably split into two tables (one patient, one procedures, one by case id)
-#  df1 %>% rename(othercpt0 = cpt, otherproc0 = prncptx, wrvu0 = workrvu) %>% pivot_longer(cols = c(starts_with("othercpt"), starts_with("otherproc"), starts_with("otherwrvu")), names_to = c(".value", "procedure"), names_pattern = "^other([a-z]*)(\\d)$", names_repair = "unique", values_drop_na = TRUE, names_transform = list(procedure = as.integer)) %>% mutate(procedure = procedure + 1) %>% select(caseid,procedure, cpt, proc, wrvu) %>% View()
-
+  invisible(NULL)
 }
 
-set_up_df <- function(df) {
-  df %>%
-    dplyr::rename_with(., tolower) %>%
-    dplyr::mutate(dplyr::across(dplyr::everything(), tolower)) %>%
-    dplyr::mutate(dplyr::across(dplyr::everything(), furniture::washer, "unknown", "null", "n/a", "not documented", "none/not documented", "not entered","-99", -99))
+setup <- function(df, filename, progbar, cols) {
+  tick(progbar, "converting names to lower case in", filename)
+  setlowernames(df)
+  tick(progbar, "adding missing columns to", filename)
+  addmissingcolumns(df, cols)
+  tick(progbar, "coalescing old and new columns", filename)
+  coalesce_cols(df, coalesce_in_cols, coalesce_out_cols)
 }
 
-conv_type_cols <- function(df) {
-  df %>%
-    dplyr::mutate(dplyr::across(dplyr::any_of(date_cols), ~ lubridate::ymd(.x, truncated = 2))) %>%
-    dplyr::mutate(dplyr::across(dplyr::any_of(complication_cols), conv_complication)) %>%
-    dplyr::mutate(dplyr::across(dplyr::any_of(numscale_cols), conv_numscale)) %>%
-    dplyr::mutate(dplyr::across(dplyr::any_of(yes_no_cols), conv_yesno)) %>%
-    dplyr::mutate(dplyr::across(dplyr::any_of(integer_cols), as.integer)) %>%
-    dplyr::mutate(dplyr::across(dplyr::any_of(numeric_cols), conv_numeric)) %>%
-    dplyr::mutate(dplyr::across(dplyr::any_of(reason_cols), conv_reasons))
+conv_type_cols <- function(df, filename, progbar) {
+  tick(progbar, "converting integer columns of", filename)
+  conv_(df, integer_cols, as.integer)
+  tick(progbar, "converting numeric columns of", filename)
+  conv_(df, numeric_cols, as.numeric)
+  tick(progbar, "converting complication columns of", filename)
+  conv_(df, complication_cols, conv_complication)
+  tick(progbar, "converting number scale columns of", filename)
+  conv_(df, numscale_cols, conv_numscale)
+  tick(progbar, "converting yes/no columns of", filename)
+  conv_(df, yes_no_cols, conv_yesno)
+  tick(progbar, "converting date columns of", filename)
+  conv_(df, date_cols, conv_date)
 }
 
-conv_special_cols <- function(df, file) {
-  fn <- switch(parse_filename(file),
+
+conv_special_cols <- function(df, filename, progbar) {
+  tick(progbar, "converting unique columns of", filename)
+  fn <- switch(parse_filename(filename),
                "acs_nsqip_puf" = `conv_acs_cols`,
                "puf_tar_col" = `conv_col_cols`,
                "puf_tar_aaa" = `conv_aaa_cols`,
                "puf_tar_aie" = `conv_aie_cols`,
                "puf_tar_pan" = `conv_pan_cols`)
-  fn(df)
+  fn(df, filename)
 }
 
+conv_factor_cols <- function(df, filename, progbar) {
+  tick(progbar, "converting factor columns of", filename)
+  conv_factor(df, factor_cols)
+}
 
+conv_long_tables <- function(df, filename, progbar) {
+  tick(progbar, "creating long tables for", filename)
+  long_funcs <- c(make_cpt_long, make_reop_long, make_readm_long, make_anesthes_other_long, make_pan_percdrainage_long, make_amylase_long)
+  lapply(long_funcs, function(f) f(df))
+}
+
+conv_order_cols <- function(df, filename, progbar) {
+  tick(progbar, "ordering columns of", filename)
+  colorder(df, col_order)
+  tick(progbar, "removing redundant columns from", filename)
+  remove_undesired(df, redundant_cols)
+}

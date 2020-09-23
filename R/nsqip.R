@@ -1,28 +1,26 @@
 #' Clean NSQIP data
 #'
-#' Converts a single NSQIP \code{.txt} or a directory of NSQIP \code{.txt} files into a standardized NSQIP data frame.
-#'
-#' @return a data frame of class \code{tibble}.
+#' Converts a single NSQIP \code{.txt} or a directory of NSQIP \code{.txt} files into a standardized NSQIP data table.
 #'
 #' @param path path to file or directory.
-#' @param return_df return a data frame.
-#' @param write_to_csv write the resulting data frame to a \code{.csv} file. Produces individual files for each \code{.txt} input
-#' @param append writes the resulting data frames all to a single \code{.csv} file
-#' @param headers whether to include column headers in the generated \code{.csv} file
+#' @param csv write the resulting data frame to a \code{.csv} file. See details for options.
+#' @param rds a logical value. Write the resulting data frame to \code{.rds} file. Produces individual files for each \code{.txt} input.
+#'
+#' @details \code{csv} may be set to "indiv", "append", "both", or NA. If "indiv", a CSV file will be output for each input file.
+#' If "append", a single CSV file will be created appending all input files into a single output file. "Both" will enact the
+#' effects of both "indiv" and "append". NA will produce no CSV files.
+#'
+#' @return NULL
 #'
 #' @export
 #'
-nsqip <- function(path, return_df = TRUE, write_to_csv = FALSE, append = FALSE, headers = TRUE) {
+nsqip <- function(path, csv = "both", rds = TRUE) {
 
   usethis::ui_info("This could take a while (10-15 minutes depending on how many files)! Don't worry, its working...")
   files <- get_file_or_dir(path) # returns a character vector of matching file(s)
   dirs <- parse_files(files) # Creates directories and moves files into them
-  dataframes <- dirs %>% purrr::map(nsqip_dir, return_df, write_to_csv, append, headers) # Runs nsqip_dir over each directory
-  usethis::ui_done('All files in {usethis::ui_path(path)} converted to {usethis::ui_field("nsqipr")} dataframes!')
-  return(dataframes)
+  df <- lapply(dirs, nsqip_dir, csv, rds) # Runs nsqip_dir over each directory
+  usethis::ui_done("All files in {usethis::ui_path(path)} cleaned and converted!")
+  usethis::ui_todo("If you had any problems, please open an issue at {usethis::ui_value('github.com/dylanrussellmd/nsqipr')}!")
 }
-
-
-
-
 

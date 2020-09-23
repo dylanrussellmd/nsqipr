@@ -1,0 +1,31 @@
+caseid	aaa_surgind	aaa_andiam	aaa_andiam_unk	aaa_paas	aaa_surgap	aaa_pcl	aaa_pae	aaa_distext	aaa_mima	aaa_cp_renrevasc	aaa_cp_viscrevasc	aaa_cp_ler	aaa_cp_are	aaa_colitis	aaa_dcolitis	aaa_colitiis_treat	aaa_lei	aaa_dlei	aaa_roa	aaa_droa	aaa_iculos
+1396230	Non-ruptured symptomatic	4.5		No	Transperitoneal-midline	Not documented	Infrarenal	Not documented	Not documented	No	No	No	No	No			No		No		2
+1396229	Diameter	8	1	Yes	Retroperitoneal	Infrarenal	Supra-renal	Common iliac	Ligated	Yes	Yes	Yes	Yes	Yes	1	Medical treatment	Yes	0	Yes	0	1
+1396276	Rupture w/ hypotension or use of pressors	7	-99	Unknown	Transperitoneal-transverse	Supraceliac	Juxtarenal	Aortic	Implanted						4	Surgical treatment		1		30	28
+1399437	Thrombosis	5			Not documented	Between SMA & renals	Pararenal	Internal iliac	Chronically occluded						6	Not documented		5		-99	3
+1396237	Rupture w/out hypotension	8.6				Above one renal	Type IV Thoracoabdominal aneurysm	External iliac							5	NULL		-99		1	6
+1401670	Not documented	9					Not documented								10			2		24	4
+1401673	Dissection	6.3				Between SMA CHR(38) renals									11			3		18	Not documented
+1401592		6													21			19		13	7
+1438597	Embolization	8.5													2			15		8	0
+1438590	Prior endovascular intervention w/ unsatisfactory result	5.5													-99			8		3	24
+1459256	Prior open intervention w/ unsatisfactory result	5.2													20			4		21	19
+1529021	Other indication for surgery	5.6													17			12		16	14
+1529155		3.5													3			6		2	5
+1525893															0			23		12	26
+1537293		5.7													9			10			21
+1537349		5.3													25			14			8
+1537422		6.8													12			7			30 or more
+1541748		4.6													8			20			10
+1554825		5.1													16						18
+1554826		9.1													7						9
+1555408		6.1													13						17
+1555403		3.8													19						16
+1555510		14													23						15
+1555695		6.5													14						27
+1555813		6.6													29						11
+1555727		6.9													18						22
+1562470		5.8																			
+1562484		5.88																			25
+1562596		7.8																			13
+1558154		13																			20

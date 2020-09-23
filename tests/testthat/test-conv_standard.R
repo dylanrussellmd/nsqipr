@@ -1,5 +1,0 @@
-test_set("acs_nsqip_puf")
-test_set("puf_tar_aaa")
-test_set("puf_tar_aie")
-test_set("puf_tar_col")
-test_set("puf_tar_pan")
