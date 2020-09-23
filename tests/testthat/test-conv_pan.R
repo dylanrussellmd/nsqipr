@@ -1,13 +1,3 @@
-testthat::test_that("conv_pan_open_assist works", {
-  test <- c("Hybrid","Hybrid w/ open assist","Hybrid w/ unplanned conversion to open","Laparoscopic","Laparoscopic w/ open assist","Laparoscopic w/ unplanned conversion to open","Laparoscopic hand assisted","NOTES","NOTES w/ open assist","NOTES w/ unplanned conversion to open","Open","Open (planned)","Other","Other MIS approach","Other MIS approach w/ open assist","Other MIS approach w/ unplanned conversion to open","Robotic","Robotic w/ open assist","Robotic w/ unplanned conversion to open","SILS","SILS w/ open assist","SILS w/ unplanned conversion to open", NA)
-  testthat::expect_equal(conv_pan_open_assist(test), c(FALSE, TRUE, FALSE, FALSE, TRUE, FALSE, TRUE, FALSE, TRUE, FALSE, NA, NA, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, FALSE, NA))
-})
-
-testthat::test_that("conv_pan_unplanned_conversion works", {
-  test <- c("Hybrid","Hybrid w/ open assist","Hybrid w/ unplanned conversion to open","Laparoscopic","Laparoscopic w/ open assist","Laparoscopic w/ unplanned conversion to open","Laparoscopic hand assisted","NOTES","NOTES w/ open assist","NOTES w/ unplanned conversion to open","Open","Open (planned)","Other","Other MIS approach","Other MIS approach w/ open assist","Other MIS approach w/ unplanned conversion to open","Robotic","Robotic w/ open assist","Robotic w/ unplanned conversion to open","SILS","SILS w/ open assist","SILS w/ unplanned conversion to open", NA)
-  testthat::expect_equal(conv_pan_unplanned_conversion(test), c(FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, TRUE, NA, NA, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, NA))
-})
-
 testthat::test_that("conv_pan_fistula works", {
   test <- c("No","No evidence of Biochemical Leak or POPF","Biochemical Leak only","Yes, Grade B POPF present","Yes, Grade C POPF present","Yes-clinical diagnosis, NPO-TPN","Yes-clinical diagnosis, drain continued >7 days","Yes-clinical diagnosis, percutaneous drainage performed","Yes-clinical diagnosis, reoperation performed", "Yes-clinical diagnosis, spontaneous wound drainage","Yes-persistent drainage, NPO-TPN","Yes-persistent drainage, drain continued >7 days","Yes-persistent drainage, percutaneous drainage performed","Yes-persistent drainage, reoperation performed", NA)
   testthat::expect_equal(conv_pan_fistula(test), c(FALSE, FALSE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, NA))

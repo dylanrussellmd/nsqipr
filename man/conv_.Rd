@@ -37,3 +37,4 @@ x <- data.table::data.table(x = rep("APPLE", 10), y = rep("BANANA", 10), z = rep
 nsqipr:::conv_(x, "x", paste, "JUICE", sep = " ", newcol = "drink")
 
 }
+\keyword{internal}

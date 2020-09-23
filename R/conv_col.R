@@ -1,146 +1,137 @@
-conv_col_cols <- function(df) {
-  df %>%
-    dplyr::mutate(
-      pufyear = tryCatch(conv_pufyear(caseid), error = function(e) return(NULL)),
-      col_indication = tryCatch(conv_col_indication(col_indication), error = function(e) return(NULL)),
-      col_emergent = tryCatch(conv_col_emergent(col_emergent), error = function(e) return(NULL)),
-      col_open_assist = tryCatch(conv_col_open_assist(col_approach), error = function(e) return(NULL)),
-      col_unplanned_conversion = tryCatch(conv_col_unplanned_conversion(col_approach), error = function(e) return(NULL)),
-      col_approach = tryCatch(conv_col_approach(col_approach), error = function(e) return(NULL)),
-      col_malignancyt = tryCatch(conv_col_malignancyt(col_malignancyt), error = function(e) return(NULL)),
-      col_malignancyn = tryCatch(conv_col_malignancyn(col_malignancyn), error = function(e) return(NULL)),
-      col_malignancym = tryCatch(conv_col_malignancym(col_malignancym), error = function(e) return(NULL)),
-      col_leak_treatment = tryCatch(conv_col_leak_treatment(col_anastomotic), error = function(e) return(NULL)),
-      col_anastomotic = tryCatch(conv_col_anastomotic(col_anastomotic), error = function(e) return(NULL))
-    )
+#' Convert targeted colectomy columns
+#'
+#' @param df a data table to be cleaned
+#' @param filename the name of the file from which the data table has been read in
+#'
+#' @details If the file being processed is a targeted colectomy dataset,
+#' it will be processed by this function. This function determines how data cleaning steps specific
+#' to targeted colectomy dataset files should proceed.
+#'
+#' @keywords internal
+#'
+conv_col_cols <- function(df, filename) {
+  get_pufyear(df, filename)
+  conv_(df, "col_approach", conv_open_assist, newcol = "col_open_assist")
+  conv_(df, "col_approach", conv_unplanned_conversion, newcol = "col_unplanned_conversion")
+  conv_(df, "col_anastomotic", conv_col_leak_treatment, newcol = "col_leak_treatment")
+  conv_(df, "col_anastomotic", conv_col_anastomotic)
+  data.table::setnames(df, c("col_icd10_indication","col_icd10_emergent"), c("col_indication_icd","col_emergent_icd"))
 }
 
+#### ---- FACTOR LISTS (THESE DEFINE THE FACTOR LEVELS FOR VARIOUS COLUMNS) ---- ####
+col_malignancym <- list(
+  `M0/Mx` = c("M0/Mx", "M0"),
+  `M1` = "M1",
+  `M1a` = "M1a",
+  `M1b` = "M1b"
+)
+col_malignancyt <- list(
+  `T0` = "T0",
+  `T1` = "T1",
+  `T2` = "T2",
+  `T3` = "T3",
+  `T4` = "T4",
+  `T4a` = "T4a",
+  `T4b` = "T4b",
+  `Tis` = "Tis",
+  `Tx` = "Tx"
+)
+col_malignancyn <- list(
+  `N0` = "N0",
+  `N1` = "N1",
+  `N1a` = "N1a",
+  `N1b` = "N1b",
+  `N1c` = "N1c",
+  `N2` = "N2",
+  `N2a` = "N2a",
+  `N2b` = "N2b",
+  `Nx` = "Nx"
+)
+col_approach <- list(
+  `Endoscopic` = c("Endoscopic","Endoscopic w/ open assist","Endoscopic w/ unplanned conversion to open"),
+  `Hybrid` = c("Hybrid", "Hybrid w/ open assist","Hybrid w/ unplanned conversion to open"),
+  `Laparoscopic` = c("Laparoscopic","Laparoscopic w/ open assist","Laparoscopic w/ unplanned conversion to open","Laparoscopic w/ unplanned conversion to Open","Laparoscopic hand assisted","Laparoscopic Hand Assisted"),
+  `NOTES` = c("NOTES","NOTES w/ open assist","NOTES w/ unplanned conversion to open"),
+  `Open` = c("Open","Open (planned)"),
+  `Other` = "Other",
+  `Other MIS` = c("Other MIS approach","Other MIS approach w/ open assist","Other MIS approach w/ unplanned conversion to open"),
+  `Robotic` = c("Robotic","Robotic w/ open assist","Robotic w/ unplanned conversion to open"),
+  `SILS` = c("SILS","SILS w/ open assist","SILS w/ unplanned conversion to open")
+)
+col_emergent <- list(
+  `Bleeding` = "Bleeding",
+  `Obstruction` = "Obstruction",
+  `Perforation` = "Perforation",
+  `Toxic colitis` = "Toxic colitis (Toxic Megacolon, C. diff w/out perforation, Ischemic Colitis)",
+  `Other` = c("Other (enter ICD-9 code)", "Other (enter ICD-10 code)")
+)
+col_indication = list(
+  `Acute diverticulitis` = "Acute diverticulitis",
+  `Bleeding` = "Bleeding",
+  `Chronic diverticular disease` = "Chronic diverticular disease",
+  `Colon cancer` = "Colon cancer",
+  `Colon cancer w/ obstruction` = "Colon cancer w/ obstruction",
+  `Chrohn's disease` = "Crohn's Disease",
+  `Enterocolitis` = "Enterocolitis (e.g. C. Difficile)",
+  `Non-malignant polyp` = "Non-malignant polyp",
+  `Other` =  c("Other-Enter ICD-9 for diagnosis","Other-Enter ICD-10 for diagnosis"),
+  `Ulcerative colitis` = "Ulcerative colitis",
+  `Volvulus` = "Volvulus"
+)
+
+#### ---- FUNCTIONS ---- ####
+
+#' Parse entries that indicate the presence of an anastomotic leak
+#'
+#' @param vec a character vector to parse
+#'
+#' @details returns TRUE if case-insensitive "yes" or "leak'
+#' is detected in the character vector.
+#'
+#' @return a logical vector
+#' @keywords internal
+#' @examples
+#' x <- c("No", "Yes-reoperation", "Yes-percutaneous intervention",
+#' "Yes-no intervention required",
+#' "No definitive diagnosis of leak/leak related abscess",
+#' "Leak, treated w/ reoperation", "Leak, treated w/ interventional means",
+#' "Leak, no treatment intervention documented",
+#' "Leak, treated w/ non-interventional/non-operative means", NA)
+#'
+#' cbind(x, nsqipr:::conv_col_anastomotic(x))
+#'
 conv_col_anastomotic <- function(vec) {
-  stringr::str_detect(vec, "yes-|leak, ")
+  stringi::stri_detect_regex(vec, "^yes-|^leak,", opts_regex = list(case_insensitive = TRUE))
 }
 
+#' Parse a column for type of anastomotic leak intervention
+#'
+#' @param vec a character vector of values to convert
+#'
+#' @details NSQIP encodes the \code{col_anastomotic} column as having one of multiple interventions.
+#' This function extracts those values from character vectors and factors them.
+#'
+#' @return a factor vector
+#' @keywords internal
+#'
+#' @examples
+#' x <- c("No", "Yes-reoperation", "Yes-percutaneous intervention",
+#' "Yes-no intervention required",
+#' "No definitive diagnosis of leak/leak related abscess",
+#' "Leak, treated w/ reoperation", "Leak, treated w/ interventional means",
+#' "Leak, no treatment intervention documented",
+#' "Leak, treated w/ non-interventional/non-operative means", NA)
+#'
+#' nsqipr:::conv_col_leak_treatment(x)
+#'
 conv_col_leak_treatment <- function(vec) {
-  val <- c("no" = NA,
-           "yes-reoperation" = 1L,
-           "yes-percutaneous intervention" = 2L,
-           "yes-no intervention required" = 3L,
-           "unknown" = NA,
-           "no definitive diagnosis of leak/leak related abscess" = NA,
-           "leak, treated w/ reoperation" = 1L,
-           "leak, treated w/ interventional means" = 2L,
-           "leak, no treatment intervention documented" = 3L,
-           "leak, treated w/ non-interventional/non-operative means" = 4L)
-  unname(val[vec])
-}
-
-conv_col_malignancym <- function(vec) {
-  val <- c("m0/mx" = 1L,
-           "m1" = 2L,
-           "m1a" = 3L,
-           "m1b" = 4L,
-           "unknown" = NA,
-           "n/a" = NA
+  vec %^% list(
+    `Reoperation` = "Yes-reoperation",
+    `Percutaneous intervention` = "Yes-percutaneous intervention",
+    `No intervention` = "Yes-no intervention required",
+    `Reoperation` = "Leak, treated w/ reoperation",
+    `Percutaneous intervention` = "Leak, treated w/ interventional means",
+    `No intervention` = "Leak, no treatment intervention documented",
+    `Non-operative intervention` = "Leak, treated w/ non-interventional/non-operative means"
   )
-  unname(val[vec])
-}
-
-conv_col_malignancyt <- function(vec) {
-  val <- c("t0" = 1L,
-           "t1" = 2L,
-           "t2" = 3L,
-           "t3" = 4L,
-           "t4" = 5L,
-           "t4a" = 6L,
-           "t4b" = 7L,
-           "tis" = 8L,
-           "tx" = 9L,
-           "unknown" = NA,
-           "n/a" = NA
-           )
-  unname(val[vec])
-}
-
-conv_col_malignancyn <- function(vec) {
-  val <- c("n0" = 1L,
-           "n1" = 2L,
-           "n1a" = 3L,
-           "n1b" = 4L,
-           "n1c" = 5L,
-           "n2" = 6L,
-           "n2a" = 7L,
-           "n2b" = 8L,
-           "nx" = 9L,
-           "unknown" = NA,
-           "n/a" = NA
-           )
-  unname(val[vec])
-}
-
-conv_col_open_assist <- function(vec) {
-  stringr::str_detect(vec, "w/ open assist|hand assisted")
-}
-
-conv_col_unplanned_conversion <- function(vec) {
-  stringr::str_detect(vec, "w/ unplanned conversion to open")
-}
-
-conv_col_approach <- function(vec) {
-  val <- c("endoscopic" = 1L,
-           "endoscopic w/ open assist" = 1L,
-           "endoscopic w/ unplanned conversion to open" = 1L,
-           "hybrid" = 2L,
-           "hybrid w/ open assist" = 2L,
-           "hybrid w/ unplanned conversion to open" = 2L,
-           "laparoscopic" = 3L,
-           "laparoscopic w/ open assist" = 3L,
-           "laparoscopic w/ unplanned conversion to open" = 3L,
-           "laparoscopic hand assisted" = 3L,
-           "notes" = 4L,
-           "notes w/ open assist" = 4L,
-           "notes w/ unplanned conversion to open" = 4L,
-           "open" = 5L,
-           "open (planned)" = 5L,
-           "other"= 6L,
-           "other mis approach" = 7L,
-           "other mis approach w/ open assist" = 7L,
-           "other mis approach w/ unplanned conversion to open" = 7L,
-           "robotic" = 8L,
-           "robotic w/ open assist" = 8L,
-           "robotic w/ unplanned conversion to open" = 8L,
-           "sils" = 9L,
-           "sils w/ open assist" = 9L,
-           "sils w/ unplanned conversion to open" = 9L,
-           "unknown" = NA
-           )
-  unname(val[vec])
-}
-
-conv_col_emergent <- function(vec) {
-  val <- c("bleeding" = 1L,
-           "obstruction" = 2L,
-           "perforation" = 3L,
-           "toxic colitis (toxic megacolon, c. diff w/out perforation, ischemic colitis)" = 4L,
-           "other (enter icd-9 code)" = 5L,
-           "other (enter icd-10 code)" = 6L,
-           "unknown" = NA
-           )
-  unname(val[vec])
-}
-
-conv_col_indication <- function(vec) {
-  val <- c("acute diverticulitis" = 1L,
-           "bleeding" = 2L,
-           "chronic diverticular disease" = 3L,
-           "colon cancer" = 4L,
-           "colon cancer w/ obstruction" = 5L,
-           "crohn's disease" = 6L,
-           "enterocolitis (e.g. c. difficile)" = 7L,
-           "non-malignant polyp" = 8L,
-           "other-enter icd-9 for diagnosis" = 9L,
-           "other-enter icd-10 for diagnosis" = 10L,
-           "ulcerative colitis" = 11L,
-           "volvulus" = 12L,
-           "unknown" = NA
-           )
-  unname(val[vec])
 }

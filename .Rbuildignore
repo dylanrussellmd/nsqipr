@@ -9,3 +9,7 @@
 ^\.Rprofile
 ^gcloud-service-key\.json
 ^\.github$
+^data-raw$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$

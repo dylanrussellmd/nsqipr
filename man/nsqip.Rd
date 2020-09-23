@@ -4,7 +4,7 @@
 \alias{nsqip}
 \title{Clean NSQIP data}
 \usage{
-nsqip(path, csv = "indiv", rds = TRUE)
+nsqip(path, csv = "both", rds = TRUE)
 }
 \arguments{
 \item{path}{path to file or directory.}

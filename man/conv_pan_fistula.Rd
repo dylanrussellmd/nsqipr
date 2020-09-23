@@ -17,17 +17,18 @@ Parse entries that indicate the presence of a fistula
 }
 \details{
 returns TRUE if case-insensitive "yes" or "biochemical leak only'
-is detected in the character vector. Cases with an "open" or "open (planned)"
-approach will return NA.
+is detected in the character vector.
 }
 \examples{
 x <- c("No","No evidence of Biochemical Leak or POPF","Biochemical Leak only",
 "Yes, Grade B POPF present","Yes, Grade C POPF present","Yes-clinical diagnosis, NPO-TPN",
 "Yes-clinical diagnosis, drain continued >7 days",
-"Yes-clinical diagnosis, percutaneous drainage performed","Yes-clinical diagnosis, reoperation performed",
+"Yes-clinical diagnosis, percutaneous drainage performed",
+"Yes-clinical diagnosis, reoperation performed",
 "Yes-clinical diagnosis, spontaneous wound drainage","Yes-persistent drainage, NPO-TPN",
 "Yes-persistent drainage, drain continued >7 days",
-"Yes-persistent drainage, percutaneous drainage performed","Yes-persistent drainage, reoperation performed",
+"Yes-persistent drainage, percutaneous drainage performed",
+"Yes-persistent drainage, reoperation performed",
 NA)
 
 cbind(x, nsqipr:::conv_pan_fistula(x))

@@ -21,10 +21,14 @@ This function extracts those values from character vectors and factors them.
 }
 \examples{
 fistulas <- c("No", "Yes-persistent drainage, drain continued >7 days",
-"Yes-clinical diagnosis, drain continued >7 days", "Yes-persistent drainage, percutaneous drainage performed",
-"Yes-clinical diagnosis, percutaneous drainage performed", "Yes-persistent drainage, reoperation performed",
-"Unknown", "Yes-clinical diagnosis, reoperation performed", "Yes-clinical diagnosis, spontaneous wound drainage",
-"Yes-persistent drainage, NPO-TPN", "Yes-clinical diagnosis, NPO-TPN", "No evidence of Biochemical Leak or POPF",
+"Yes-clinical diagnosis, drain continued >7 days",
+"Yes-persistent drainage, percutaneous drainage performed",
+"Yes-clinical diagnosis, percutaneous drainage performed",
+"Yes-persistent drainage, reoperation performed",
+"Unknown", "Yes-clinical diagnosis, reoperation performed",
+"Yes-clinical diagnosis, spontaneous wound drainage",
+"Yes-persistent drainage, NPO-TPN", "Yes-clinical diagnosis, NPO-TPN",
+"No evidence of Biochemical Leak or POPF",
 "Biochemical Leak only", "Yes, Grade B POPF present", "Yes, Grade C POPF present")
 
 nsqipr:::conv_pan_fistula_intervention(fistulas)

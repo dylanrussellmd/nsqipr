@@ -29,3 +29,4 @@ nsqipr:::`\%qsin\%`("apple",x) # could also use "apple" \%qsin\% x
 nsqipr:::`\%qsin\%`(c("APPLE","BANANA","coconut", NA), x)
 
 }
+\keyword{internal}

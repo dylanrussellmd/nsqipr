@@ -11,8 +11,8 @@
 #'
 conv_pan_cols <- function(df, filename) {
   get_pufyear(df, filename)
-  conv_(df, "pan_approach", conv_pan_open_assist, newcol = "pan_open_assist")
-  conv_(df, "pan_approach", conv_pan_unplanned_conversion, newcol = "pan_unplanned_conversion")
+  conv_(df, "pan_approach", conv_open_assist, newcol = "pan_open_assist")
+  conv_(df, "pan_approach", conv_unplanned_conversion, newcol = "pan_unplanned_conversion")
   conv_(df, "pan_fistula", conv_pan_fistula_type, newcol = "pan_fistula_type")
   conv_(df, "pan_fistula", conv_pan_fistula_intervention, newcol = "pan_fistula_intervention")
   conv_(df, "pan_fistula", conv_pan_fistula)
@@ -116,28 +116,14 @@ pan_ductsize <- list(
   `>6 mm` = ">6 mm"
 )
 pan_approach <- list(
-  `Hybrid` = "Hybrid",
-  `Hybrid` = "Hybrid w/ open assist",
-  `Hybrid` = "Hybrid w/ unplanned conversion to open",
-  `Laparoscopic` = "Laparoscopic",
-  `Laparoscopic` = "Laparoscopic w/ open assist",
-  `Laparoscopic` = "Laparoscopic w/ unplanned conversion to open",
-  `Laparoscopic` = "Laparoscopic hand assisted",
-  `NOTES` = "NOTES",
-  `NOTES` = "NOTES w/ open assist",
-  `NOTES` = "NOTES w/ unplanned conversion to open",
-  `Open` = "Open",
-  `Open` = "Open (planned)",
+  `Hybrid` = c("Hybrid", "Hybrid w/ open assist","Hybrid w/ unplanned conversion to open"),
+  `Laparoscopic` = c("Laparoscopic","Laparoscopic w/ open assist","Laparoscopic w/ unplanned conversion to open","Laparoscopic hand assisted"),
+  `NOTES` = c("NOTES","NOTES w/ open assist","NOTES w/ unplanned conversion to open"),
+  `Open` = c("Open","Open (planned)"),
   `Other` = "Other",
-  `Other MIS` = "Other MIS approach",
-  `Other MIS` = "Other MIS approach w/ open assist",
-  `Other MIS` = "Other MIS approach w/ unplanned conversion to open",
-  `Robotic` = "Robotic",
-  `Robotic` = "Robotic w/ open assist",
-  `Robotic` = "Robotic w/ unplanned conversion to open",
-  `SILS` = "SILS",
-  `SILS` = "SILS w/ open assist",
-  `SILS` = "SILS w/ unplanned conversion to open"
+  `Other MIS` = c("Other MIS approach","Other MIS approach w/ open assist","Other MIS approach w/ unplanned conversion to open"),
+  `Robotic` = c("Robotic","Robotic w/ open assist","Robotic w/ unplanned conversion to open"),
+  `SILS` = c("SILS","SILS w/ open assist","SILS w/ unplanned conversion to open")
 )
 pan_biliarystent <- list(
   `No stent at time of surgery` = "No stent at time of surgery",
@@ -195,65 +181,12 @@ make_pan_percdrainage_cols <- function(df) {
   }
 }
 
-#' Parse entries with open assist or hand assist
-#'
-#' @param vec a character vector to parse
-#'
-#' @details returns TRUE if either case-insensitive "w/ open assist" or
-#' "hand assisted" is detected in the character vector. Cases with an
-#' "open" or "open (planned)" approach will return NA.
-#'
-#' @return a logical vector
-#' @keywords internal
-#' @examples
-#' x <- c("Hybrid","Hybrid w/ open assist","Hybrid w/ unplanned conversion to open",
-#' "Laparoscopic","Laparoscopic w/ open assist","Laparoscopic w/ unplanned conversion to open",
-#' "Laparoscopic hand assisted","NOTES","NOTES w/ open assist","NOTES w/ unplanned conversion to open",
-#' "Open","Open (planned)","Other","Other MIS approach","Other MIS approach w/ open assist",
-#' "Other MIS approach w/ unplanned conversion to open","Robotic","Robotic w/ open assist",
-#' "Robotic w/ unplanned conversion to open","SILS","SILS w/ open assist",
-#' "SILS w/ unplanned conversion to open", NA)
-#'
-#' cbind(x, nsqipr:::conv_pan_open_assist(x))
-#'
-conv_pan_open_assist <- function(vec) {
-  ifelse(stringi::stri_detect_regex(vec, "^Open", opts_regex = list(case_insensitive = TRUE)), NA,
-         stringi::stri_detect_regex(vec, "w/ open assist$|hand assisted$", opts_regex = list(case_insensitive = TRUE)))
-}
-
-#' Parse entries with unplanned conversion to open
-#'
-#' @param vec a character vector to parse
-#'
-#' @details returns TRUE if case-insensitive "w/ unplanned conversion to open"
-#' is detected in the character vector. Cases with an "open" or "open (planned)"
-#' approach will return NA.
-#'
-#' @return a logical vector
-#' @keywords internal
-#' @examples
-#' x <- c("Hybrid","Hybrid w/ open assist","Hybrid w/ unplanned conversion to open",
-#' "Laparoscopic","Laparoscopic w/ open assist","Laparoscopic w/ unplanned conversion to open",
-#' "Laparoscopic hand assisted","NOTES","NOTES w/ open assist","NOTES w/ unplanned conversion to open",
-#' "Open","Open (planned)","Other","Other MIS approach","Other MIS approach w/ open assist",
-#' "Other MIS approach w/ unplanned conversion to open","Robotic","Robotic w/ open assist",
-#' "Robotic w/ unplanned conversion to open","SILS","SILS w/ open assist",
-#' "SILS w/ unplanned conversion to open", NA)
-#'
-#' cbind(x, nsqipr:::conv_pan_unplanned_conversion(x))
-#'
-conv_pan_unplanned_conversion <- function(vec) {
-  ifelse(stringi::stri_detect_regex(vec, "^Open", opts_regex = list(case_insensitive = TRUE)), NA,
-         stringi::stri_detect_regex(vec, "w/ unplanned conversion to open$", opts_regex = list(case_insensitive = TRUE)))
-}
-
 #' Parse entries that indicate the presence of a fistula
 #'
 #' @param vec a character vector to parse
 #'
 #' @details returns TRUE if case-insensitive "yes" or "biochemical leak only'
-#' is detected in the character vector. Cases with an "open" or "open (planned)"
-#' approach will return NA.
+#' is detected in the character vector.
 #'
 #' @return a logical vector
 #' @keywords internal
@@ -261,10 +194,12 @@ conv_pan_unplanned_conversion <- function(vec) {
 #' x <- c("No","No evidence of Biochemical Leak or POPF","Biochemical Leak only",
 #' "Yes, Grade B POPF present","Yes, Grade C POPF present","Yes-clinical diagnosis, NPO-TPN",
 #' "Yes-clinical diagnosis, drain continued >7 days",
-#' "Yes-clinical diagnosis, percutaneous drainage performed","Yes-clinical diagnosis, reoperation performed",
+#' "Yes-clinical diagnosis, percutaneous drainage performed",
+#' "Yes-clinical diagnosis, reoperation performed",
 #' "Yes-clinical diagnosis, spontaneous wound drainage","Yes-persistent drainage, NPO-TPN",
 #' "Yes-persistent drainage, drain continued >7 days",
-#' "Yes-persistent drainage, percutaneous drainage performed","Yes-persistent drainage, reoperation performed",
+#' "Yes-persistent drainage, percutaneous drainage performed",
+#' "Yes-persistent drainage, reoperation performed",
 #' NA)
 #'
 #' cbind(x, nsqipr:::conv_pan_fistula(x))
@@ -277,7 +212,7 @@ conv_pan_fistula <- function(vec) {
 #'
 #' @param vec a character vector of values to convert
 #'
-#' @details NSQIP encodes the \code{pan_fistula} column as either a biochemica leak, a clinical diagnosis,
+#' @details NSQIP encodes the \code{pan_fistula} column as either a biochemical leak, a clinical diagnosis,
 #' persistent drainage, or a grade B or C POPF. This function extracts those values from character vectors
 #' and factors them.
 #'
@@ -286,11 +221,16 @@ conv_pan_fistula <- function(vec) {
 #'
 #' @examples
 #' fistulas <- c("No", "Yes-persistent drainage, drain continued >7 days",
-#' "Yes-clinical diagnosis, drain continued >7 days", "Yes-persistent drainage, percutaneous drainage performed",
-#' "Yes-clinical diagnosis, percutaneous drainage performed", "Yes-persistent drainage, reoperation performed",
-#' "Unknown", "Yes-clinical diagnosis, reoperation performed", "Yes-clinical diagnosis, spontaneous wound drainage",
-#' "Yes-persistent drainage, NPO-TPN", "Yes-clinical diagnosis, NPO-TPN", "No evidence of Biochemical Leak or POPF",
-#' "Biochemical Leak only", "Yes, Grade B POPF present", "Yes, Grade C POPF present")
+#' "Yes-clinical diagnosis, drain continued >7 days",
+#' "Yes-persistent drainage, percutaneous drainage performed",
+#' "Yes-clinical diagnosis, percutaneous drainage performed",
+#' "Yes-persistent drainage, reoperation performed",
+#' "Unknown", "Yes-clinical diagnosis, reoperation performed",
+#' "Yes-clinical diagnosis, spontaneous wound drainage",
+#' "Yes-persistent drainage, NPO-TPN", "Yes-clinical diagnosis, NPO-TPN",
+#' "No evidence of Biochemical Leak or POPF",
+#' "Biochemical Leak only", "Yes, Grade B POPF present", "Yes, Grade C POPF present",
+#' NA)
 #'
 #' nsqipr:::conv_pan_fistula_type(fistulas)
 #'
@@ -323,10 +263,14 @@ conv_pan_fistula_type <- function(vec) {
 #'
 #' @examples
 #' fistulas <- c("No", "Yes-persistent drainage, drain continued >7 days",
-#' "Yes-clinical diagnosis, drain continued >7 days", "Yes-persistent drainage, percutaneous drainage performed",
-#' "Yes-clinical diagnosis, percutaneous drainage performed", "Yes-persistent drainage, reoperation performed",
-#' "Unknown", "Yes-clinical diagnosis, reoperation performed", "Yes-clinical diagnosis, spontaneous wound drainage",
-#' "Yes-persistent drainage, NPO-TPN", "Yes-clinical diagnosis, NPO-TPN", "No evidence of Biochemical Leak or POPF",
+#' "Yes-clinical diagnosis, drain continued >7 days",
+#' "Yes-persistent drainage, percutaneous drainage performed",
+#' "Yes-clinical diagnosis, percutaneous drainage performed",
+#' "Yes-persistent drainage, reoperation performed",
+#' "Unknown", "Yes-clinical diagnosis, reoperation performed",
+#' "Yes-clinical diagnosis, spontaneous wound drainage",
+#' "Yes-persistent drainage, NPO-TPN", "Yes-clinical diagnosis, NPO-TPN",
+#' "No evidence of Biochemical Leak or POPF",
 #' "Biochemical Leak only", "Yes, Grade B POPF present", "Yes, Grade C POPF present")
 #'
 #' nsqipr:::conv_pan_fistula_intervention(fistulas)

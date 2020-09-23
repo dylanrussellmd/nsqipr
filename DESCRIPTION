@@ -31,6 +31,8 @@ Imports:
     fs,
     data.table,
     stringi,
-    rlang
+    rlang,
+    purrr,
+    stringr
 Depends: 
     R (>= 3.5.0)

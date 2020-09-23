@@ -14,7 +14,7 @@
 #'
 #' @importFrom data.table %chin%
 #' @importFrom stats na.omit
-#' @export
+#' @keywords internal
 #'
 #' @examples
 #' x <- c("apple","banana","cherry",NA)
@@ -31,6 +31,8 @@
 #'
 #' @details Will return TRUE if the object supplied is a non-empty data.table.
 #' Otherwise, returns FALSE.
+#'
+#' @keywords internal
 #'
 #' @examples
 #' nsqipr:::isFullDT(NULL)

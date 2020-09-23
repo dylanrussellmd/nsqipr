@@ -11,13 +11,13 @@ nsqip_dir <- function(dir, csv, rds) {
   files <- fs::dir_ls(dir)
   cols <- collect_column_names(files)
   df <- lapply(files, function(file) {
-     conv_to_standard(file, cols, csv, rds, progbar)
+     conv_to_standard(file, cols, csv, rds)
   })
   usethis::ui_done('Successfully cleaned all files in {usethis::ui_path(dir)}.')
   invisible(NULL)
 }
 
-conv_to_standard <- function(file, cols, csv, rds, progbar) {
+conv_to_standard <- function(file, cols, csv, rds) {
   progbar <- pb(csv, rds)
   filename <- fs::path_file(file)
   tick(progbar, "reading", filename, 0)

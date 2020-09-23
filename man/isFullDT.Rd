@@ -25,3 +25,4 @@ nsqipr:::isFullDT(data.table::data.table(test = numeric(), test2 = logical(), te
 nsqipr:::isFullDT(data.table::data.table(test = 1, test2 = TRUE, test3 = "character"))
 
 }
+\keyword{internal}

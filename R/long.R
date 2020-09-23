@@ -235,7 +235,7 @@ make_cpt_long <- function(df) {
 #' @details The data contained in the 4 "pan_percdrainage" columns created by \code{make_pan_percdrainage_cols}
 #' are converted into a long format.
 #'
-#' If "pan_percdrainager" is a column in \code{df}, it will be broken into a long format with
+#' If "pan_percdrainage" is a column in \code{df}, it will be broken into a long format with
 #' \code{caseid} as the ID variable for joining back to the main table. This is because the targeted pancreatectomy
 #' datasets input multiple values into a single "pan_percdrainage" column. For example,
 #' "Yes-other, Yes-bile, Yes-pus" may be an entry in the raw data set. This makes
