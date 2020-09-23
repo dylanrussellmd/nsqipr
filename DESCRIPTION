@@ -36,3 +36,4 @@ Imports:
     stringr
 Depends: 
     R (>= 3.5.0)
+URL: https://dylanrussellmd.github.io/nsqipr/, https://github.com/dylanrussellmd/nsqipr
