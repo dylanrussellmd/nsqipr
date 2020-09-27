@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="Clean NSQIP data — nsqip" />
-<meta property="og:description" content="Converts a single NSQIP .txt or a directory of NSQIP .txt files into a standardized NSQIP data table." />
+<meta property="og:description" content="Converts a single NSQIP .txt or a directory of NSQIP .txt files into a standardized data table." />
 
 
 
@@ -117,7 +117,7 @@
     </div>
 
     <div class="ref-description">
-    <p>Converts a single NSQIP <code>.txt</code> or a directory of NSQIP <code>.txt</code> files into a standardized NSQIP data table.</p>
+    <p>Converts a single NSQIP <code>.txt</code> or a directory of NSQIP <code>.txt</code> files into a standardized <code>data table</code>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>nsqip</span>(<span class='kw'>path</span>, csv = <span class='st'>"both"</span>, rds = <span class='fl'>TRUE</span>)</pre>
@@ -127,23 +127,28 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>path</th>
-      <td><p>path to file or directory.</p></td>
+      <td><p>a path to a file or directory.</p></td>
     </tr>
     <tr>
       <th>csv</th>
-      <td><p>write the resulting data frame to a <code>.csv</code> file. See details for options.</p></td>
+      <td><p>a character vector. write the resulting data table to a <code>.csv</code> file. See details for options.</p></td>
     </tr>
     <tr>
       <th>rds</th>
-      <td><p>a logical value. Write the resulting data frame to <code>.rds</code> file. Produces individual files for each <code>.txt</code> input.</p></td>
+      <td><p>a logical vector. Write the resulting data table to <code>.rds</code> file. Produces individual files for each <code>.txt</code> input.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><code>csv</code> may be set to "indiv", "append", "both", or NA. If "indiv", a CSV file will be output for each input file.
-If "append", a single CSV file will be created appending all input files into a single output file. "Both" will enact the
-effects of both "indiv" and "append". NA will produce no CSV files.</p>
+    
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a><code>csv</code></h3>
+
+
+<p><code>csv</code> may be set to "<b>indiv</b>", "<b>append</b>", "<b>both</b>", or <b>NA</b>. If "<b>indiv</b>",
+a CSV file will be output for each input file. If "<b>append</b>", a single CSV file will be created appending all input files into a single output file.
+"<b>both</b>" will enact the effects of both "<b>indiv</b>" and "<b>append</b>". <b>NA</b> will produce no CSV files.</p>
+
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
