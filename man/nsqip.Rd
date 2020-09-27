@@ -7,17 +7,20 @@
 nsqip(path, csv = "both", rds = TRUE)
 }
 \arguments{
-\item{path}{path to file or directory.}
+\item{path}{a path to a file or directory.}
 
-\item{csv}{write the resulting data frame to a \code{.csv} file. See details for options.}
+\item{csv}{a character vector. write the resulting data table to a \code{.csv} file. See details for options.}
 
-\item{rds}{a logical value. Write the resulting data frame to \code{.rds} file. Produces individual files for each \code{.txt} input.}
+\item{rds}{a logical vector. Write the resulting data table to \code{.rds} file. Produces individual files for each \code{.txt} input.}
 }
 \description{
-Converts a single NSQIP \code{.txt} or a directory of NSQIP \code{.txt} files into a standardized NSQIP data table.
+Converts a single NSQIP \code{.txt} or a directory of NSQIP \code{.txt} files into a standardized \code{data table}.
 }
 \details{
-\code{csv} may be set to "indiv", "append", "both", or NA. If "indiv", a CSV file will be output for each input file.
-If "append", a single CSV file will be created appending all input files into a single output file. "Both" will enact the
-effects of both "indiv" and "append". NA will produce no CSV files.
+\subsection{\code{csv}}{
+
+\code{csv} may be set to "\bold{indiv}", "\bold{append}", "\bold{both}", or \bold{NA}. If "\bold{indiv}",
+a CSV file will be output for each input file. If "\bold{append}", a single CSV file will be created appending all input files into a single output file.
+"\bold{both}" will enact the effects of both "\bold{indiv}" and "\bold{append}". \bold{NA} will produce no CSV files.
+}
 }

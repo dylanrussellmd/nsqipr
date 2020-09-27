@@ -148,7 +148,7 @@ pan_percdrainage3 <- pan_percdrainage
 pan_percdrainage4 <- pan_percdrainage
 
 #### ---- LONG COLUMNS ---- ####
-pan_percdrainage_cols = paste("pan_percdrainage", 1:4, sep = "")
+pan_percdrainage_cols <- paste("pan_percdrainage", 1:4, sep = "")
 pan_amylase_cols <- c("pan_amylase_pod1", "pan_amylase_pod230")
 #### ---- FUNCTIONS ---- ####
 

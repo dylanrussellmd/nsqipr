@@ -9,9 +9,9 @@ nsqip_dir(dir, csv, rds)
 \arguments{
 \item{dir}{directory to which the \code{nsqip} function is being applied.}
 
-\item{csv}{write the resulting data frame to a \code{.csv} file. See details for options.}
+\item{csv}{a character vector. write the resulting data table to a \code{.csv} file. See details for options.}
 
-\item{rds}{a logical value. Write the resulting data frame to \code{.rds} file. Produces individual files for each \code{.txt} input.}
+\item{rds}{a logical vector. Write the resulting data table to \code{.rds} file. Produces individual files for each \code{.txt} input.}
 }
 \description{
 Utilized by \code{nsqip} after all files are parsed and respective directories are created.
