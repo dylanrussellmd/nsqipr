@@ -53,6 +53,17 @@ testthat::test_that("nsqip puf_tar_aie 2018 works", {
   fs::dir_delete("test-data/puf_tar_aie")
 })
 
+testthat::test_that("nsqip puf_tar_aio 2018 works", {
+  goldstandard <- readRDS(file.path("test-data/gs_puf_tar_aio18.rds"))
+  nsqipr::nsqip(file.path("test-data/test_puf_tar_aio18.txt"), csv = NA)
+  testthat::expect_equal(basename(fs::dir_ls("test-data/puf_tar_aio", type = "file")), "test_puf_tar_aio18.txt")
+  testthat::expect_equal(basename(fs::dir_ls("test-data/puf_tar_aio/rds", type = "file")), "test_puf_tar_aio18_clean.rds")
+  test <- readRDS(file.path("test-data/puf_tar_aio/rds/test_puf_tar_aio18_clean.rds"))
+  testthat::expect_identical(goldstandard, test)
+  fs::file_move(file.path("test-data/puf_tar_aio/test_puf_tar_aio18.txt"),file.path("test-data/test_puf_tar_aio18.txt"))
+  fs::dir_delete("test-data/puf_tar_aio")
+})
+
 testthat::test_that("nsqip puf_tar_aaa 2018 works", {
   goldstandard <- readRDS(file.path("test-data/gs_puf_tar_aaa18.rds"))
   nsqipr::nsqip(file.path("test-data/test_puf_tar_aaa18.txt"), csv = NA)

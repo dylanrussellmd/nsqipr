@@ -1,9 +1,9 @@
 #### ---- DINDO-CLAVIEN DEFINITIONS ---- ####
 dindo_1 <- c("supinfec","wndinfd","dehis","renainsf")
 dindo_2 <- c("orgspcssi","oupneumo","urninfec","pulembol","othbleed","othdvt","othsysep","othcdiff")
-dindo_3 <- c("returnor")
+dindo_3 <- c("returnor", "reoperation")
 dindo_4 <- c("reintub","failwean","oprenafl","cnscva","cdarrest","cdmi","othseshock","cnscoma","neurodef")
-dindo_5 <- c("yrdeath")
+dindo_5 <- c("dopertod")
 
 #### ---- FUNCTIONS ---- ####
 
