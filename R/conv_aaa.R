@@ -1,3 +1,14 @@
+#' Convert targeted abdominal aortic aneurysm columns
+#'
+#' @param df a data table to be cleaned
+#' @param filename the name of the file from which the data table has been read in
+#'
+#' @details If the file being processed is a targeted abdominal aortic aneurysm (AAA) dataset,
+#' it will be processed by this function. This function determines how data cleaning steps specific
+#' to targeted AAA files should proceed.
+#'
+#' @keywords internal
+#'
 conv_aaa_cols <- function(df, filename) {
   get_pufyear(df, filename)
   conv_(df, "aaa_iculos", conv_aaa_iculos)
