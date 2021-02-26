@@ -18,10 +18,12 @@ conv_hep_cols <- function(df, filename) {
   conv_(df, "hep_approach", conv_unplanned_conversion, newcol = "hep_unplanned_conversion")
   conv_(df, "hep_con_partres", conv_hep_con_partres)
   conv_(df, "hep_recon", conv_notno)
-  make_hep_neotherapy_cols(df)
+  make_long_cols(df, "hep_neotherapy_140101", hep_neotherapy_cols)
+  make_long_cols(df, "hep_con_ablation_140101", hep_con_ablation_cols)
+  make_long_cols(df, "hep_invasive_type", hep_invasive_type_cols)
 }
 
-#### ---- FACTOR LISTS (THESE DEFINE THE FACTOR LEVELS FOR VARIOUS COLUMNS) ----
+#### ---- FACTOR LISTS (THESE DEFINE THE FACTOR LEVELS FOR VARIOUS COLUMNS) ---- ####
 pan_drainsys_type <- list(
   `Closed` = "Closed",
   `Open` = "Open",
@@ -162,77 +164,26 @@ hep_con_ablation3 <- hep_con_ablation_140101
 hep_con_ablation4 <- hep_con_ablation_140101
 hep_con_ablation5 <- hep_con_ablation_140101
 
+hep_invasive_type <- list(
+  `Pus from drain or aspirate` = "Pus from drain or aspirate",
+  `Other intervention` = "Other intervention",
+  `Biliary stent for biliary obstruction/leak` = "Biliary stent for biliary obstruction/leak",
+  `Bilirubin-rich fluid from drain or aspirate` = "Bilirubin-rich fluid from drain or aspirate",
+  `Intervention other than transfusion for bleeding/hematoma` = "Intervention other than transfusion for bleeding/hematoma"
+)
+
+hep_invasive_type1 <- hep_invasive_type
+hep_invasive_type2 <- hep_invasive_type
+hep_invasive_type3 <- hep_invasive_type
+hep_invasive_type4 <- hep_invasive_type
+hep_invasive_type5 <- hep_invasive_type
+
 #### ---- LONG COLUMNS ---- ####
 hep_neotherapy_cols <- paste("hep_neotherapy", 1:5, sep = "")
 hep_con_ablation_cols <- paste("hep_con_ablation", 1:5, sep = "")
+hep_invasive_type_cols <- paste("hep_invasive_type", 1:5, sep = "")
 
 #### ---- FUNCTIONS ---- ####
-
-#' Create hepatectomy neotherapy columns for long conversion
-#'
-#' @param df a data table to add the columns to
-#'
-#' @details First checks if the data table contains a "hep_neotherapy_140101" column.
-#' If so, the column is split into 5 columns according to the regex pattern ",\\s?".
-#'
-#' @keywords internal
-#'
-#' @examples
-#' x <- data.table::data.table(
-#' hep_neotherapy_140101 = c("Preoperative systemic chemotherapy", "Portal vein embolization",
-#' "Locoregional liver ablation", "Preoperative systemic chemotherapy,Portal vein embolization",
-#' "Locoregional interarterial infusion,Portal vein embolization",
-#' "Locoregional liver ablation,Portal vein embolization", "Other type",
-#' "Preoperative systemic chemotherapy,Locoregional liver ablation",
-#' "Preoperative systemic chemotherapy,Other type", "Locoregional interarterial infusion",
-#' "Portal vein embolization,Other type", "Locoregional interarterial infusion,Other type",
-#' "Preoperative systemic chemotherapy,Locoregional interarterial infusion",
-#' "Preoperative systemic chemotherapy,Portal vein embolization,Other type",
-#' "Preoperative systemic chemotherapy,Locoregional liver ablation,Other type",
-#' "Preoperative systemic chemotherapy,Locoregional liver ablation,Portal vein embolization",
-#' "Locoregional liver ablation,Other type",
-#' "Locoregional interarterial infusion,Locoregional liver ablation,Portal vein embolization",
-#' "Preoperative systemic chemotherapy,Locoregional interarterial infusion,Portal vein embolization",
-#' "Locoregional interarterial infusion,Locoregional liver ablation",
-#' "Preoperative systemic chemotherapy,Locoregional interarterial infusion,Locoregional liver ablation",
-#' "Locoregional interarterial infusion,Locoregional liver ablation,Portal vein embolization,Other type")
-#' )
-#'
-#' nsqipr:::make_hep_neotherapy_cols(x)
-#' x
-#'
-make_hep_neotherapy_cols <- function(df) {
-  if("hep_neotherapy_140101" %qsin% names(df)) {
-    mat <- stringi::stri_split_regex(df[["hep_neotherapy_140101"]], ",\\s?", simplify = NA, n = 5, omit_empty = TRUE, opts_regex = list(case_insensitive = TRUE))
-    for(j in seq_along(hep_neotherapy_cols)) data.table::set(df, j = hep_neotherapy_cols[[j]], value = mat[, j])
-  }
-}
-
-#' Create hepatectomy concurrent ablation columns for long conversion
-#'
-#' @param df a data table to add the columns to
-#'
-#' @details First checks if the data table contains a "hep_con_ablation_140101" column.
-#' If so, the column is split into 5 columns according to the regex pattern ",\\s?".
-#'
-#' @keywords internal
-#'
-#' @examples
-#' x <- data.table::data.table(
-#' hep_con_ablation_140101 = c("Microwave ablation", "RFA ablation", "Other ablation",
-#' "Microwave ablation,Other ablation", "RFA ablation,Microwave ablation",
-#' "RFA ablation,Other ablation", "RFA ablation,Alcohol ablation", "Alcohol ablation",
-#' "Microwave ablation,Alcohol ablation", "Cryoablation", NA, "RFA ablation,Cryoablation"))
-#'
-#' nsqipr:::make_hep_con_ablation_cols(x)
-#' x
-#'
-make_hep_con_ablation_cols <- function(df) {
-  if("hep_con_ablation_140101" %qsin% names(df)) {
-    mat <- stringi::stri_split_regex(df[["hep_con_ablation_140101"]], ",\\s?", simplify = NA, n = 5, omit_empty = TRUE, opts_regex = list(case_insensitive = TRUE))
-    for(j in seq_along(hep_con_ablation_cols)) data.table::set(df, j = hep_con_ablation_cols[[j]], value = mat[, j])
-  }
-}
 
 #' Parse entries that indicate a Hepatitis B infection
 #'
