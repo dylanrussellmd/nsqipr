@@ -112,12 +112,6 @@ hep_livertext <- list(
   `Fatty` = "Fatty",
   `Normal` = "Normal"
 )
-hep_viral <- list(
-  `None` = "None",
-  `Hepatitis B` = "Hepatitis B",
-  `Hepatitis B and C` = "Hepatitis B and C",
-  `Hepatitis`
-)
 hep_approach <- list(
   `Hybrid` = c("Hybrid", "Hybrid w/ open assist","Hybrid w/ unplanned conversion to open"),
   `Laparoscopic` = c("Laparoscopic","Laparoscopic w/ open assist","Laparoscopic w/ unplanned conversion to open"),
