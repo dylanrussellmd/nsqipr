@@ -232,8 +232,8 @@ get_pufyear <- function(df, filename) {
 #' @details This function \bold{modifies by reference}.
 #' This function checks for which columns to factor by comparing against a character vector called \code{factor_cols}.
 #' The function then fetches a variable from the calling environment with the same name as the column being converted to a factor.
-#' This variable should reference a named list specifying how to rename the levels (see \code{\link[nsqipr:factorpipe]{\%^\%}})
-#' for further details.
+#' This variable should reference a named list specifying how to rename the levels (see \code{\link[nsqipr:factorpipe]{\%^\%}}
+#' for further details).
 #'
 #' @keywords internal
 #' @examples

@@ -18,47 +18,50 @@ conv_hep_cols <- function(df, filename) {
   conv_(df, "hep_approach", conv_unplanned_conversion, newcol = "hep_unplanned_conversion")
   conv_(df, "hep_con_partres", conv_hep_con_partres)
   conv_(df, "hep_recon", conv_notno)
+  conv_(df, "hep_bileleakage", conv_hep_bileleakage_type, newcol = "hep_bileleakage_type")
+  conv_(df, "hep_bileleakage", conv_hep_bileleakage_intervention, newcol = "hep_bileleakage_intervention")
+  conv_(df, "hep_bileleakage", conv_hep_bileleakage)
+  conv_(df, "hep_liverfail", conv_hep_liverfail_type, newcol = "hep_liverfail_type")
+  conv_(df, "hep_liverfail", conv_hep_liverfail)
+  conv_(df, "hep_sec_numtumors", conv_hep_sec_numtumors)
+  coalesce_cols(df, "ddrainsremoval", "damylase")
   make_long_cols(df, "hep_neotherapy_140101", hep_neotherapy_cols)
   make_long_cols(df, "hep_con_ablation_140101", hep_con_ablation_cols)
   make_long_cols(df, "hep_invasive_type", hep_invasive_type_cols)
 }
 
-#### ---- FACTOR LISTS (THESE DEFINE THE FACTOR LEVELS FOR VARIOUS COLUMNS) ---- ####
-pan_drainsys_type <- list(
-  `Closed` = "Closed",
-  `Open` = "Open",
-  `Closed and open` = "Closed and Open"
-)
-pan_oincis_type <- list(
-  `Subcostal type` = "Subcostal type",
-  `Upper midline` = "Upper midline",
-  `Other` = "Other"
-)
-pan_intra_antibiotics <- list(
-  `1st generation cephalosporin` = "1st generation cephalosporin",
-  `2nd or 3rd generation cephalosporin` = "2nd or 3rd generation cephalosporin",
-  `Broad spectrum` = "Broad spectrum",
-  `Other` = "Other"
-)
-pan_benign_tumorsize <- list(
+#### ---- FACTOR LISTS (THESE DEFINE THE FACTOR LEVELS FOR VARIOUS COLUMNS) ---- #### BE SURE TO ADD THESE TO FACTOR_COLS IN COL_DEFINITIONS.R
+hep_benign_lesion <- list(
   `<2 cm` = "<2 cm",
   `2-5 cm` = "2-5 cm",
   `>5 cm` = ">5 cm"
 )
-pan_benign_histologic <- list(
-  `Chronic pancreatitis` = "Chronic pancreatitis",
-  `IPMN-noninvasive` = "IPMN-noninvasive",
-  `Mucinous cystic neoplasm` = "Mucinous cystic neoplasm",
-  `Neuroendocrine w/ no metastases` = "Neuroendocrine w/ no metastases",
-  `Serous cystadenoma` = "Serous cystadenoma",
-  `Solid pseudopapillary neoplasm` = "Solid pseudopapillary neoplasm",
+hep_benign_histologic <- list(
+  `Focal nodular hyperplasia` = "Focal nodular hyperplasia",
+  `Biliary cyst` = "Biliary cyst",
+  `Hepatic abscess` = "Hepatic abscess",
+  `Hepatic adenoma` = "Hepatic adenoma",
+  `Hemangioma` = "Hemangioma",
+  `Hepatic cyst` = "Hepatic cyst",
   `Other` = "Other"
 )
-pan_mstage <- list(
+hep_sec_tumorsize <- list(
+  `<2 cm` = "<2 cm",
+  `2-5 cm` = "2-5 cm",
+  `>5 cm` = ">5 cm"
+)
+hep_sec_histologic <- list(
+  `Colorectal` = "Colorectal metastasis",
+  `Sarcoma` = "Sarcoma metastases",
+  `Breast cancer` = "Breast cancer metastasis",
+  `Neuroendocrine` = "Neuroendocrine metastasis",
+  `Other` = "Other type"
+)
+hep_mstage <- list(
   `M0/Mx` = "M0/Mx",
   `M1` = "M1"
 )
-pan_tstage <- list(
+hep_tstage <- list(
   `T0` = "T0",
   `T1` = "T1",
   `T2` = "T2",
@@ -67,44 +70,23 @@ pan_tstage <- list(
   `Tis` = "Tis",
   `Tx` = "Tx"
 )
-pan_nstage <- list(
+hep_nstage <- list(
   `N0` = "N0",
   `N1` = "N1",
+  `N2` = "N2",
   `Nx` = "Nx"
 )
-pan_malig_histologic <- list(
-  `Ampullary carcinoma` = "Ampullary carcinoma",
-  `Cystadenocarcinoma` = "Cystadenocarcinoma",
-  `Distal cholangiocarcinoma` = "Distal cholangiocarcinoma",
-  `Duodenal carcinoma` = "Duodenal carcinoma",
-  `IPMN-invasive` = "IPMN-invasive",
-  `Neuroendocrine-functioning` = "Neuroendocrine-functioning",
-  `Neuroendocrine-nonfunctioning` = "Neuroendocrine-nonfunctioning",
-  `Pancreatic adenocarcinoma` = "Pancreatic adenocarcinoma",
+hep_histologic <- list(
+  `Hepatocellular carcinoma` = "Hepatocellular carcinoma",
+  `Gallbladder cancer` = "Gallbladder cancer",
+  `Intrahepatic cholangiocarcinoma` = "Intrahepatic cholangiocarcinoma",
+  `Hilar cholangiocarcinoma` = "Hilar cholangiocarcinoma",
   `Other` = "Other type"
 )
-pan_resection <- list(
-  `Vein` = "Vein",
-  `Artery` = "Artery",
-  `Vein and artery` = "Vein and artery",
-  `Not performed` = "Not performed"
-)
-pan_drains_type <- list(
-  `Pancreatic anastomosis` = "Pancreatic anastomosis",
-  `Biliary anastomosis` = "Biliary anastomosis",
-  `Pancreatic and biliary anastomosis` = "Pancreatic & Biliary Anastomosis",
-  `Pancreatic parenchyma` = "Pancreatic parenchyma"
-)
-pan_gastduo <- list(
-  `Antecolic fashion` = "Antecolic fashion",
-  `Retrocolic fasion` = "Retrocolic fashion",
-  `Not performed` = "Not performed"
-)
-pan_reconstruction <- list(
-  `Pancreaticogastrostomy` = "Pancreaticogastrostomy",
-  `Pancreaticojejunal invagination` = "Pancreaticojejunal invagination",
-  `Pancreaticojejunal duct-to-mucosal` = "Pancreaticojejunal duct-to-mucosal",
-  `Not performed` = "Not performed"
+hep_pathres <- list(
+  `Benign` = "Benign",
+  `Primary hepatobiliary cancer` = "Primary hepatobiliary cancer",
+  `Secondary (metastatic) tumor` = "Secondary (metastatic) tumor"
 )
 hep_livertext <- list(
   `Cirrhotic` = "Cirrhotic",
@@ -124,13 +106,18 @@ hep_approach <- list(
 hep_biliarystent <- list(
   `None` = "No",
   `Endoscopic stent` = "Yes-endoscopic",
-  `Percutaneous stent` = "Yes-percutaneous stent",
+  `Percutaneous stent` = "Yes-percutaneous",
   `Stent of other unknown type` = "Yes-stent of unknown or other type"
 )
 hep_lapthor <- list(
   `Laparoscopic` = "47379",
   `Open` = "47399",
   `Other` = "Other"
+)
+hep_liverfail_grade <- list(
+  `Grade A` = "Grade A",
+  `Grade B` = "Grade B",
+  `Grade C` = "Grade C"
 )
 hep_neotherapy_140101 <- list(
   `Other` = "Other type",
@@ -253,134 +240,163 @@ conv_hep_con_partres <- function(vec) {
   as.integer(ifelse(stringi::stri_detect_fixed(vec, "10 or more", opts_fixed = list(case_insensitive = TRUE)), "10", vec))
 }
 
-#' Parse entries that indicate the presence of a fistula
+#' Convert number of secondary tumors to integer
+#'
+#' @param vec a character vector of values to convert
+#'
+#' @details NSQIP encodes anyone with more than 8 secondary tumors as "8 or more".
+#' This converts all "8 or more" to 8. If given NA, will return NA.
+#'
+#' @return an integer vector
+#' @keywords internal
+#'
+#' @examples
+#' nsqipr:::conv_hep_sec_numtumors(c("1","2","More than 8",NA))
+#'
+conv_hep_sec_numtumors <- function(vec) {
+  as.integer(ifelse(stringi::stri_detect_fixed(vec, "More than 8", opts_fixed = list(case_insensitive = TRUE)), "8", vec))
+}
+
+#' Parse entries that indicate the presence of a bile leak
 #'
 #' @param vec a character vector to parse
 #'
-#' @details returns TRUE if case-insensitive "yes" or "biochemical leak only'
+#' @details returns TRUE if case-insensitive "yes"
 #' is detected in the character vector.
 #'
 #' @return a logical vector
 #' @keywords internal
 #' @examples
-#' x <- c("No","No evidence of Biochemical Leak or POPF","Biochemical Leak only",
-#' "Yes, Grade B POPF present","Yes, Grade C POPF present","Yes-clinical diagnosis, NPO-TPN",
-#' "Yes-clinical diagnosis, drain continued >7 days",
+#' x <- c("No",
+#' "Yes-clinical diagnosis, drain continued on or after POD3",
 #' "Yes-clinical diagnosis, percutaneous drainage performed",
 #' "Yes-clinical diagnosis, reoperation performed",
-#' "Yes-clinical diagnosis, spontaneous wound drainage","Yes-persistent drainage, NPO-TPN",
-#' "Yes-persistent drainage, drain continued >7 days",
+#' "Yes-clinical diagnosis, spontaneous wound drainage",
+#' "Yes-persistent drainage, drain continued on or after POD3",
 #' "Yes-persistent drainage, percutaneous drainage performed",
 #' "Yes-persistent drainage, reoperation performed",
 #' NA)
 #'
-#' cbind(x, nsqipr:::conv_pan_fistula(x))
+#' cbind(x, nsqipr:::conv_hep_bileleakage(x))
 #'
-conv_pan_fistula <- function(vec) {
-  stringi::stri_detect_regex(vec, "^yes|^biochemical leak only", opts_regex = list(case_insensitive = TRUE))
+conv_hep_bileleakage <- function(vec) {
+  stringi::stri_detect_regex(vec, "^yes", opts_regex = list(case_insensitive = TRUE))
 }
 
-#' Parse a column for type of fistula
+#' Parse a column for type of bile leakage
 #'
 #' @param vec a character vector of values to convert
 #'
-#' @details NSQIP encodes the \code{pan_fistula} column as either a biochemical leak, a clinical diagnosis,
-#' persistent drainage, or a grade B or C POPF. This function extracts those values from character vectors
+#' @details NSQIP encodes the \code{hep_bileleakage} column as either a clinical diagnosis or
+#' persistent drainage. This function extracts those values from character vectors
 #' and factors them.
 #'
 #' @return a factor vector
 #' @keywords internal
 #'
 #' @examples
-#' fistulas <- c("No", "Yes-persistent drainage, drain continued >7 days",
-#' "Yes-clinical diagnosis, drain continued >7 days",
-#' "Yes-persistent drainage, percutaneous drainage performed",
+#' x <- c("No",
+#' "Yes-clinical diagnosis, drain continued on or after POD3",
 #' "Yes-clinical diagnosis, percutaneous drainage performed",
-#' "Yes-persistent drainage, reoperation performed",
-#' "Unknown", "Yes-clinical diagnosis, reoperation performed",
+#' "Yes-clinical diagnosis, reoperation performed",
 #' "Yes-clinical diagnosis, spontaneous wound drainage",
-#' "Yes-persistent drainage, NPO-TPN", "Yes-clinical diagnosis, NPO-TPN",
-#' "No evidence of Biochemical Leak or POPF",
-#' "Biochemical Leak only", "Yes, Grade B POPF present", "Yes, Grade C POPF present",
+#' "Yes-persistent drainage, drain continued on or after POD3",
+#' "Yes-persistent drainage, percutaneous drainage performed",
+#' "Yes-persistent drainage, reoperation performed",
 #' NA)
 #'
-#' nsqipr:::conv_pan_fistula_type(fistulas)
+#' nsqipr:::conv_hep_bileleakage_type(x)
 #'
-conv_pan_fistula_type <- function(vec) {
+conv_hep_bileleakage_type <- function(vec) {
   vec %^% list(
-    `Biochemical leak only` = "Biochemical Leak only",
-    `Grade B POPF` = "Yes, Grade B POPF present",
-    `Grade C POPF` = "Yes, Grade C POPF present",
-    `Clinical diagnosis` = "Yes-clinical diagnosis, NPO-TPN",
-    `Clinical diagnosis` = "Yes-clinical diagnosis, drain continued >7 days",
+    `Clinical diagnosis` = "Yes-clinical diagnosis, drain continued on or after POD3",
     `Clinical diagnosis` = "Yes-clinical diagnosis, percutaneous drainage performed",
     `Clinical diagnosis` = "Yes-clinical diagnosis, reoperation performed",
     `Clinical diagnosis` = "Yes-clinical diagnosis, spontaneous wound drainage",
-    `Persistent drainage` = "Yes-persistent drainage, NPO-TPN",
-    `Persistent drainage` = "Yes-persistent drainage, drain continued >7 days",
+    `Persistent drainage` = "Yes-persistent drainage, drain continued on or after POD3",
     `Persistent drainage` = "Yes-persistent drainage, percutaneous drainage performed",
     `Persistent drainage` = "Yes-persistent drainage, reoperation performed"
   )
 }
 
-#' Parse a column for type of fistula intervention
+#' Parse a column for type of bile leak intervention
 #'
 #' @param vec a character vector of values to convert
 #'
-#' @details NSQIP encodes the \code{pan_fistula} column as having one of multiple interventions.
+#' @details NSQIP encodes the \code{hep_bileleakage} column as having one of multiple interventions.
 #' This function extracts those values from character vectors and factors them.
 #'
 #' @return a factor vector
 #' @keywords internal
 #'
 #' @examples
-#' fistulas <- c("No", "Yes-persistent drainage, drain continued >7 days",
-#' "Yes-clinical diagnosis, drain continued >7 days",
-#' "Yes-persistent drainage, percutaneous drainage performed",
+#' x <- c("No",
+#' "Yes-clinical diagnosis, drain continued on or after POD3",
 #' "Yes-clinical diagnosis, percutaneous drainage performed",
-#' "Yes-persistent drainage, reoperation performed",
-#' "Unknown", "Yes-clinical diagnosis, reoperation performed",
+#' "Yes-clinical diagnosis, reoperation performed",
 #' "Yes-clinical diagnosis, spontaneous wound drainage",
-#' "Yes-persistent drainage, NPO-TPN", "Yes-clinical diagnosis, NPO-TPN",
-#' "No evidence of Biochemical Leak or POPF",
-#' "Biochemical Leak only", "Yes, Grade B POPF present", "Yes, Grade C POPF present")
+#' "Yes-persistent drainage, drain continued on or after POD3",
+#' "Yes-persistent drainage, percutaneous drainage performed",
+#' "Yes-persistent drainage, reoperation performed",
+#' NA)
 #'
-#' nsqipr:::conv_pan_fistula_intervention(fistulas)
+#' nsqipr:::conv_hep_bileleakage_intervention(x)
 #'
-conv_pan_fistula_intervention <- function(vec) {
+conv_hep_bileleakage_intervention <- function(vec) {
   vec %^% list(
-    `NPO-TPN` = "Yes-clinical diagnosis, NPO-TPN",
-    `Drain continued >7 days` = "Yes-clinical diagnosis, drain continued >7 days",
+    `Drain continued on or after POD3` = "Yes-clinical diagnosis, drain continued on or after POD3",
     `Percutaneous drainage` = "Yes-clinical diagnosis, percutaneous drainage performed",
     `Reoperation` = "Yes-clinical diagnosis, reoperation performed",
     `Spontaneous wound drainage` = "Yes-clinical diagnosis, spontaneous wound drainage",
-    `NPO-TPN` = "Yes-persistent drainage, NPO-TPN",
-    `Drain continued >7 days` = "Yes-persistent drainage, drain continued >7 days",
+    `Drain continued on or after POD3` = "Yes-persistent drainage, drain continued on or after POD3",
     `Percutaneous drainage` = "Yes-persistent drainage, percutaneous drainage performed",
     `Reoperation` = "Yes-persistent drainage, reoperation performed"
   )
 }
 
-#' Parse a column for type of delayed gastric emptying treatment
+#' Parse entries that indicate the presence of liver failure
+#'
+#' @param vec a character vector to parse
+#'
+#' @details returns TRUE if case-insensitive "yes"
+#' is detected in the character vector.
+#'
+#' @return a logical vector
+#' @keywords internal
+#' @examples
+#' x <- c("No-does not meet criteria for PHLF",
+#' "Yes-meets criteria for PHLF",
+#' "Yes-PHLF (receiving clotting factors to maintain INR)",
+#' NA)
+#'
+#' cbind(x, nsqipr:::conv_hep_liverfail(x))
+#'
+conv_hep_liverfail <- function(vec) {
+  stringi::stri_detect_regex(vec, "^yes", opts_regex = list(case_insensitive = TRUE))
+}
+
+#' Parse a column for type of liver failure
 #'
 #' @param vec a character vector of values to convert
 #'
-#' @details NSQIP encodes the \code{pan_delgastric_20140315} column as either no or
-#' having one of multiple interventions. This function extracts those values from
-#' character vectors and factors them.
+#' @details NSQIP encodes the \code{hep_liverfail} column as either "meets criteria for PHLF" or
+#' "PHFL (receiving clotting factors to maintain INR)". This function extracts those values from character vectors
+#' and factors them.
 #'
 #' @return a factor vector
 #' @keywords internal
 #'
 #' @examples
-#' delgastric <- c("No", "Yes-no oral intake by POD 14",
-#' "Yes-tube to external drainage/NG tube present/reinserted")
+#' x <- c("No-does not meet criteria for PHLF",
+#' "Yes-meets criteria for PHLF",
+#' "Yes-PHLF (receiving clotting factors to maintain INR)",
+#' NA)
 #'
-#' nsqipr:::conv_pan_delgastric(delgastric)
+#' nsqipr:::conv_hep_liverfail_type(x)
 #'
-conv_pan_delgastric <- function(vec) {
+conv_hep_liverfail_type <- function(vec) {
   vec %^% list(
-    `No oral intake by POD 14` = "Yes-no oral intake by POD 14",
-    `Tube to external drainage/NG tube present/reinserted` = "Yes-tube to external drainage/NG tube present/reinserted"
+    `Meets criteria for PHLF` = "Yes-meets criteria for PHLF",
+    `PHLF (receiving clotting factors to maintain INR)` = "Yes-PHLF (receiving clotting factors to maintain INR)"
   )
 }

@@ -421,3 +421,48 @@ make_hep_con_ablation_long <- function(df) {
     return(long)
   }
 }
+
+#' Convert hep_invasive_type column from wide to long format
+#'
+#' @param df a data.table
+#'
+#' @details The data contained in the 5 "hep_invasive_type" columns created by \code{make_hep_invasive_type_cols}
+#' are converted into a long format.
+#'
+#' If "hep_invasive_type" is a column in \code{df}, it will be broken into a long format with
+#' \code{caseid} as the ID variable for joining back to the main table. This is because the targeted hepatectomy
+#' datasets input multiple values into a single "hep_invasive_type" column. For example,
+#' "Biliary stent for biliary obstruction/leak,Other intervention" may be an entry in the raw data set. This makes
+#' parsing for patients that had other types of invasive procedures at any point, for example, very difficult.
+#'
+#' Note that this does not alter the "hep_invasive_type" column.
+#'
+#' @return a data.table
+#'
+#' @keywords internal
+#' @examples
+#' x <- data.table::data.table(caseid = 1:7,
+#' hep_invasive_type = c("Biliary stent for biliary obstruction/leak", "Bilirubin-rich fluid from drain or aspirate", "Other intervention",
+#' "Biliary stent for biliary obstruction/leak,Other intervention", "Bilirubin-rich fluid from drain or aspirate,Biliary stent for biliary obstruction/leak",
+#' "Bilirubin-rich fluid from drain or aspirate,Other intervention", NA))
+#'
+#' hep_invasive_type_cols <- paste("hep_invasive_type", 1:5, sep = "")
+#'
+#' nsqipr:::make_long_cols(x, "hep_invasive_type", hep_invasive_type_cols)
+#' nsqipr:::make_hep_invasive_type_long(x)
+#'
+make_hep_invasive_type_long <- function(df) {
+  if("hep_invasive_type" %qsin% names(df)) {
+    long <- suppressWarnings(data.table::melt(df, id.vars = "caseid",
+                                              measure.vars = hep_invasive_type_cols,
+                                              variable.name = "ninvasive_type",
+                                              value.name = "invasive_type",
+                                              na.rm = TRUE,
+                                              variable.factor = FALSE,
+                                              value.factor = TRUE))
+    data.table::set(long, j = "ninvasive_type", value = stringi::stri_extract_all_regex(long[["ninvasive_type"]], "\\d", simplify = TRUE))
+    data.table::set(long, j = "ninvasive_type", value = as.integer(long[["ninvasive_type"]]))
+    data.table::setorder(long, caseid)
+    return(long)
+  }
+}
