@@ -15,6 +15,8 @@ conv_app_cols <- function(df, filename) {
   conv_(df, "app_img_ct", conv_app_img_ct, newcol = "app_ct")
   data.table::setnames(df, "app_mri", "app_img_mri")
   conv_(df, "app_img_mri", conv_app_img_mri, newcol = "app_mri")
+  conv_(df, "app_perfabscess", conv_app_perforation, newcol = "app_perforation")
+  conv_(df, "app_perfabscess", conv_app_abscess, newcol = "app_abscess")
 }
 
 #### ---- FACTOR LISTS (THESE DEFINE THE FACTOR LEVELS FOR VARIOUS COLUMNS) ---- #### BE SURE TO ADD THESE TO FACTOR_COLS IN COL_DEFINITIONS.R
@@ -118,4 +120,42 @@ conv_app_img_ct <- function(vec) {
 #'
 conv_app_img_mri <- function(vec) {
   stringi::stri_detect_regex(vec, "^Result", opts_regex = list(case_insensitive = TRUE))
+}
+
+#' Parse entries that indicate an abscess
+#'
+#' @param vec a character vector to parse
+#'
+#' @details returns TRUE if case-insensitive "^abscess only|^perforation and abscess"
+#' is detected in the character vector.
+#'
+#' @return a logical vector
+#' @keywords internal
+#' @examples
+#' x <- c("No mention of perforation or abscess", "Perforation and abscess",
+#' "Perforation only", "Abscess only", NA)
+#'
+#' cbind(x, nsqipr:::conv_app_abscess(x))
+#'
+conv_app_abscess <- function(vec) {
+  stringi::stri_detect_regex(vec, "^abscess only|^perforation and abscess", opts_regex = list(case_insensitive = TRUE))
+}
+
+#' Parse entries that indicate a perforation
+#'
+#' @param vec a character vector to parse
+#'
+#' @details returns TRUE if case-insensitive "^perforation only|^perforation and abscess"
+#' is detected in the character vector.
+#'
+#' @return a logical vector
+#' @keywords internal
+#' @examples
+#' x <- c("No mention of perforation or abscess", "Perforation and abscess",
+#' "Perforation only", "Abscess only", NA)
+#'
+#' cbind(x, nsqipr:::conv_app_perforation(x))
+#'
+conv_app_perforation <- function(vec) {
+  stringi::stri_detect_regex(vec, "^perforation only|^perforation and abscess", opts_regex = list(case_insensitive = TRUE))
 }
