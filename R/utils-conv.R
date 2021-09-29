@@ -193,8 +193,8 @@ conv_date <- function(vec) {
 #'
 get_pufyear <- function(df, filename) {
   yrs <- factor(stringi::stri_match_last_regex(filename, ".*(\\d{2})", opts_regex = list(case_insensitive = TRUE))[,2],
-                levels = c("06","07","08","09","10","11","12","13","14","15","16","17","18"),
-                labels = c("2005-2006","2007","2008","2009","2010","2011","2012","2013","2014","2015","2016","2017","2018"),
+                levels = c("06","07","08","09","10","11","12","13","14","15","16","17","18","19"),
+                labels = c("2005-2006","2007","2008","2009","2010","2011","2012","2013","2014","2015","2016","2017","2018","2019"),
                 ordered = TRUE)
   data.table::set(df, j = "pufyear", value = yrs)
 }
@@ -232,8 +232,8 @@ get_pufyear <- function(df, filename) {
 #' @details This function \bold{modifies by reference}.
 #' This function checks for which columns to factor by comparing against a character vector called \code{factor_cols}.
 #' The function then fetches a variable from the calling environment with the same name as the column being converted to a factor.
-#' This variable should reference a named list specifying how to rename the levels (see \code{\link[nsqipr:factorpipe]{\%^\%}})
-#' for further details.
+#' This variable should reference a named list specifying how to rename the levels (see \code{\link[nsqipr:factorpipe]{\%^\%}}
+#' for further details).
 #'
 #' @keywords internal
 #' @examples

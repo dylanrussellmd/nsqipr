@@ -70,7 +70,9 @@ conv_special_cols <- function(df, filename, progbar) {
                "puf_tar_aaa" = `conv_aaa_cols`,
                "puf_tar_aie" = `conv_aie_cols`,
                "puf_tar_aio" = `conv_aio_cols`,
-               "puf_tar_pan" = `conv_pan_cols`)
+               "puf_tar_app" = `conv_app_cols`,
+               "puf_tar_pan" = `conv_pan_cols`,
+               "puf_tar_hep" = `conv_hep_cols`)
   fn(df, filename)
 }
 
@@ -81,7 +83,8 @@ conv_factor_cols <- function(df, filename, progbar) {
 
 conv_long_tables <- function(df, filename, progbar) {
   tick(progbar, "creating long tables for", filename)
-  long_funcs <- c(make_cpt_long, make_reop_long, make_readm_long, make_anesthes_other_long, make_pan_percdrainage_long, make_amylase_long)
+  long_funcs <- c(make_cpt_long, make_reop_long, make_readm_long, make_anesthes_other_long, make_pan_percdrainage_long, make_amylase_long, make_hep_neotherapy_long, make_hep_con_ablation_long,
+                  make_hep_invasive_type_long)
   lapply(long_funcs, function(f) f(df))
 }
 
