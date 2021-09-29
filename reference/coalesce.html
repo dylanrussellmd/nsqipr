@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +94,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/dylanrussellmd/nsqipr/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,7 +120,7 @@
     <p>A simple wrapper around <code><a href='https://Rdatatable.gitlab.io/data.table/reference/coalesce.html'>fcoalesce</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>coalesce</span>(<span class='kw'>new</span>, <span class='kw'>old</span>)</pre>
+    <pre class="usage"><span class='fu'>coalesce</span><span class='op'>(</span><span class='va'>new</span>, <span class='va'>old</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -141,9 +141,9 @@ columns are have values at the same position.</p></td>
     <p>a vector of the type of <code>new</code></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>x</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>11L</span>, <span class='fl'>NA</span>, <span class='fl'>13L</span>, <span class='fl'>NA</span>, <span class='fl'>15L</span>, <span class='fl'>NA</span>)
-<span class='kw'>y</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>NA</span>, <span class='fl'>12L</span>, <span class='fl'>5L</span>, <span class='fl'>NA</span>, <span class='fl'>NA</span>, <span class='fl'>NA</span>)
-<span class='kw'>nsqipr</span>:::<span class='fu'>coalesce</span>(<span class='kw'>x</span>, <span class='kw'>y</span>)
+    <pre class="examples"><div class='input'><span class='va'>x</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>11L</span>, <span class='cn'>NA</span>, <span class='fl'>13L</span>, <span class='cn'>NA</span>, <span class='fl'>15L</span>, <span class='cn'>NA</span><span class='op'>)</span>
+<span class='va'>y</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>NA</span>, <span class='fl'>12L</span>, <span class='fl'>5L</span>, <span class='cn'>NA</span>, <span class='cn'>NA</span>, <span class='cn'>NA</span><span class='op'>)</span>
+<span class='fu'>nsqipr</span><span class='fu'>:::</span><span class='fu'>coalesce</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] 11 12 13 NA 15 NA</div><div class='input'>
 </div></pre>
   </div>

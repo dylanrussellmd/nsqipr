@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +94,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/dylanrussellmd/nsqipr/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,7 +120,7 @@
     <p>Parse a column for type of delayed gastric emptying treatment</p>
     </div>
 
-    <pre class="usage"><span class='fu'>conv_pan_delgastric</span>(<span class='kw'>vec</span>)</pre>
+    <pre class="usage"><span class='fu'>conv_pan_delgastric</span><span class='op'>(</span><span class='va'>vec</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -141,10 +141,10 @@ having one of multiple interventions. This function extracts those values from
 character vectors and factors them.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>delgastric</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"No"</span>, <span class='st'>"Yes-no oral intake by POD 14"</span>,
-<span class='st'>"Yes-tube to external drainage/NG tube present/reinserted"</span>)
+    <pre class="examples"><div class='input'><span class='va'>delgastric</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"No"</span>, <span class='st'>"Yes-no oral intake by POD 14"</span>,
+<span class='st'>"Yes-tube to external drainage/NG tube present/reinserted"</span><span class='op'>)</span>
 
-<span class='kw'>nsqipr</span>:::<span class='fu'>conv_pan_delgastric</span>(<span class='kw'>delgastric</span>)
+<span class='fu'>nsqipr</span><span class='fu'>:::</span><span class='fu'>conv_pan_delgastric</span><span class='op'>(</span><span class='va'>delgastric</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] &lt;NA&gt;                                                
 #&gt; [2] No oral intake by POD 14                            
 #&gt; [3] Tube to external drainage/NG tube present/reinserted

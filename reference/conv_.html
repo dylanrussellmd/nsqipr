@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +94,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/dylanrussellmd/nsqipr/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,7 +120,7 @@
     <p>Apply a given function to specified columns in a data table</p>
     </div>
 
-    <pre class="usage"><span class='fu'>conv_</span>(<span class='kw'>df</span>, <span class='kw'>cols</span>, <span class='kw'>f</span>, <span class='kw'>...</span>, <span class='kw'>newcol</span>)</pre>
+    <pre class="usage"><span class='fu'>conv_</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>cols</span>, <span class='va'>f</span>, <span class='va'>...</span>, <span class='va'>newcol</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -153,9 +153,9 @@
 provided data table, this will simply return the original data.table unmodified without error.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='kw'>data.table</span>::<span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span>(x = <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='st'>"APPLE"</span>, <span class='fl'>10</span>), y = <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='st'>"BANANA"</span>, <span class='fl'>10</span>), z = <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='st'>"CHERRY"</span>, <span class='fl'>10</span>))
-<span class='kw'>nsqipr</span>:::<span class='fu'>conv_</span>(<span class='kw'>x</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"x"</span>,<span class='st'>"y"</span>), <span class='kw'>tolower</span>)
-<span class='kw'>x</span>
+    <pre class="examples"><div class='input'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>data.table</span><span class='fu'>::</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='st'>"APPLE"</span>, <span class='fl'>10</span><span class='op'>)</span>, y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='st'>"BANANA"</span>, <span class='fl'>10</span><span class='op'>)</span>, z <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='st'>"CHERRY"</span>, <span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>nsqipr</span><span class='fu'>:::</span><span class='fu'>conv_</span><span class='op'>(</span><span class='va'>x</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"x"</span>,<span class='st'>"y"</span><span class='op'>)</span>, <span class='va'>tolower</span><span class='op'>)</span>
+<span class='va'>x</span>
 </div><div class='output co'>#&gt;         x      y      z
 #&gt;  1: apple banana CHERRY
 #&gt;  2: apple banana CHERRY
@@ -167,9 +167,9 @@ provided data table, this will simply return the original data.table unmodified 
 #&gt;  8: apple banana CHERRY
 #&gt;  9: apple banana CHERRY
 #&gt; 10: apple banana CHERRY</div><div class='input'>
-<span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='kw'>data.table</span>::<span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span>(x = <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='st'>"APPLE"</span>, <span class='fl'>10</span>), y = <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='st'>"BANANA"</span>, <span class='fl'>10</span>), z = <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='st'>"CHERRY"</span>, <span class='fl'>10</span>))
-<span class='kw'>nsqipr</span>:::<span class='fu'>conv_</span>(<span class='kw'>x</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"x"</span>,<span class='st'>"y"</span>), <span class='kw'>tolower</span>, newcol =  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"X"</span>,<span class='st'>"Y"</span>))
-<span class='kw'>x</span>
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>data.table</span><span class='fu'>::</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='st'>"APPLE"</span>, <span class='fl'>10</span><span class='op'>)</span>, y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='st'>"BANANA"</span>, <span class='fl'>10</span><span class='op'>)</span>, z <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='st'>"CHERRY"</span>, <span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>nsqipr</span><span class='fu'>:::</span><span class='fu'>conv_</span><span class='op'>(</span><span class='va'>x</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"x"</span>,<span class='st'>"y"</span><span class='op'>)</span>, <span class='va'>tolower</span>, newcol <span class='op'>=</span>  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"X"</span>,<span class='st'>"Y"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>x</span>
 </div><div class='output co'>#&gt;         x      y      z     X      Y
 #&gt;  1: APPLE BANANA CHERRY apple banana
 #&gt;  2: APPLE BANANA CHERRY apple banana
@@ -181,8 +181,8 @@ provided data table, this will simply return the original data.table unmodified 
 #&gt;  8: APPLE BANANA CHERRY apple banana
 #&gt;  9: APPLE BANANA CHERRY apple banana
 #&gt; 10: APPLE BANANA CHERRY apple banana</div><div class='input'>
-<span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='kw'>data.table</span>::<span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span>(x = <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='st'>"APPLE"</span>, <span class='fl'>10</span>), y = <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='st'>"BANANA"</span>, <span class='fl'>10</span>), z = <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='st'>"CHERRY"</span>, <span class='fl'>10</span>))
-<span class='kw'>nsqipr</span>:::<span class='fu'>conv_</span>(<span class='kw'>x</span>, <span class='st'>"x"</span>, <span class='kw'>paste</span>, <span class='st'>"JUICE"</span>, sep = <span class='st'>" "</span>, newcol = <span class='st'>"drink"</span>)
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>data.table</span><span class='fu'>::</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='st'>"APPLE"</span>, <span class='fl'>10</span><span class='op'>)</span>, y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='st'>"BANANA"</span>, <span class='fl'>10</span><span class='op'>)</span>, z <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='st'>"CHERRY"</span>, <span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>nsqipr</span><span class='fu'>:::</span><span class='fu'>conv_</span><span class='op'>(</span><span class='va'>x</span>, <span class='st'>"x"</span>, <span class='va'>paste</span>, <span class='st'>"JUICE"</span>, sep <span class='op'>=</span> <span class='st'>" "</span>, newcol <span class='op'>=</span> <span class='st'>"drink"</span><span class='op'>)</span>
 
 </div></pre>
   </div>

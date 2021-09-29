@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +94,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/dylanrussellmd/nsqipr/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,7 +120,7 @@
     <p>Create reoperation columns for long conversion</p>
     </div>
 
-    <pre class="usage"><span class='fu'>make_reop_cols</span>(<span class='kw'>df</span>)</pre>
+    <pre class="usage"><span class='fu'>make_reop_cols</span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -137,9 +137,9 @@
 If so, the rest are created as needed. New columns are set to a value of NA.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='kw'>data.table</span>::<span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span>(reoperation1 = <span class='fl'>TRUE</span>)
-<span class='kw'>nsqipr</span>:::<span class='fu'>make_reop_cols</span>(<span class='kw'>x</span>)
-<span class='kw'>x</span>
+    <pre class="examples"><div class='input'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>data.table</span><span class='fu'>::</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span><span class='op'>(</span>reoperation1 <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='fu'>nsqipr</span><span class='fu'>:::</span><span class='fu'>make_reop_cols</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
+<span class='va'>x</span>
 </div><div class='output co'>#&gt;    reoperation1 reoperation2 reoperation3 retorpodays retor2podays retor3podays
 #&gt; 1:         TRUE           NA           NA          NA           NA           NA
 #&gt;    reoporcpt1 reopor2cpt1 reopor3cpt1 retorrelated retor2related retor3related

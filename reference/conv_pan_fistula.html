@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +94,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/dylanrussellmd/nsqipr/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,7 +120,7 @@
     <p>Parse entries that indicate the presence of a fistula</p>
     </div>
 
-    <pre class="usage"><span class='fu'>conv_pan_fistula</span>(<span class='kw'>vec</span>)</pre>
+    <pre class="usage"><span class='fu'>conv_pan_fistula</span><span class='op'>(</span><span class='va'>vec</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -140,7 +140,7 @@
 is detected in the character vector.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"No"</span>,<span class='st'>"No evidence of Biochemical Leak or POPF"</span>,<span class='st'>"Biochemical Leak only"</span>,
+    <pre class="examples"><div class='input'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"No"</span>,<span class='st'>"No evidence of Biochemical Leak or POPF"</span>,<span class='st'>"Biochemical Leak only"</span>,
 <span class='st'>"Yes, Grade B POPF present"</span>,<span class='st'>"Yes, Grade C POPF present"</span>,<span class='st'>"Yes-clinical diagnosis, NPO-TPN"</span>,
 <span class='st'>"Yes-clinical diagnosis, drain continued &gt;7 days"</span>,
 <span class='st'>"Yes-clinical diagnosis, percutaneous drainage performed"</span>,
@@ -149,9 +149,9 @@ is detected in the character vector.</p>
 <span class='st'>"Yes-persistent drainage, drain continued &gt;7 days"</span>,
 <span class='st'>"Yes-persistent drainage, percutaneous drainage performed"</span>,
 <span class='st'>"Yes-persistent drainage, reoperation performed"</span>,
-<span class='fl'>NA</span>)
+<span class='cn'>NA</span><span class='op'>)</span>
 
-<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='kw'>x</span>, <span class='kw'>nsqipr</span>:::<span class='fu'>conv_pan_fistula</span>(<span class='kw'>x</span>))
+<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='fu'>nsqipr</span><span class='fu'>:::</span><span class='fu'>conv_pan_fistula</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;       x                                                                 
 #&gt;  [1,] "No"                                                       "FALSE"
 #&gt;  [2,] "No evidence of Biochemical Leak or POPF"                  "FALSE"
