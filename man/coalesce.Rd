@@ -8,7 +8,7 @@ coalesce(new, old)
 }
 \arguments{
 \item{new}{the newer vector to be coalesced into. Will take priority if both
-columns are have values at the same position.}
+columns have values at the same position.}
 
 \item{old}{the older vector to be coalesced.}
 }
