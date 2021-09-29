@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Coalesce two vector — coalesce • nsqipr</title>
+<title>Convert number of secondary tumors to integer — conv_hep_sec_numtumors • nsqipr</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Coalesce two vector — coalesce" />
-<meta property="og:description" content="A simple wrapper around fcoalesce." />
+<meta property="og:title" content="Convert number of secondary tumors to integer — conv_hep_sec_numtumors" />
+<meta property="og:description" content="Convert number of secondary tumors to integer" />
 
 
 
@@ -111,40 +111,37 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Coalesce two vector</h1>
-    <small class="dont-index">Source: <a href='https://github.com/dylanrussellmd/nsqipr/blob/master/R/utils-conv.R'><code>R/utils-conv.R</code></a></small>
-    <div class="hidden name"><code>coalesce.Rd</code></div>
+    <h1>Convert number of secondary tumors to integer</h1>
+    <small class="dont-index">Source: <a href='https://github.com/dylanrussellmd/nsqipr/blob/master/R/conv_hep.R'><code>R/conv_hep.R</code></a></small>
+    <div class="hidden name"><code>conv_hep_sec_numtumors.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A simple wrapper around <code><a href='https://Rdatatable.gitlab.io/data.table/reference/coalesce.html'>fcoalesce</a></code>.</p>
+    <p>Convert number of secondary tumors to integer</p>
     </div>
 
-    <pre class="usage"><span class='fu'>coalesce</span><span class='op'>(</span><span class='va'>new</span>, <span class='va'>old</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>conv_hep_sec_numtumors</span><span class='op'>(</span><span class='va'>vec</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>new</th>
-      <td><p>the newer vector to be coalesced into. Will take priority if both
-columns have values at the same position.</p></td>
-    </tr>
-    <tr>
-      <th>old</th>
-      <td><p>the older vector to be coalesced.</p></td>
+      <th>vec</th>
+      <td><p>a character vector of values to convert</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a vector of the type of <code>new</code></p>
+    <p>an integer vector</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>NSQIP encodes anyone with more than 8 secondary tumors as "8 or more".
+This converts all "8 or more" to 8. If given NA, will return NA.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>x</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>11L</span>, <span class='cn'>NA</span>, <span class='fl'>13L</span>, <span class='cn'>NA</span>, <span class='fl'>15L</span>, <span class='cn'>NA</span><span class='op'>)</span>
-<span class='va'>y</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>NA</span>, <span class='fl'>12L</span>, <span class='fl'>5L</span>, <span class='cn'>NA</span>, <span class='cn'>NA</span>, <span class='cn'>NA</span><span class='op'>)</span>
-<span class='fu'>nsqipr</span><span class='fu'>:::</span><span class='fu'>coalesce</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 11 12 13 NA 15 NA</div><div class='input'>
+    <pre class="examples"><div class='input'><span class='fu'>nsqipr</span><span class='fu'>:::</span><span class='fu'>conv_hep_sec_numtumors</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"1"</span>,<span class='st'>"2"</span>,<span class='st'>"More than 8"</span>,<span class='cn'>NA</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1]  1  2  8 NA</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

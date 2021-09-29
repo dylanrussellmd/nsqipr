@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Coalesce two vector — coalesce • nsqipr</title>
+<title>Create multiple columns from comma-separated column — make_long_cols • nsqipr</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,9 @@
 
 
 
-<meta property="og:title" content="Coalesce two vector — coalesce" />
-<meta property="og:description" content="A simple wrapper around fcoalesce." />
+<meta property="og:title" content="Create multiple columns from comma-separated column — make_long_cols" />
+<meta property="og:description" content="Given a single column containing multiple comma-separated values,
+this function will create new columns and split the comma-separated values." />
 
 
 
@@ -111,40 +112,53 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Coalesce two vector</h1>
-    <small class="dont-index">Source: <a href='https://github.com/dylanrussellmd/nsqipr/blob/master/R/utils-conv.R'><code>R/utils-conv.R</code></a></small>
-    <div class="hidden name"><code>coalesce.Rd</code></div>
+    <h1>Create multiple columns from comma-separated column</h1>
+    <small class="dont-index">Source: <a href='https://github.com/dylanrussellmd/nsqipr/blob/master/R/utils-long.R'><code>R/utils-long.R</code></a></small>
+    <div class="hidden name"><code>make_long_cols.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A simple wrapper around <code><a href='https://Rdatatable.gitlab.io/data.table/reference/coalesce.html'>fcoalesce</a></code>.</p>
+    <p>Given a single column containing multiple comma-separated values,
+this function will create new columns and split the comma-separated values.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>coalesce</span><span class='op'>(</span><span class='va'>new</span>, <span class='va'>old</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>make_long_cols</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>from</span>, <span class='va'>to</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>new</th>
-      <td><p>the newer vector to be coalesced into. Will take priority if both
-columns have values at the same position.</p></td>
+      <th>df</th>
+      <td><p>the dataframe in which the current comma-separated column is stored.</p></td>
     </tr>
     <tr>
-      <th>old</th>
-      <td><p>the older vector to be coalesced.</p></td>
+      <th>from</th>
+      <td><p>a character vector representing the name of the comma-separated column.</p></td>
+    </tr>
+    <tr>
+      <th>to</th>
+      <td><p>a character vector of new column names into which the comma-separated column
+will be split.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>a vector of the type of <code>new</code></p>
+    <p>This function will create new columns in the data frame but it will not remove
+the original column (the <code>from</code> column).</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>x</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>11L</span>, <span class='cn'>NA</span>, <span class='fl'>13L</span>, <span class='cn'>NA</span>, <span class='fl'>15L</span>, <span class='cn'>NA</span><span class='op'>)</span>
-<span class='va'>y</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>NA</span>, <span class='fl'>12L</span>, <span class='fl'>5L</span>, <span class='cn'>NA</span>, <span class='cn'>NA</span>, <span class='cn'>NA</span><span class='op'>)</span>
-<span class='fu'>nsqipr</span><span class='fu'>:::</span><span class='fu'>coalesce</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 11 12 13 NA 15 NA</div><div class='input'>
+    <pre class="examples"><div class='input'><span class='co'>#' @examples</span>
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>data.table</span><span class='fu'>::</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span><span class='op'>(</span>
+hep_con_ablation_140101 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Microwave ablation"</span>, <span class='st'>"RFA ablation"</span>, <span class='st'>"Other ablation"</span>,
+<span class='st'>"Microwave ablation,Other ablation"</span>, <span class='st'>"RFA ablation,Microwave ablation"</span>,
+<span class='st'>"RFA ablation,Other ablation"</span>, <span class='st'>"RFA ablation,Alcohol ablation"</span>, <span class='st'>"Alcohol ablation"</span>,
+<span class='st'>"Microwave ablation,Alcohol ablation"</span>, <span class='st'>"Cryoablation"</span>, <span class='cn'>NA</span>, <span class='st'>"RFA ablation,Cryoablation"</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='va'>hep_invasive_type_cols</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"hep_invasive_type"</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>, sep <span class='op'>=</span> <span class='st'>""</span><span class='op'>)</span>
+
+<span class='fu'>make_long_cols</span><span class='op'>(</span><span class='va'>x</span>, <span class='st'>"hep_con_ablation_140101"</span>, <span class='va'>hep_invasive_type_cols</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in make_long_cols(x, "hep_con_ablation_140101", hep_invasive_type_cols): could not find function "make_long_cols"</span></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

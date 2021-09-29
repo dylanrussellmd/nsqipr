@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Convert factor columns — conv_factor • nsqipr</title>
+<title>Convert hep_neotherapy_140101 column from wide to long format — make_hep_neotherapy_long • nsqipr</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Convert factor columns — conv_factor" />
-<meta property="og:description" content="Convert factor columns" />
+<meta property="og:title" content="Convert hep_neotherapy_140101 column from wide to long format — make_hep_neotherapy_long" />
+<meta property="og:description" content="Convert hep_neotherapy_140101 column from wide to long format" />
 
 
 
@@ -111,57 +111,63 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Convert factor columns</h1>
-    <small class="dont-index">Source: <a href='https://github.com/dylanrussellmd/nsqipr/blob/master/R/utils-conv.R'><code>R/utils-conv.R</code></a></small>
-    <div class="hidden name"><code>conv_factor.Rd</code></div>
+    <h1>Convert hep_neotherapy_140101 column from wide to long format</h1>
+    <small class="dont-index">Source: <a href='https://github.com/dylanrussellmd/nsqipr/blob/master/R/long.R'><code>R/long.R</code></a></small>
+    <div class="hidden name"><code>make_hep_neotherapy_long.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Convert factor columns</p>
+    <p>Convert hep_neotherapy_140101 column from wide to long format</p>
     </div>
 
-    <pre class="usage"><span class='fu'>conv_factor</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>factor_cols</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>make_hep_neotherapy_long</span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>df</th>
-      <td><p>a data table in which to convert factor columns</p></td>
-    </tr>
-    <tr>
-      <th>factor_cols</th>
-      <td><p>columns to be converted to a factor</p></td>
+      <td><p>a data.table</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a data table</p>
+    <p>a data.table</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This function <b>modifies by reference</b>.
-This function checks for which columns to factor by comparing against a character vector called <code>factor_cols</code>.
-The function then fetches a variable from the calling environment with the same name as the column being converted to a factor.
-This variable should reference a named list specifying how to rename the levels (see <code><a href='%^%.html'>%^%</a></code>
-for further details).</p>
+    <p>The data contained in the 5 "hep_neotherapy" columns created by <code>make_hep_neotherapy_cols</code>
+are converted into a long format.</p>
+<p>If "hep_neotherapy_140101" is a column in <code>df</code>, it will be broken into a long format with
+<code>caseid</code> as the ID variable for joining back to the main table. This is because the targeted hepatectomy
+datasets input multiple values into a single "hep_neotherapy_140101" column. For example,
+"Locoregional interarterial infusion,Other type" may be an entry in the raw data set. This makes
+parsing for patients that had other types of neoadjuvant therapy at any point, for example, very difficult.</p>
+<p>Note that this does not alter the "hep_neotherapy_140101" column.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>data.table</span><span class='fu'>::</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span><span class='op'>(</span>foods <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"apple"</span>,<span class='st'>"banana"</span>,<span class='st'>"cherry"</span>,<span class='st'>"steak"</span>,<span class='st'>"chicken"</span>,<span class='st'>"pork"</span><span class='op'>)</span>,
-                            drinks <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"milk"</span>,<span class='st'>"water"</span>,<span class='st'>"oj"</span>,<span class='st'>"beer"</span>,<span class='st'>"vodka"</span>,<span class='st'>"rum"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>foods</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>fruit <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"apple"</span>, <span class='st'>"banana"</span>, <span class='st'>"cherry"</span><span class='op'>)</span>, meat <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"steak"</span>,<span class='st'>"chicken"</span>,<span class='st'>"pork"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>drinks</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>`non-alcoholic` <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"milk"</span>,<span class='st'>"water"</span>,<span class='st'>"oj"</span><span class='op'>)</span>, alcoholic <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"beer"</span>,<span class='st'>"vodka"</span>,<span class='st'>"rum"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>factor_cols</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"foods"</span>, <span class='st'>"drinks"</span><span class='op'>)</span>
-<span class='fu'>nsqipr</span><span class='fu'>:::</span><span class='fu'>conv_factor</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>factor_cols</span><span class='op'>)</span>
-<span class='va'>x</span>
-</div><div class='output co'>#&gt;    foods        drinks
-#&gt; 1: fruit non-alcoholic
-#&gt; 2: fruit non-alcoholic
-#&gt; 3: fruit non-alcoholic
-#&gt; 4:  meat     alcoholic
-#&gt; 5:  meat     alcoholic
-#&gt; 6:  meat     alcoholic</div><div class='input'>
+    <pre class="examples"><div class='input'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>data.table</span><span class='fu'>::</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span><span class='op'>(</span>caseid <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>22</span>,
+hep_neotherapy_140101 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Preoperative systemic chemotherapy"</span>, <span class='st'>"Portal vein embolization"</span>,
+<span class='st'>"Locoregional liver ablation"</span>, <span class='st'>"Preoperative systemic chemotherapy,Portal vein embolization"</span>,
+<span class='st'>"Locoregional interarterial infusion,Portal vein embolization"</span>,
+<span class='st'>"Locoregional liver ablation,Portal vein embolization"</span>, <span class='st'>"Other type"</span>,
+<span class='st'>"Preoperative systemic chemotherapy,Locoregional liver ablation"</span>,
+<span class='st'>"Preoperative systemic chemotherapy,Other type"</span>, <span class='st'>"Locoregional interarterial infusion"</span>,
+<span class='st'>"Portal vein embolization,Other type"</span>, <span class='st'>"Locoregional interarterial infusion,Other type"</span>,
+<span class='st'>"Preoperative systemic chemotherapy,Locoregional interarterial infusion"</span>,
+<span class='st'>"Preoperative systemic chemotherapy,Portal vein embolization,Other type"</span>,
+<span class='st'>"Preoperative systemic chemotherapy,Locoregional liver ablation,Other type"</span>,
+<span class='st'>"Preoperative systemic chemotherapy,Locoregional liver ablation,Portal vein embolization"</span>,
+<span class='st'>"Locoregional liver ablation,Other type"</span>,
+<span class='st'>"Locoregional interarterial infusion,Locoregional liver ablation,Portal vein embolization"</span>,
+<span class='st'>"Preoperative systemic chemotherapy,Locoregional interarterial infusion,Portal vein embolization"</span>,
+<span class='st'>"Locoregional interarterial infusion,Locoregional liver ablation"</span>,
+<span class='st'>"Preoperative systemic chemotherapy,Locoregional interarterial infusion,Locoregional liver ablation"</span>,
+<span class='st'>"Locoregional interarterial infusion,Locoregional liver ablation,Portal vein embolization,Other type"</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='fu'>nsqipr</span><span class='fu'>:::</span><span class='fu'>make_hep_neotherapy_cols</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): object 'make_hep_neotherapy_cols' not found</span></div><div class='input'><span class='fu'>nsqipr</span><span class='fu'>:::</span><span class='fu'>make_hep_neotherapy_long</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in melt.data.table(df, id.vars = "caseid", measure.vars = hep_neotherapy_cols,     variable.name = "nneotherapy", value.name = "neotherapy",     na.rm = TRUE, variable.factor = FALSE, value.factor = TRUE): One or more values in 'measure.vars' is invalid.</span></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

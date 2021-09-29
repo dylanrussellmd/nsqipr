@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Coalesce two vector — coalesce • nsqipr</title>
+<title>Convert hep_invasive_type column from wide to long format — make_hep_invasive_type_long • nsqipr</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Coalesce two vector — coalesce" />
-<meta property="og:description" content="A simple wrapper around fcoalesce." />
+<meta property="og:title" content="Convert hep_invasive_type column from wide to long format — make_hep_invasive_type_long" />
+<meta property="og:description" content="Convert hep_invasive_type column from wide to long format" />
 
 
 
@@ -111,40 +111,60 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Coalesce two vector</h1>
-    <small class="dont-index">Source: <a href='https://github.com/dylanrussellmd/nsqipr/blob/master/R/utils-conv.R'><code>R/utils-conv.R</code></a></small>
-    <div class="hidden name"><code>coalesce.Rd</code></div>
+    <h1>Convert hep_invasive_type column from wide to long format</h1>
+    <small class="dont-index">Source: <a href='https://github.com/dylanrussellmd/nsqipr/blob/master/R/long.R'><code>R/long.R</code></a></small>
+    <div class="hidden name"><code>make_hep_invasive_type_long.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A simple wrapper around <code><a href='https://Rdatatable.gitlab.io/data.table/reference/coalesce.html'>fcoalesce</a></code>.</p>
+    <p>Convert hep_invasive_type column from wide to long format</p>
     </div>
 
-    <pre class="usage"><span class='fu'>coalesce</span><span class='op'>(</span><span class='va'>new</span>, <span class='va'>old</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>make_hep_invasive_type_long</span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>new</th>
-      <td><p>the newer vector to be coalesced into. Will take priority if both
-columns have values at the same position.</p></td>
-    </tr>
-    <tr>
-      <th>old</th>
-      <td><p>the older vector to be coalesced.</p></td>
+      <th>df</th>
+      <td><p>a data.table</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a vector of the type of <code>new</code></p>
+    <p>a data.table</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The data contained in the 5 "hep_invasive_type" columns created by <code>make_hep_invasive_type_cols</code>
+are converted into a long format.</p>
+<p>If "hep_invasive_type" is a column in <code>df</code>, it will be broken into a long format with
+<code>caseid</code> as the ID variable for joining back to the main table. This is because the targeted hepatectomy
+datasets input multiple values into a single "hep_invasive_type" column. For example,
+"Biliary stent for biliary obstruction/leak,Other intervention" may be an entry in the raw data set. This makes
+parsing for patients that had other types of invasive procedures at any point, for example, very difficult.</p>
+<p>Note that this does not alter the "hep_invasive_type" column.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>x</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>11L</span>, <span class='cn'>NA</span>, <span class='fl'>13L</span>, <span class='cn'>NA</span>, <span class='fl'>15L</span>, <span class='cn'>NA</span><span class='op'>)</span>
-<span class='va'>y</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>NA</span>, <span class='fl'>12L</span>, <span class='fl'>5L</span>, <span class='cn'>NA</span>, <span class='cn'>NA</span>, <span class='cn'>NA</span><span class='op'>)</span>
-<span class='fu'>nsqipr</span><span class='fu'>:::</span><span class='fu'>coalesce</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 11 12 13 NA 15 NA</div><div class='input'>
+    <pre class="examples"><div class='input'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>data.table</span><span class='fu'>::</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span><span class='op'>(</span>caseid <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>7</span>,
+hep_invasive_type <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Biliary stent for biliary obstruction/leak"</span>, <span class='st'>"Bilirubin-rich fluid from drain or aspirate"</span>, <span class='st'>"Other intervention"</span>,
+<span class='st'>"Biliary stent for biliary obstruction/leak,Other intervention"</span>, <span class='st'>"Bilirubin-rich fluid from drain or aspirate,Biliary stent for biliary obstruction/leak"</span>,
+<span class='st'>"Bilirubin-rich fluid from drain or aspirate,Other intervention"</span>, <span class='cn'>NA</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='va'>hep_invasive_type_cols</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"hep_invasive_type"</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>, sep <span class='op'>=</span> <span class='st'>""</span><span class='op'>)</span>
+
+<span class='fu'>nsqipr</span><span class='fu'>:::</span><span class='fu'><a href='make_long_cols.html'>make_long_cols</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='st'>"hep_invasive_type"</span>, <span class='va'>hep_invasive_type_cols</span><span class='op'>)</span>
+<span class='fu'>nsqipr</span><span class='fu'>:::</span><span class='fu'>make_hep_invasive_type_long</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;    caseid ninvasive_type                               invasive_type
+#&gt; 1:      1              1  Biliary stent for biliary obstruction/leak
+#&gt; 2:      2              1 Bilirubin-rich fluid from drain or aspirate
+#&gt; 3:      3              1                          Other intervention
+#&gt; 4:      4              1  Biliary stent for biliary obstruction/leak
+#&gt; 5:      4              2                          Other intervention
+#&gt; 6:      5              1 Bilirubin-rich fluid from drain or aspirate
+#&gt; 7:      5              2  Biliary stent for biliary obstruction/leak
+#&gt; 8:      6              1 Bilirubin-rich fluid from drain or aspirate
+#&gt; 9:      6              2                          Other intervention</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
