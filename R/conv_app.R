@@ -17,6 +17,10 @@ conv_app_cols <- function(df, filename) {
   conv_(df, "app_img_mri", conv_app_img_mri, newcol = "app_mri")
   conv_(df, "app_perfabscess", conv_app_perforation, newcol = "app_perforation")
   conv_(df, "app_perfabscess", conv_app_abscess, newcol = "app_abscess")
+  conv_(df, "app_approach", conv_open_assist, newcol = "app_open_assist")
+  conv_(df, "app_approach", conv_unplanned_conversion, newcol = "app_unplanned_conversion")
+  conv_(df, "app_intraabscess", conv_app_intraabscess_intervention, newcol = "app_intraabscess_intervention")
+  conv_(df, "app_intraabscess", conv_app_intraabscess)
 }
 
 #### ---- FACTOR LISTS (THESE DEFINE THE FACTOR LEVELS FOR VARIOUS COLUMNS) ---- #### BE SURE TO ADD THESE TO FACTOR_COLS IN COL_DEFINITIONS.R
@@ -25,40 +29,44 @@ app_img_ultra <- list(
   `Indeterminate` = "US done-indeterminate; result uncertain",
   `Not consistent with appendicitis` = "US done-not consistent with appendicitis"
 )
-
 app_setting_ultra <- list(
   `Operating hospital` = "US in operating hospital",
   `Outside facility` = "US at outside facility"
 )
-
 app_img_ct <- list(
   `Consistent with appendicitis` = "CT done-result consistent with diagnosis of appendicitis",
   `Indeterminate` = "CT done-result indeterminate; result uncertain",
   `Not consistent with appendicitis` = "CT done-result not consistent with appendicitis"
 )
-
 app_setting_ct <- list(
   `Operating hospital` = "CT in operating hospital",
   `Outside facility` = "CT at outside facility"
 )
-
 app_img_mri <- list(
   `Consistent with appendicitis` = "Result consistent w/ diagnosis of Appendicitis",
   `Indeterminate` = "Result Indeterminate / Uncertain",
   `Not consistent with appendicitis` = 'Result Not Consistent w/ Appendicitis; Appendix "Normal"'
 )
-
 app_setting_mri <- list(
   `Operating hospital` = "Performed in Operating Hospital",
   `Outside facility` = "Performed at Outside Facility"
 )
-
 app_pathres <- list(
   `Consistent with appendicitis` = "Consistent with appendicitis",
   `Not consistent with appendicitis` = "Not consistent with appendicitis",
   `Indeterminate` = "Result is indeterminate or uncertain",
   `Other appendiceal pathology` = "Other appendiceal pathology",
   `Tumor/malignancy involving appendix` = "Tumor/malignancy involving appendix"
+)
+app_approach <- list(
+  `Hybrid` = c("Hybrid", "Hybrid w/ open assist","Hybrid w/ unplanned conversion to open"),
+  `Laparoscopic` = c("Laparoscopic","Laparoscopic w/ open assist","Laparoscopic w/ unplanned conversion to open"),
+  `Open` = c("Open","Open (planned)"),
+  `Other` = "Other",
+  `Other MIS` = c("Other MIS approach","Other MIS approach w/ open assist","Other MIS approach w/ unplanned conversion to open"),
+  `Robotic` = c("Robotic","Robotic w/ open assist","Robotic w/ unplanned conversion to open"),
+  `Endoscopic` = c("Endoscopic","Endoscopic w/ unplanned conversion to open"),
+  `SILS` = c("SILS", "SILS w/ open assist", "SILS w/ uplanned conversion to open")
 )
 
 #### ---- LONG COLUMNS ---- ####
@@ -158,4 +166,56 @@ conv_app_abscess <- function(vec) {
 #'
 conv_app_perforation <- function(vec) {
   stringi::stri_detect_regex(vec, "^perforation only|^perforation and abscess", opts_regex = list(case_insensitive = TRUE))
+}
+
+#' Parse entries that indicate an post-operative intraabdominal abscess
+#'
+#' @param vec a character vector to parse
+#'
+#' @details returns TRUE if case-insensitive "^yes-"
+#' is detected in the character vector.
+#'
+#' @return a logical vector
+#' @keywords internal
+#' @examples
+#' x <- c("No diagnosis of postoperative abscess", "Yes-percutaneous drainage",
+#' "Yes-no treatment or intervention", "Yes-IV antibiotics w/out procedural intervention",
+#' "Yes-oral/IM antibiotics w/out procedural intervention",
+#' "Yes-reoperation for surgical drainage, open", "Yes-reoperation for surgical drainage, minimally invasive",
+#' "Yes-transrectal/other endoscopic drainage", NA)
+#'
+#' cbind(x, nsqipr:::conv_app_intraabscess(x))
+#'
+conv_app_intraabscess <- function(vec) {
+  stringi::stri_detect_regex(vec, "^yes-", opts_regex = list(case_insensitive = TRUE))
+}
+
+#' Parse a column for type of intra-abdominal abscess intervention
+#'
+#' @param vec a character vector of values to convert
+#'
+#' @details NSQIP encodes the \code{app_intraabscess} column as having one of multiple interventions.
+#' This function extracts those values from character vectors and factors them.
+#'
+#' @return a factor vector
+#' @keywords internal
+#'
+#' @examples
+# x <- c("No diagnosis of postoperative abscess", "Yes-percutaneous drainage",
+# "Yes-no treatment or intervention", "Yes-IV antibiotics w/out procedural intervention",
+# "Yes-oral/IM antibiotics w/out procedural intervention",
+# "Yes-reoperation for surgical drainage, open", "Yes-reoperation for surgical drainage, minimally invasive",
+# "Yes-transrectal/other endoscopic drainage", NA)
+#
+# nsqipr:::conv_app_intraabscess_intervention(x)
+#'
+conv_app_intraabscess_intervention <- function(vec) {
+  vec %^% list(
+    `Percutaneous drainage` = "Yes-percutaneous drainage",
+    `IV antibiotics` = "Yes-IV antibiotics w/out procedural intervention",
+    `PO/IM antibiotics` = "Yes-oral/IM antibiotics w/out procedural intervention",
+    `Open reoperation` = "Yes-reoperation for surgical drainage, open",
+    `MIS reoperation` = "Yes-reoperation for surgical drainage, minimally invasive",
+    `Transrectal or other endoscopic drainage` = "Yes-transrectal/other endoscopic drainage"
+  )
 }
