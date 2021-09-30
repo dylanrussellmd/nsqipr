@@ -8,20 +8,31 @@
 #' @keywords internal
 #'
 nsqip_dir <- function(dir, csv, rds) {
-  files <- fs::dir_ls(dir)
-  cols <- collect_column_names(files)
+  files <- fs::dir_ls(dir) # Create list of files in directory
+  cols <- collect_column_names(files) # Create unique vector of column names in directory
   df <- lapply(files, function(file) {
-     conv_to_standard(file, cols, csv, rds)
+     conv_to_standard(file, cols, csv, rds) # Clean each file in the directory
   })
   usethis::ui_done('Successfully cleaned all files in {usethis::ui_path(dir)}.')
   invisible(NULL)
 }
 
+#' The top level data cleaning function
+#'
+#' Calls all cleaning functions in the correct order and outputs a clean file.
+#'
+#' @param file a text file containing data to be cleaned
+#' @param cols a character vector of column names
+#' @inheritParams nsqip_dir
+#'
+#' @keywords internal
+#'
 conv_to_standard <- function(file, cols, csv, rds) {
-  progbar <- pb(csv, rds)
-  filename <- fs::path_file(file)
+  progbar <- pb(csv, rds) # Creates a progress bar
+  filename <- fs::path_file(file) # Extracts the filename portion of the file path
   tick(progbar, "reading", filename, 0)
 
+  # Call all cleaning functions
   df <- data.table::fread(file, sep = "\t", colClasses = "character", showProgress = FALSE, na.strings = na_strings)
   setup(df, filename, progbar, cols)
   conv_type_cols(df, filename, progbar)
