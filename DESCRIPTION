@@ -33,6 +33,7 @@ Imports:
     stringi,
     rlang,
     purrr,
-    stringr
+    stringr,
+    tibble
 Depends: 
     R (>= 3.5.0)

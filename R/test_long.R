@@ -1,37 +1,60 @@
-make_cols_long <- function(df, ..., id.vars = "caseid", removeFALSE = FALSE) {
-  vars <- rlang::ensyms(...)
-  var.name <- as.character(vars[[1]])
-  variable.name <- paste("n", var.name, sep = "")
+make_cols_long <- function(df, ..., id.vars = "caseid", variable.name, na.cols) {
 
-  if(length(intersect(c(...), names(df))) > 0) {
+  measure.vars <- tibble::lst(...)
+  if(rlang::is_missing(variable.name)) variable.name <- paste("n", names(measure.vars)[[1]], sep = "")
+
+  if(check_if_in(c(...), df)) {
     melted <- suppressWarnings(data.table::melt(df, id.vars = id.vars,
-                                                measure.vars =  list(...),
+                                                measure.vars =  measure.vars, # a list where each element is a character vector of column names that are melted into one column
                                                 variable.name = variable.name,
-                                                value.name = as.character(vars),
+                                                value.name = names(measure.vars),
                                                 variable.factor = FALSE,
                                                 value.factor = TRUE))
 
-    # Extracts the number from the variable name column
-    data.table::set(melted, j = variable.name, value = stringi::stri_extract_all_regex(melted[[variable.name]], "\\d", simplify = TRUE))
+    extract_number_from_column(melted, variable.name)
+    convert_col_to_integer(melted, variable.name)
 
-    melted <- na.omit(melted, cols = var.name) # Removes all rows with NA values
+    if(!rlang::is_missing(na.cols)) melted <-na.omit(melted, na.cols) # Omit rows with NA values in the selected columns.
 
-    if(removeFALSE && is.logical(melted[[var.name]])) { # if removeFalse is TRUE and the var.name column is a logical
-      melted <- melted[melted[[var.name]], ] # Returns only those rows where an outcome occurred (removes those where outcome is FALSE)
-    }
-
-    data.table::set(melted, j = variable.name, value = as.integer(melted[[variable.name]])) # Converts the "n" column from character to integer.
     data.table::setorder(melted, caseid) # Orders the table by caseid
 
     return(melted)
   }
 }
 
+check_if_in <- function(cols, df) {
+  all(cols %qsin% names(df))
+}
+
+extract_number_from_column <- function(df, col) {
+  data.table::set(df, j = col, value = stringi::stri_extract_all_regex(df[[col]], "\\d+", simplify = TRUE))
+}
+
+convert_col_to_integer <- function(df, col) {
+  data.table::set(df, j = col, value = as.integer(df[[col]]))
+}
+
+make_amylase_long <- function(df) {
+
+  melted <- make_cols_long(df, amylase = pan_amylase_cols, id.vars = c("caseid", "damylase"), variable.name = "pod", na.cols = "amylase")
+
+  data.table::set(melted, j = c("damylase","pod"), value = list(
+    ifelse(melted[["pod"]] == 1, 1, melted[["damylase"]]),
+    NULL))
+
+  return(melted)
+}
+
 # Works so far on:
+# reop
+# readm
+# anesthes_other
+# amylase
+# cpt
 # hep_con_ablation
 # hep_invasive_type
 # hep_neotherapy
+# pan_percdrainage
 
 # TODO
-# - Validate this works on all long tables so far
-# - Maybe add in ability to customize the column names?
+# Need to create a robust testing environment before moving on.
