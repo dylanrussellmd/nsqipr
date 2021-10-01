@@ -8,7 +8,7 @@
 #' @keywords internal
 #'
 nsqip_dir <- function(dir, csv, rds) {
-  files <- fs::dir_ls(dir) # Create list of files in directory
+  files <- fs::dir_ls(dir, type = "file", glob = "*.txt") # Create list of files in directory
   cols <- collect_column_names(files) # Create unique vector of column names in directory
   df <- lapply(files, function(file) {
      conv_to_standard(file, cols, csv, rds) # Clean each file in the directory

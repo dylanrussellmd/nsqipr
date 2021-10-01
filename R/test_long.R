@@ -34,16 +34,16 @@ convert_col_to_integer <- function(df, col) {
   data.table::set(df, j = col, value = as.integer(df[[col]]))
 }
 
-make_amylase_long <- function(df) {
-
-  melted <- make_cols_long(df, amylase = pan_amylase_cols, id.vars = c("caseid", "damylase"), variable.name = "pod", na.cols = "amylase")
-
-  data.table::set(melted, j = c("damylase","pod"), value = list(
-    ifelse(melted[["pod"]] == 1, 1, melted[["damylase"]]),
-    NULL))
-
-  return(melted)
-}
+# make_amylase_long <- function(df) {
+#
+#   melted <- make_cols_long(df, amylase = pan_amylase_cols, id.vars = c("caseid", "damylase"), variable.name = "pod", na.cols = "amylase")
+#
+#   data.table::set(melted, j = c("damylase","pod"), value = list(
+#     ifelse(melted[["pod"]] == 1, 1, melted[["damylase"]]),
+#     NULL))
+#
+#   return(melted)
+# }
 
 # Works so far on:
 # reop
