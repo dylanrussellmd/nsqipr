@@ -10,9 +10,9 @@ testthat::test_that("nsqip acs_nsqip_puf 2018 works", {
 })
 
 testthat::test_that("nsqip acs_nsqip_puf 2005-2006 works", {
-  goldstandard <- readRDS(file.path("test-data/gs_acs_nsqip_puf_05_06.rds"))
-  nsqipr::nsqip(file.path("test-data/test_acs_nsqip_puf_05_06.txt"), csv = NA)
-  testthat::expect_equal(basename(fs::dir_ls("test-data/acs_nsqip_puf", type = "file")), "test_acs_nsqip_puf_05_06.txt")
+  goldstandard <- readRDS(file.path("test-data/ACS_NSQIP_PUF_05_06_vr1_clean.rds"))
+  nsqipr::nsqip(file.path("test-data/ACS_NSQIP_PUF_05_06_vr1.txt"), csv = NA)
+  testthat::expect_equal(basename(fs::dir_ls("test-data/acs_nsqip_puf", type = "file")), "ACS_NSQIP_PUF_05_06_vr1.txt")
   testthat::expect_equal(basename(fs::dir_ls("test-data/acs_nsqip_puf/rds", type = "file")),c("test_acs_nsqip_puf_05_06_anesthes_other.rds","test_acs_nsqip_puf_05_06_clean.rds","test_acs_nsqip_puf_05_06_cpt.rds","test_acs_nsqip_puf_05_06_readmission.rds","test_acs_nsqip_puf_05_06_reoperation.rds"))
   test <- readRDS(file.path("test-data/acs_nsqip_puf/rds/test_acs_nsqip_puf_05_06_clean.rds"))
   testthat::expect_identical(goldstandard, test)

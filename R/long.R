@@ -219,11 +219,12 @@ make_cpt_long <- function(df) {
                                                 variable.name = "nproc",
                                                 value.name = c("cpt","proc","wrvu"),
                                                 variable.factor = FALSE))
-    melted <- na.omit(melted, cols = "cpt")
-    data.table::set(melted, j = "nproc", value = as.integer(melted[["nproc"]])) # Needs to be based on variable name, not nproc
+    data.table::setorder(melted, caseid)
+    data.table::set(melted, j = "nproc", value = as.integer(melted[["nproc"]]))
     data.table::set(melted, j = "primarysurg", value = melted[["nproc"]] <= 11)
     data.table::set(melted, j = "nproc", value = data.table::rowid(melted[["caseid"]]))
-    data.table::setorder(melted, caseid)
+    melted <- na.omit(melted, cols = "cpt")
+
     return(melted)
   }
 }
