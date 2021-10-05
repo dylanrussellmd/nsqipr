@@ -279,18 +279,10 @@ check_comaneurograft <- function(df) {
 #' @examples
 #' x <- data.table::data.table(
 #' race = c("Hispanic, White", "White, Not of Hispanic Origin","Hispanic, Black",
-#' "Black, Not of Hispanic Origin", "American Indian or Alaska Native","Asian",
-#' "Native Hawaiian or Pacific Islander","Asian or Pacific Islander")
-#' )
-#'
-#' nsqipr:::conv_hispanic(x)
-#' x
-#'
-#' x <- data.table::data.table(
-#' race = c("Hispanic, White", "White, Not of Hispanic Origin","White","Hispanic, Black",
-#' "Black, Not of Hispanic Origin","Black or African American", "American Indian or Alaska Native",
-#' "Asian", "Native Hawaiian or Pacific Islander","Asian or Pacific Islander"),
-#' ethnicity_hispanic = c(NA, NA, "yes", NA, NA, NA, NA, NA, NA, NA)
+#' "Black, Not of Hispanic Origin", "Hispanic, Color Unknown", "White", "Black or African American",
+#' "American Indian or Alaska Native", "Asian", "Native Hawaiian or Pacific Islander",
+#' "Asian or Pacific Islander", NA),
+#' ethnicity_hispanic = c(NA, NA, NA, NA, NA, "Yes", "No", "Yes", "No", NA, NA, "Yes")
 #' )
 #'
 #' nsqipr:::conv_hispanic(x)
@@ -298,22 +290,23 @@ check_comaneurograft <- function(df) {
 #'
 conv_hispanic <- function(df) {
   if("ethnicity_hispanic" %chin% names(df)) {
-    vec <- conv_hispanic_helper(df)
+    vec <- ifelse(!is.na(df[["ethnicity_hispanic"]]),
+                  conv_yesno(df[["ethnicity_hispanic"]]),
+                  conv_hispanic_helper(df))
   } else {
-    vec <- stringi::stri_detect_regex(df[["race"]], "^hispanic,", opts_regex = list(case_insensitive = TRUE))
+    vec <- ifelse(stringi::stri_detect_regex(df[["race"]], "hispanic", opts_regex = list(case_insensitive = TRUE)),
+                  stringi::stri_detect_regex(df[["race"]], "^hispanic,", opts_regex = list(case_insensitive = TRUE)),
+                  NA)
   }
   data.table::set(df, j = "ethnicity_hispanic", value = vec)
 }
 
 #' @describeIn conv_hispanic A helper function for updating the \code{ethnicity_hispanic} column
 conv_hispanic_helper <- function(df) {
-  ifelse((df[["race"]] %chin% c("White","Black or African American") | is.na(df[["race"]])), # only PUFs after RACE_NEW was introduced should have these possible races.
-         conv_yesno(df[["ethnicity_hispanic"]]),
-         ifelse(df[["race"]] %chin% c("American Indian or Alaska Native","Asian","Native Hawaiian or Pacific Islander","Asian or Pacific Islander"),
-                FALSE,
-                stringi::stri_detect_regex(df[["race"]], "^hispanic,", opts_regex = list(case_insensitive = TRUE))))
+  ifelse(stringi::stri_detect_regex(df[["race"]], "hispanic", opts_regex = list(case_insensitive = TRUE)),
+         stringi::stri_detect_regex(df[["race"]], "^hispanic,", opts_regex = list(case_insensitive = TRUE)),
+         NA)
 }
-
 
 #' Convert race to factor
 #'
@@ -448,7 +441,7 @@ when_dyspnea <- function(vec) {
 #' @details NSQIP encodes the \code{sepsis} column as either "sirs", "sepsis", "septic shock", or "none.
 #' This function factors the vector for the levels "SIRS", "Sepsis", and "Septic shock".
 #'
-#' \bold{NOTE}: \code{prsepis} is spelled illogically (as it is originally spelled in the NSQIP database).
+#' \bold{NOTE}: \code{prsepis} is spelled incorrectly (as it is originally spelled in the NSQIP database).
 #' It is not spelled \code{prsepsis}.
 #'
 #' @return a factor vector

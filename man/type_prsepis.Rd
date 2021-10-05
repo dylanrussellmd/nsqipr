@@ -19,7 +19,7 @@ Parse a column for type of sepsis
 NSQIP encodes the \code{sepsis} column as either "sirs", "sepsis", "septic shock", or "none.
 This function factors the vector for the levels "SIRS", "Sepsis", and "Septic shock".
 
-\bold{NOTE}: \code{prsepis} is spelled illogically (as it is originally spelled in the NSQIP database).
+\bold{NOTE}: \code{prsepis} is spelled incorrectly (as it is originally spelled in the NSQIP database).
 It is not spelled \code{prsepsis}.
 }
 \examples{
