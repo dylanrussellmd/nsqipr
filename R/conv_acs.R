@@ -14,7 +14,6 @@ conv_acs_cols <- function(df, filename) {
   conv_hispanic(df)
   conv_(df, "race", conv_race)
   conv_(df, "age", conv_age)
-  conv_(df, "sex", conv_sex)
   conv_(df, "inout", conv_inout)
   conv_(df, "diabetes", insulin, newcol = "insulin")
   conv_(df, "diabetes", conv_notno)
@@ -29,6 +28,9 @@ conv_acs_cols <- function(df, filename) {
 }
 
 #### ---- FACTOR LISTS (THESE DEFINE THE FACTOR LEVELS FOR VARIOUS COLUMNS) ---- ####
+sex <- list(Male = "male",
+            Female = "female",
+            `Non-binary` = "non-binary")
 fnstatus1 <- list(Independent = "Independent",
                  `Partially dependent` = "Partially Dependent",
                  `Totally dependent` = "Totally Dependent")
@@ -347,22 +349,6 @@ conv_race <- function(vec, pacific = "asian") {
                     "hawaiian" = hawaiian)
 
   vec %^% levels
-}
-
-#' Convert sex to logical
-#'
-#' @param vec a character vector of values to convert
-#'
-#' @details if "male", will result in TRUE. If given NA, will return NA.
-#'
-#' @return a logical vector
-#' @keywords internal
-#'
-#' @examples
-#'  nsqipr:::conv_sex(c("male","MALE","female","FEMALE",NA))
-#'
-conv_sex <- function(vec) {
-  stringi::stri_detect_regex(vec, "^male", opts_regex = list(case_insensitive = TRUE))
 }
 
 #' Convert inout to logical
