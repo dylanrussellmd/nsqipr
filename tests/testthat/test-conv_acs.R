@@ -1,7 +1,3 @@
-testthat::test_that("conv_sex works", {
-  testthat::expect_equal(conv_sex(c("male","MALE","female","FEMALE",NA)), c(TRUE, TRUE, FALSE, FALSE, NA))
-})
-
 testthat::test_that("conv_age works", {
   testthat::expect_equal(conv_age(c("18","45","90+",NA)), c(18,45,90,NA))
 })

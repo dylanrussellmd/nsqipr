@@ -17,7 +17,8 @@ Suggests:
     knitr,
     rmarkdown,
     testthat,
-    spelling
+    spelling,
+    withr
 VignetteBuilder: knitr
 URL: https://github.com/dylanrussellmd/nsqipr, https://dylanrussellmd.github.io/nsqipr/
 BugReports: https://github.com/dylanrussellmd/nsqipr/issues
