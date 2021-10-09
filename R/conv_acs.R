@@ -103,7 +103,8 @@ dischdest <- list(`Skilled care, not home` = "Skilled Care, Not Home",
 anesthes <- list(`Epidural` = "Epidural",
                  `General` = "General",
                  `Local` = "Local",
-                 `Monitored anesthesia care` = c("MAC/IV Sedation","Monitored Anesthesia Care"),
+                 `Monitored anesthesia care` = c("MAC/IV Sedation","Monitored Anesthesia Care",
+                                                 "Monitored Anesthesia Care/IV Sedation", "Monitored anesthesia care/IV sedation"),
                  `None` = "None",
                  `Other` = "Other",
                  `Regional` = "Regional",
@@ -237,7 +238,6 @@ make_anesthes_other_cols <- function(df) {
 #'
 #' @examples
 #' x <- data.table::data.table(
-#' coma = c(TRUE, TRUE, FALSE),
 #' cnscoma = c(TRUE, TRUE, FALSE),
 #' ncnscoma = c(1,2,3),
 #' dcnscoma = c(1,2,3),
@@ -257,7 +257,7 @@ make_anesthes_other_cols <- function(df) {
 #'
 check_comaneurograft <- function(df) {
   if(unique(df[["pufyear"]]) > 2010) {
-    cols <- c("coma","cnscoma","ncnscoma","dcnscoma","neurodef","nneurodef","dneurodef","othgrafl","nothgrafl","dothgrafl")
+    cols <- c("cnscoma","ncnscoma","dcnscoma","neurodef","nneurodef","dneurodef","othgrafl","nothgrafl","dothgrafl")
     for(j in intersect(cols, names(df))) data.table::set(df, j = j, value = NA)
   }
   invisible(df)
