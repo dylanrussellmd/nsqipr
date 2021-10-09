@@ -131,6 +131,7 @@ surgspec <- list(`Cardiac surgery` = "Cardiac Surgery",
                  `Ophthalmology` = "Ophthalmology",
                  `Podiatry` = "Podiatry",
                  `Oral surgery` = "Oral Surgery",
+                 `Obstetrics` = "Obstetrics",
                  `Other` = "Other")
 
 #### ---- LONG COLUMNS ---- ####
