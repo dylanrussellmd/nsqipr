@@ -215,9 +215,9 @@ make_anesthes_other_long <- function(df) {
 make_cpt_long <- function(df) {
   if(all(cpt_cols %qsin% names(df))) {
     melted <- suppressWarnings(data.table::melt(df, id.vars = "caseid",
-                                                measure.vars = list(cpt, proc, wrvu),
+                                                measure.vars = list(cpt, proc, workrvu),
                                                 variable.name = "nproc",
-                                                value.name = c("cpt","proc","wrvu"),
+                                                value.name = c("cpt","proc","workrvu"),
                                                 variable.factor = FALSE))
     data.table::setorder(melted, caseid)
     data.table::set(melted, j = "nproc", value = as.integer(melted[["nproc"]]))

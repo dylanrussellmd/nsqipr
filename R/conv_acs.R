@@ -159,8 +159,8 @@ anesthes_other_cols = paste("anesthes_other", 1:8, sep = "")
 
 proc <- c("prncptx", paste("otherproc", 1:10, sep = ""), paste("concurr", 1:10, sep = ""))
 cpt <- c("cpt", paste("othercpt", 1:10, sep = ""), paste("concpt", 1:10, sep = ""))
-wrvu <- c("workrvu", paste("otherwrvu", 1:10, sep = ""), paste("conwrvu", 1:10, sep = ""))
-cpt_cols <- c(proc, cpt, wrvu)
+workrvu <- c("workrvu", paste("otherwrvu", 1:10, sep = ""), paste("conwrvu", 1:10, sep = ""))
+cpt_cols <- c(proc, cpt, workrvu)
 
 #### ---- FUNCTIONS ---- ####
 
