@@ -98,7 +98,7 @@ make_reop_long <- function(df, removeFALSE = FALSE) {
 # readmunrelsusp3 = c("Reason", NA, NA, NA),
 # readmunrelicd93 = c("111", NA, NA, NA),
 # readmunrelicd103 = c("1111",NA,NA,NA),
-# readmission4 = c(TRUE, TRUE, FALSE, NA),
+# readmission4 = c(TRUE, TRUE, NA, NA),
 # readmpodays4 = c(10, 7, NA, NA),
 # readmrelated4 = c(TRUE, FALSE, NA, NA),
 # readmsuspreason4 = c("Reason", "Reason", NA, NA),
@@ -125,18 +125,20 @@ make_reop_long <- function(df, removeFALSE = FALSE) {
 make_readm_long <- function(df, removeFALSE = FALSE) {
   if(length(intersect(readm_cols, names(df))) > 0) {
     melted <- suppressWarnings(data.table::melt(df, id.vars = "caseid",
-                               measure.vars = list(readmission, readmpodays, readmrelated, readmsuspreason, readmrelicd9,
-                                                   readmrelicd10, unplannedreadmission, readmunrelsusp, readmunrelicd9, readmunrelicd10),
+                               measure.vars = list(readmission, readmpodays, unplannedreadmission, readmrelated, readmsuspreason, readmunrelsusp, readmrelicd9,
+                                                   readmrelicd10, readmunrelicd9, readmunrelicd10),
                                variable.name = "nreadmission",
-                               value.name = c("readmission","readmpodays","readmrelated","readmsuspreason","readmrelicd9","readmrelicd10",
-                                              "unplannedreadmission","readmunrelsusp","readmunrelicd9",'readmunrelicd10'),
+                               value.name = c("readmission","readmpodays", "unplannedreadmission", "readmrelated","readmsuspreason", "readmunrelsusp",
+                                              "readmrelicd9","readmrelicd10", "readmunrelicd9",'readmunrelicd10'),
+                               #na.rm = TRUE,
                                variable.factor = FALSE,
                                value.factor = TRUE))
+
     melted <- na.omit(melted, cols = "readmission")
     if(removeFALSE) {
       melted <- melted[melted[["readmission"]], ]
     }
-    data.table::set(melted, j = "nreadmission", value = as.integer(melted[["nreadmission"]]))
+    melted[, nreadmission := data.table::rowid(caseid)]
     data.table::setorder(melted, caseid)
     return(melted)
   }
