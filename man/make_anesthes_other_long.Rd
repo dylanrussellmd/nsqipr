@@ -2,20 +2,30 @@
 % Please edit documentation in R/long.R
 \name{make_anesthes_other_long}
 \alias{make_anesthes_other_long}
-\title{Convert anesthes_other column from wide to long format}
+\title{Convert readmission columns from wide to long format}
 \usage{
 make_anesthes_other_long(df)
 }
 \arguments{
 \item{df}{a data.table}
+
+\item{removeFALSE}{a logical indicating whether to remove rows where \code{reoperation} is FALSE}
 }
 \value{
 a data.table
+
+a data.table
 }
 \description{
-Convert anesthes_other column from wide to long format
+Convert readmission columns from wide to long format
 }
 \details{
+The data from the data table is melted into a long format with \code{caseid} as the ID variable to allow
+rejoining to the main table. After melting, rows with missing values are omitted to reduce the size of the table.
+Rows where \code{readmission} are false may also be removed with \code{removeFALSE} to reduce table size if
+desired, but note this results in an inability to a clarify a known FALSE ("did not have a readmission") from
+a missing value ("do not know if there was a readmission").
+
 The data contained in the 8 "anesthes_other" columns created by \code{make_anesthes_other_cols}
 are converted into a long format.
 
@@ -29,6 +39,9 @@ Note that this does not alter the "anesthes" column or include the anesthetic te
 "anesthes" column in the resulting "anesthes_other" data table.
 }
 \examples{
+
+Convert anesthes_other column from wide to long format
+
 x <- data.table::data.table(caseid = c(1,2,3,4),
 anesthes_other = c("General","General, Spinal", "General, Spinal, MAC/IV Sedation", NA),
 anesthes_other1 = c("General", "General", "General", NA),

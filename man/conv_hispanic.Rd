@@ -3,7 +3,7 @@
 \name{conv_hispanic}
 \alias{conv_hispanic}
 \alias{conv_hispanic_helper}
-\title{Add or update hispanic ethnicity column}
+\title{Add or update Hispanic ethnicity column}
 \usage{
 conv_hispanic(df)
 
@@ -16,7 +16,7 @@ conv_hispanic_helper(df)
 a data table
 }
 \description{
-Add or update hispanic ethnicity column
+Add or update Hispanic ethnicity column
 }
 \details{
 \code{ethnicity_hispanic} was not added until the 2008 NSQIP PUF when \code{race} was revised to

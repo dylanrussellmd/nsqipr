@@ -22,7 +22,7 @@ conv_acs_cols <- function(df, filename) {
   conv_(df, "prsepis", type_prsepis, newcol = "type_prsepis")
   conv_(df, "prsepis", conv_notno)
   check_comaneurograft(df)
-  make_readm_cols(df)
+  #make_readm_cols(df)
   make_reop_cols(df)
   make_anesthes_other_cols(df)
 }
@@ -145,7 +145,6 @@ unplannedreadmission <- paste("unplannedreadmission", 1:5, sep = "")
 readmunrelsusp <- paste("readmunrelsusp", 1:5, sep = "")
 readmunrelicd9 <- paste("readmunrelicd9", 1:5, sep = "")
 readmunrelicd10 <- paste("readmunrelicd10", 1:5, sep = "")
-readm_cols <- c(readmission, readmpodays, readmrelated, readmsuspreason, readmrelicd9, readmrelicd10, unplannedreadmission, readmunrelsusp, readmunrelicd9, readmunrelicd10)
 
 reoperations <- paste("reoperation", 1:3, sep = "")
 retorpodays <- c("retorpodays","retor2podays", "retor3podays")
@@ -164,24 +163,79 @@ cpt_cols <- c(proc, cpt, workrvu)
 
 #### ---- FUNCTIONS ---- ####
 
-#' Create readmission columns for long conversion
+#' Convert readmission columns from wide to long format
 #'
-#' @param df a data table to add the columns to
+#' @param df a data.table
+#' @param removeFALSE a character vector indicating from which columns to remove  rows with a FALSE value.
 #'
-#' @details First checks if the data table contains any of the readmission columns.
-#' If so, the rest are created as needed. New columns are set to a value of NA.
+#' @details The data from the data table is melted into a long format with \code{caseid} as the ID variable to allow
+#' rejoining to the main table. After melting, rows with missing values are omitted to reduce the size of the table.
+#' Rows where \code{readmission} are false may also be removed with \code{removeFALSE = "readmission"} to reduce table size if
+#' desired, but note this results in an inability to a clarify a known FALSE ("did not have a readmission") from
+#' a missing value ("do not know if there was a readmission").
+#'
+#' @return a data.table
 #'
 #' @keywords internal
-#'
 #' @examples
-#' x <- data.table::data.table(readmission1 = TRUE)
-#' nsqipr:::make_readm_cols(x)
-#' x
+#' x <- data.table::data.table(caseid = c(1,2,3,4),
+#' readmission1 = c(TRUE, TRUE, FALSE, NA),
+#' readmpodays1 = c(10, 7, NA, NA),
+#' readmrelated1 = c(TRUE, FALSE, NA, NA),
+#' readmsuspreason1 = c("Reason", "Reason", NA, NA),
+#' readmrelicd91 = c("111", "222", NA, NA),
+#' readmrelicd101 = c("1111","2222", NA, NA),
+#' unplannedreadmission1 = c(TRUE, FALSE, NA, NA),
+#' readmunrelsusp1 = c("Reason", NA, NA, NA),
+#' readmunrelicd91 = c("111", NA, NA, NA),
+#' readmunrelicd101 = c("1111",NA,NA,NA),
+#' readmission2 = c(TRUE, TRUE, FALSE, NA),
+#' readmpodays2 = c(10, 7, NA, NA),
+#' readmrelated2 = c(TRUE, FALSE, NA, NA),
+#' readmsuspreason2 = c("Reason", "Reason", NA, NA),
+#' readmrelicd92 = c("111", "222", NA, NA),
+#' readmrelicd102 = c("1111","2222", NA, NA),
+#' unplannedreadmission2 = c(TRUE, FALSE, NA, NA),
+#' readmunrelsusp2 = c("Reason", NA, NA, NA),
+#' readmunrelicd92 = c("111", NA, NA, NA),
+#' readmunrelicd102 = c("1111",NA,NA,NA),
+#' readmission3 = c(TRUE, TRUE, FALSE, NA),
+#' readmpodays3 = c(10, 7, NA, NA),
+#' readmrelated3 = c(TRUE, FALSE, NA, NA),
+#' readmsuspreason3 = c("Reason", "Reason", NA, NA),
+#' readmrelicd93 = c("111", "222", NA, NA),
+#' readmrelicd103 = c("1111","2222", NA, NA),
+#' unplannedreadmission3 = c(TRUE, FALSE, NA, NA),
+#' readmunrelsusp3 = c("Reason", NA, NA, NA),
+#' readmunrelicd93 = c("111", NA, NA, NA),
+#' readmunrelicd103 = c("1111",NA,NA,NA),
+#' readmission4 = c(TRUE, TRUE, NA, NA),
+#' readmpodays4 = c(10, 7, NA, NA),
+#' readmrelated4 = c(TRUE, FALSE, NA, NA),
+#' readmsuspreason4 = c("Reason", "Reason", NA, NA),
+#' readmrelicd94 = c("111", "222", NA, NA),
+#' readmrelicd104 = c("1111","2222", NA, NA),
+#' unplannedreadmission4 = c(TRUE, FALSE, NA, NA),
+#' readmunrelsusp4 = c("Reason", NA, NA, NA),
+#' readmunrelicd94 = c("111", NA, NA, NA),
+#' readmunrelicd104 = c("1111",NA,NA,NA),
+#' readmission5 = c(TRUE, TRUE, FALSE, NA),
+#' readmpodays5 = c(10, 7, NA, NA),
+#' readmrelated5 = c(TRUE, FALSE, NA, NA),
+#' readmsuspreason5 = c("Reason", "Reason", NA, NA),
+#' readmrelicd95 = c("111", "222", NA, NA),
+#' readmrelicd105 = c("1111","2222", NA, NA),
+#' unplannedreadmission5 = c(TRUE, FALSE, NA, NA),
+#' readmunrelsusp5 = c("Reason", NA, NA, NA),
+#' readmunrelicd95 = c("111", NA, NA, NA),
+#' readmunrelicd105 = c("1111",NA,NA,NA))
 #'
-make_readm_cols <- function(df) {
-  if(length(intersect(readm_cols, names(df))) > 0) {
-    for(j in setdiff(readm_cols, names(df))) data.table::set(df, j = j, value = NA)
-  }
+#' nsqipr:::make_readm_long(x)
+#' nsqipr:::make_readm_long(x, "readmission")
+#'
+make_readm_long <- function(df, removeFALSE) {
+  make_cols_long(df, readmission, readmpodays, unplannedreadmission, readmrelated, readmsuspreason, readmunrelsusp, readmrelicd9, readmrelicd10,  readmunrelicd9, readmunrelicd10,
+                 na.cols = "readmission", removeFALSE = rlang::maybe_missing(removeFALSE, default = rlang::missing_arg()), reorder = TRUE)
 }
 
 #' Create reoperation columns for long conversion
@@ -229,7 +283,7 @@ make_anesthes_other_cols <- function(df) {
 
 #' Remove coma, neuro deficit, and graft columns after 2010
 #'
-#' @param df a data.table from which to remove the coma, neuro deficit, and graft columns
+#' @param df a data.table from which to remove the coma, neuro deficit, and graft outcome columns
 #'
 #' @details According to NSQIP, Graft failure, Coma, and Peripheral Nerve Injury should not be
 #' considered accurate for any PUF after 2010 (see the \link[https://www.facs.org/quality-programs/acs-nsqip/participant-use]{NSQIP} website).
@@ -264,7 +318,7 @@ check_comaneurograft <- function(df) {
   invisible(df)
 }
 
-#' Add or update hispanic ethnicity column
+#' Add or update Hispanic ethnicity column
 #'
 #' @param df a data.table to add to or update with an \code{ethnicity_hispanic} column
 #'

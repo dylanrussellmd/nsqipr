@@ -7,7 +7,7 @@
 check_comaneurograft(df)
 }
 \arguments{
-\item{df}{a data.table from which to remove the coma, neuro deficit, and graft columns}
+\item{df}{a data.table from which to remove the coma, neuro deficit, and graft outcome columns}
 }
 \value{
 a data.table
@@ -21,7 +21,6 @@ considered accurate for any PUF after 2010 (see the \link[https://www.facs.org/q
 }
 \examples{
 x <- data.table::data.table(
-coma = c(TRUE, TRUE, FALSE),
 cnscoma = c(TRUE, TRUE, FALSE),
 ncnscoma = c(1,2,3),
 dcnscoma = c(1,2,3),

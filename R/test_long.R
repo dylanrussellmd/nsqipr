@@ -1,20 +1,26 @@
-make_cols_long <- function(df, ..., id.vars = "caseid", variable.name, na.cols) {
+make_cols_long <- function(df, ..., variable.name, na.cols, removeFALSE, reorder = FALSE) {
 
   measure.vars <- tibble::lst(...)
-  if(rlang::is_missing(variable.name)) variable.name <- paste("n", names(measure.vars)[[1]], sep = "")
 
   if(check_if_in(c(...), df)) {
-    melted <- suppressWarnings(data.table::melt(df, id.vars = id.vars,
+
+    for(j in setdiff(c(...), names(df))) data.table::set(df, j = j, value = NA)
+
+    if(rlang::is_missing(variable.name)) variable.name <- paste("n", names(measure.vars)[[1]], sep = "")
+
+    melted <- suppressWarnings(data.table::melt(df, id.vars = "caseid",
                                                 measure.vars =  measure.vars, # a list where each element is a character vector of column names that are melted into one column
                                                 variable.name = variable.name,
                                                 value.name = names(measure.vars),
                                                 variable.factor = FALSE,
                                                 value.factor = TRUE))
 
-    extract_number_from_column(melted, variable.name)
+    #extract_number_from_column(melted, variable.name)
     convert_col_to_integer(melted, variable.name)
 
-    if(!rlang::is_missing(na.cols)) melted <-na.omit(melted, na.cols) # Omit rows with NA values in the selected columns.
+    if(!rlang::is_missing(na.cols)) melted <- na.omit(melted, na.cols) # Omit rows with NA values in the selected columns.
+    if(!rlang::is_missing(removeFALSE)) melted <- melted[melted[[removeFALSE]], ] # Remove rows with FALSE in the selected column.
+    if(reorder) melted[, (variable.name) := data.table::rowid(caseid)] # After either NAs, FALSEs, or both are removed, reorder the variable.name in sequential order, grouped by caseid.
 
     data.table::setorder(melted, caseid) # Orders the table by caseid
 
@@ -23,7 +29,7 @@ make_cols_long <- function(df, ..., id.vars = "caseid", variable.name, na.cols) 
 }
 
 check_if_in <- function(cols, df) {
-  all(cols %qsin% names(df))
+  any(cols %qsin% names(df))
 }
 
 extract_number_from_column <- function(df, col) {
@@ -55,6 +61,3 @@ convert_col_to_integer <- function(df, col) {
 # hep_invasive_type
 # hep_neotherapy
 # pan_percdrainage
-
-# TODO
-# Need to create a robust testing environment before moving on.

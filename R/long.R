@@ -122,27 +122,29 @@ make_reop_long <- function(df, removeFALSE = FALSE) {
 # nsqipr:::make_readm_long(x)
 # nsqipr:::make_readm_long(x, TRUE)
 #'
-make_readm_long <- function(df, removeFALSE = FALSE) {
-  if(length(intersect(readm_cols, names(df))) > 0) {
-    melted <- suppressWarnings(data.table::melt(df, id.vars = "caseid",
-                               measure.vars = list(readmission, readmpodays, unplannedreadmission, readmrelated, readmsuspreason, readmunrelsusp, readmrelicd9,
-                                                   readmrelicd10, readmunrelicd9, readmunrelicd10),
-                               variable.name = "nreadmission",
-                               value.name = c("readmission","readmpodays", "unplannedreadmission", "readmrelated","readmsuspreason", "readmunrelsusp",
-                                              "readmrelicd9","readmrelicd10", "readmunrelicd9",'readmunrelicd10'),
-                               #na.rm = TRUE,
-                               variable.factor = FALSE,
-                               value.factor = TRUE))
-
-    melted <- na.omit(melted, cols = "readmission")
-    if(removeFALSE) {
-      melted <- melted[melted[["readmission"]], ]
-    }
-    melted[, nreadmission := data.table::rowid(caseid)]
-    data.table::setorder(melted, caseid)
-    return(melted)
-  }
-}
+# make_readm_long <- function(df, removeFALSE = FALSE) {
+#   if(length(intersect(readm_cols, names(df))) > 0) {
+#
+#     for(j in setdiff(readm_cols, names(df))) data.table::set(df, j = j, value = NA)
+#
+#     melted <- suppressWarnings(data.table::melt(df, id.vars = "caseid",
+#                                measure.vars = list(readmission, readmpodays, unplannedreadmission, readmrelated, readmsuspreason, readmunrelsusp, readmrelicd9,
+#                                                    readmrelicd10, readmunrelicd9, readmunrelicd10),
+#                                variable.name = "nreadmission",
+#                                value.name = c("readmission","readmpodays", "unplannedreadmission", "readmrelated","readmsuspreason", "readmunrelsusp",
+#                                               "readmrelicd9","readmrelicd10", "readmunrelicd9",'readmunrelicd10'),
+#                                variable.factor = FALSE,
+#                                value.factor = TRUE))
+#
+#     melted <- na.omit(melted, cols = "readmission")
+#     if(removeFALSE) {
+#       melted <- melted[melted[["readmission"]], ]
+#     }
+#     melted[, nreadmission := data.table::rowid(caseid)]
+#     data.table::setorder(melted, caseid)
+#     return(melted)
+#   }
+# }
 
 #' Convert anesthes_other column from wide to long format
 #'
