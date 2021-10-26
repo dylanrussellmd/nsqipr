@@ -2,7 +2,7 @@
 % Please edit documentation in R/long.R
 \name{make_cpt_long}
 \alias{make_cpt_long}
-\title{Create a CPT, Procedure Name, and WRVU Long Table}
+\title{Convert anesthes_other column from wide to long format}
 \usage{
 make_cpt_long(df)
 }
@@ -11,11 +11,25 @@ make_cpt_long(df)
 }
 \value{
 a data.table
+
+a data.table
 }
 \description{
-Create a CPT, Procedure Name, and WRVU Long Table
+Convert anesthes_other column from wide to long format
 }
 \details{
+The data contained in the 8 "anesthes_other" columns created by \code{make_anesthes_other_cols}
+are converted into a long format.
+
+If "anesthes_other" is a column in \code{df}, it will be broken into a long format with
+\code{caseid} as the ID variable for joining back to the main table. This is because many of the NSQIP
+PUF datasets input multiple values into a single "anesthes_other" column. For example,
+"General, Spinal, MAC/IV Sedation" may be an entry in the raw data set. This makes
+parsing for patients that received "Spinal" anesthesia at any point, for example, very difficult.
+
+Note that this does not alter the "anesthes" column or include the anesthetic technique stored in the
+"anesthes" column in the resulting "anesthes_other" data table.
+
 If all of the requisite columns are present in a data.table, this function
 will create a long format data table that contains the CPT, procedure name, and WRVU
 of each procedure each patient underwent. \code{caseid} is retained in order to allow joining
@@ -28,5 +42,22 @@ In order to distinguish between an "other" procedure and a "concurrent" procedur
 to a "concurrent" procedure. This variable is so named because the only difference between an
 "other" procedure and a "concurrent" procedure is that the latter is a procedure not performed
 by the primary surgical team.
+}
+\examples{
+x <- data.table::data.table(caseid = c(1,2,3,4),
+anesthes_other = c("General","General, Spinal", "General, Spinal, MAC/IV Sedation", NA),
+anesthes_other1 = c("General", "General", "General", NA),
+anesthes_other2 = c(NA, "Spinal", "Spinal", NA),
+anesthes_other3 = c(NA, NA, "MAC/IV Sedation", NA),
+anesthes_other4 = c(NA, NA, NA, NA),
+anesthes_other5 = c(NA, NA, NA, NA),
+anesthes_other6 = c(NA, NA, NA, NA),
+anesthes_other7 = c(NA, NA, NA, NA),
+anesthes_other8 = c(NA, NA, NA, NA))
+
+nsqipr:::make_anesthes_other_long(x)
+
+Create a CPT, Procedure Name, and WRVU Long Table
+
 }
 \keyword{internal}

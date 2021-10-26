@@ -22,9 +22,6 @@ conv_acs_cols <- function(df, filename) {
   conv_(df, "prsepis", type_prsepis, newcol = "type_prsepis")
   conv_(df, "prsepis", conv_notno)
   check_comaneurograft(df)
-  #make_readm_cols(df)
-  make_reop_cols(df)
-  make_anesthes_other_cols(df)
 }
 
 #### ---- FACTOR LISTS (THESE DEFINE THE FACTOR LEVELS FOR VARIOUS COLUMNS) ---- ####
@@ -109,14 +106,6 @@ anesthes <- list(`Epidural` = "Epidural",
                  `Other` = "Other",
                  `Regional` = "Regional",
                  `Spinal` = "Spinal")
-anesthes_other1 <- anesthes
-anesthes_other2 <- anesthes
-anesthes_other3 <- anesthes
-anesthes_other4 <- anesthes
-anesthes_other5 <- anesthes
-anesthes_other6 <- anesthes
-anesthes_other7 <- anesthes
-anesthes_other8 <- anesthes
 surgspec <- list(`Cardiac surgery` = "Cardiac Surgery",
                  `General surgery` = "General Surgery",
                  `Gynecology` = "Gynecology",
@@ -146,15 +135,14 @@ readmunrelsusp <- paste("readmunrelsusp", 1:5, sep = "")
 readmunrelicd9 <- paste("readmunrelicd9", 1:5, sep = "")
 readmunrelicd10 <- paste("readmunrelicd10", 1:5, sep = "")
 
-reoperations <- paste("reoperation", 1:3, sep = "")
+reoperation <- paste("reoperation", 1:3, sep = "")
 retorpodays <- c("retorpodays","retor2podays", "retor3podays")
-reoporcpt1 <- c("reoporcpt1","reopor2cpt1","reopor3cpt1")
+reoporcpt <- c("reoporcpt1","reopor2cpt1","reopor3cpt1")
 retorrelated <- c("retorrelated","retor2related","retor3related")
-reoporicd91 <- c("reoporicd91","reopor2icd91","reopor3icd91")
+reoporicd9 <- c("reoporicd91","reopor2icd91","reopor3icd91")
 reoporicd10 <- c("reopor1icd101", "reopor2icd101", "reopor3icd101")
-reop_cols <- c(reoperations, retorpodays, reoporcpt1, retorrelated, reoporicd91, reoporicd10)
 
-anesthes_other_cols = paste("anesthes_other", 1:8, sep = "")
+anesthes_other <- paste("anesthes_other", 1:8, sep = "")
 
 proc <- c("prncptx", paste("otherproc", 1:10, sep = ""), paste("concurr", 1:10, sep = ""))
 cpt <- c("cpt", paste("othercpt", 1:10, sep = ""), paste("concpt", 1:10, sep = ""))
@@ -166,11 +154,11 @@ cpt_cols <- c(proc, cpt, workrvu)
 #' Convert readmission columns from wide to long format
 #'
 #' @param df a data.table
-#' @param removeFALSE a character vector indicating from which columns to remove  rows with a FALSE value.
+#' @param removeFALSE a logical vector indicating whether or not to remove rows with a FALSE value.
 #'
 #' @details The data from the data table is melted into a long format with \code{caseid} as the ID variable to allow
 #' rejoining to the main table. After melting, rows with missing values are omitted to reduce the size of the table.
-#' Rows where \code{readmission} are false may also be removed with \code{removeFALSE = "readmission"} to reduce table size if
+#' Rows where \code{readmission} are false may also be removed with \code{removeFALSE} to reduce table size if
 #' desired, but note this results in an inability to a clarify a known FALSE ("did not have a readmission") from
 #' a missing value ("do not know if there was a readmission").
 #'
@@ -231,54 +219,88 @@ cpt_cols <- c(proc, cpt, workrvu)
 #' readmunrelicd105 = c("1111",NA,NA,NA))
 #'
 #' nsqipr:::make_readm_long(x)
-#' nsqipr:::make_readm_long(x, "readmission")
+#' nsqipr:::make_readm_long(x, TRUE)
 #'
-make_readm_long <- function(df, removeFALSE) {
+make_readm_long <- function(df, removeFALSE = FALSE) {
+  removeFALSE <- ifelse(removeFALSE, "readmission", rlang::missing_arg()) # Allows removeFALSE to be used as a logical switch
   make_cols_long(df, readmission, readmpodays, unplannedreadmission, readmrelated, readmsuspreason, readmunrelsusp, readmrelicd9, readmrelicd10,  readmunrelicd9, readmunrelicd10,
-                 na.cols = "readmission", removeFALSE = rlang::maybe_missing(removeFALSE, default = rlang::missing_arg()), reorder = TRUE)
+                 na.cols = "readmission",
+                 removeFALSE = removeFALSE,
+                 reorder = TRUE)
 }
 
-#' Create reoperation columns for long conversion
+#' Convert reoperation columns from wide to long format
 #'
-#' @param df a data table to add the columns to
+#' @param df a data.table
+#' @param removeFALSE a logical vector indicating whether or not to remove rows with a FALSE value.
 #'
-#' @details First checks if the data table contains any of the reoperation columns.
-#' If so, the rest are created as needed. New columns are set to a value of NA.
+#' @details The data from the data table is then melted into a long format with \code{caseid} as the ID variable to allow
+#' rejoining to the main table. After melting, rows with missing values are omitted to reduce the size of the table.
+#' Rows where \code{reoperation} are false may also be removed with \code{removeFALSE} to reduce table size if
+#' desired, but note this results in an inability to a clarify a known FALSE ("did not have a reoperation") from
+#' a missing value ("do not know if there was a reoperation").
+#'
+#' Note that this function does not reorder \code{nreoperation} after converting to long and removing records with
+#' NA, FALSE, or both. This is because the third reoperation (\code{reoperation3}) has significance as representing
+#' 3 or more reoperations.
+#'
+#' @return a data.table
 #'
 #' @keywords internal
-#'
 #' @examples
-#' x <- data.table::data.table(reoperation1 = TRUE)
-#' nsqipr:::make_reop_cols(x)
-#' x
+#' x <- data.table::data.table(caseid = c(1,2,3,4),
+#' reoperation1 = c(TRUE, TRUE, FALSE, NA),
+#' retorpodays = c(10, 7, NA, NA),
+#' reoporcpt1 = c("44005", "37211", NA, NA),
+#' retorrelated = c(TRUE, TRUE, NA, NA),
+#' reoporicd91 = c("K56.69","T82.868A", NA, NA),
+#' reopor1icd101 = c("K56.59", "T82.868A", NA, NA),
+#' reoperation2 = c(TRUE, TRUE, FALSE, NA),
+#' retor2podays = c(10, 7, NA, NA),
+#' reopor2cpt1 = c("44005", "37211", NA, NA),
+#' retor2related = c(TRUE, TRUE, NA, NA),
+#' reopor2icd91 = c("K56.69","T82.868A", NA, NA),
+#' reopor2icd101 = c("K56.59", "T82.868A", NA, NA),
+#' reoperation3 = c(TRUE, TRUE, FALSE, NA),
+#' retor3podays = c(10, 7, NA, NA),
+#' reopor3cpt1 = c("44005", "37211", NA, NA),
+#' retor3related = c(TRUE, TRUE, NA, NA),
+#' reopor3icd91 = c("K56.69","T82.868A", NA, NA),
+#' reopor3icd101 = c("K56.59", "T82.868A", NA, NA))
 #'
-make_reop_cols <- function(df) {
-  if(length(intersect(reop_cols, names(df))) > 0) {
-    for(j in setdiff(reop_cols, names(df))) data.table::set(df, j = j, value = NA)
-  }
+#' nsqipr:::make_reop_long(x)
+#' nsqipr:::make_reop_long(x, TRUE)
+#'
+make_reop_long <- function(df, removeFALSE = FALSE) {
+  removeFALSE <- ifelse(removeFALSE, "reoperation", rlang::missing_arg()) # Allows removeFALSE to be used as a logical switch
+  make_cols_long(df, reoperation, retorpodays, reoporcpt, retorrelated, reoporicd9, reoporicd10,
+                 na.cols = "reoperation",
+                 removeFALSE = removeFALSE)
 }
 
-#' Create reoperation columns for long conversion
+#' Convert anesthes_other column from wide to long format
 #'
-#' @param df a data table to add the columns to
+#' @param df a data.table
 #'
-#' @details First checks if the data table contains an "anesthes_other" column.
-#' If so, the column is split into 8 columns according to the regex pattern ",\\s?".
+#' If "anesthes_other" is a column in \code{df}, it will be broken into a long format with
+#' \code{caseid} as the ID variable for joining back to the main table. This is because many of the NSQIP
+#' PUF datasets input multiple values into a single "anesthes_other" column. For example,
+#' "General, Spinal, MAC/IV Sedation" may be an entry in the raw data set. This makes
+#' parsing for patients that received "Spinal" anesthesia at any point, for example, very difficult.
 #'
-#' @keywords internal
+#' Note that this does not alter the "anesthes" column or include the anesthetic technique stored in the
+#' "anesthes" column in the resulting "anesthes_other" data table.
+#'
+#' @return a data.table
 #'
 #' @examples
 #' x <- data.table::data.table(
 #' anesthes_other = c("General","General, Spinal", "General, Spinal, MAC/IV Sedation", NA)
 #' )
 #' nsqipr:::make_anesthes_other_cols(x)
-#' x
 #'
-make_anesthes_other_cols <- function(df) {
-  if("anesthes_other" %qsin% names(df)) {
-    mat <- stringi::stri_split_regex(df[["anesthes_other"]], ",\\s?", simplify = NA, n = 8, omit_empty = TRUE, opts_regex = list(case_insensitive = TRUE))
-    for(j in seq_along(anesthes_other_cols)) data.table::set(df, j = anesthes_other_cols[[j]], value = mat[, j])
-  }
+make_anesthes_other_long <- function(df) {
+  make_commas_long(df, anesthes_other, levels = anesthes)
 }
 
 #' Remove coma, neuro deficit, and graft columns after 2010

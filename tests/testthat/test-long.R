@@ -100,25 +100,18 @@ testthat::test_that("make_readm_long works", {
                               readmunrelicd10 = c("1111", "1111", "1111", "1111", "1111", NA, NA, NA, NA, NA, NA, NA, NA, NA))
 
   testthat::expect_equal(make_readm_long(x), y)
-  testthat::expect_equal(make_readm_long(x, "readmission"), y[-10:-14, ])
+  testthat::expect_equal(make_readm_long(x, TRUE), y[-10:-14, ])
   testthat::expect_null(make_readm_long(data.table::data.table()))
 })
 
 testthat::test_that("make_anesthes_other_long works", {
   x <- data.table::data.table(caseid = c(1,2,3,4),
-                              anesthes_other = c("General","General, Spinal", "General, Spinal, MAC/IV Sedation", NA),
-                              anesthes_other1 = c("General", "General", "General", NA),
-                              anesthes_other2 = c(NA, "Spinal", "Spinal", NA),
-                              anesthes_other3 = c(NA, NA, "MAC/IV Sedation", NA),
-                              anesthes_other4 = c(NA, NA, NA, NA),
-                              anesthes_other5 = c(NA, NA, NA, NA),
-                              anesthes_other6 = c(NA, NA, NA, NA),
-                              anesthes_other7 = c(NA, NA, NA, NA),
-                              anesthes_other8 = c(NA, NA, NA, NA))
+                              anesthes_other = c("General","General, Spinal", "General, Spinal, MAC/IV Sedation", NA))
 
   y <- data.table::data.table(caseid = c(1, 2, 2, 3, 3, 3),
                               nanesthes_other = c(1L, 1L, 2L, 1L, 2L, 3L),
-                              anesthes_other = c("General", "General", "Spinal", "General", "Spinal", "MAC/IV Sedation"))
+                              anesthes_other = factor(c("General", "General", "Spinal", "General", "Spinal", "Monitored anesthesia care"),
+                                                      levels = c("Epidural","General","Local","Monitored anesthesia care","None","Other","Regional","Spinal")))
 
   testthat::expect_equal(make_anesthes_other_long(x), y)
   testthat::expect_null(make_anesthes_other_long(data.table::data.table()))

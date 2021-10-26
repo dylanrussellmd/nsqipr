@@ -4,12 +4,12 @@
 \alias{make_readm_long}
 \title{Convert readmission columns from wide to long format}
 \usage{
-make_readm_long(df, removeFALSE)
+make_readm_long(df, removeFALSE = FALSE)
 }
 \arguments{
 \item{df}{a data.table}
 
-\item{removeFALSE}{a character vector indicating from which columns to remove  rows with a FALSE value.}
+\item{removeFALSE}{a logical vector indicating whether or not to remove rows with a FALSE value.}
 }
 \value{
 a data.table
@@ -20,7 +20,7 @@ Convert readmission columns from wide to long format
 \details{
 The data from the data table is melted into a long format with \code{caseid} as the ID variable to allow
 rejoining to the main table. After melting, rows with missing values are omitted to reduce the size of the table.
-Rows where \code{readmission} are false may also be removed with \code{removeFALSE = "readmission"} to reduce table size if
+Rows where \code{readmission} are false may also be removed with \code{removeFALSE} to reduce table size if
 desired, but note this results in an inability to a clarify a known FALSE ("did not have a readmission") from
 a missing value ("do not know if there was a readmission").
 }
@@ -78,7 +78,7 @@ readmunrelicd95 = c("111", NA, NA, NA),
 readmunrelicd105 = c("1111",NA,NA,NA))
 
 nsqipr:::make_readm_long(x)
-nsqipr:::make_readm_long(x, "readmission")
+nsqipr:::make_readm_long(x, TRUE)
 
 }
 \keyword{internal}

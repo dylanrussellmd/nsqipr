@@ -1,4 +1,8 @@
 testthat::test_that("acs nsqip works", {
+
+  testthat::expect_equal(sort(fs::path_file(fs::dir_ls(file.path("test-data","acs_nsqip_puf", "rds"), type = "file"))),
+                         sort(fs::path_file(fs::dir_ls(file.path("test-data"), type = "file"))))
+
   test_goldstandard("acs_nsqip_puf", "ACS_NSQIP_PUF_05_06_vr1_clean")
   test_goldstandard("acs_nsqip_puf", "ACS_NSQIP_PUF07_TXT_clean")
   test_goldstandard("acs_nsqip_puf", "ACS_NSQIP_PUF08_TXT_clean")
