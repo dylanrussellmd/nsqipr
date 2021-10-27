@@ -4,14 +4,22 @@
 \alias{make_cols_long}
 \title{Convert columns to a wide format}
 \usage{
-make_cols_long(df, ..., variable.name, na.cols, removeFALSE, reorder = FALSE)
+make_cols_long(
+  df,
+  ...,
+  variable.name,
+  na.cols,
+  removeFALSE,
+  reorder = FALSE,
+  fn
+)
 }
 \arguments{
 \item{df}{a data.table containing the columns in a wide format}
 
 \item{...}{character vectors of column names that will be melted together into single columns.}
 
-\item{variable.name}{desired output variable name (optional)}
+\item{variable.name}{desired output variable name; this is typically the numbering variable (optional)}
 
 \item{na.cols}{character vector of column names indicating which records
 should be removed when NA values are present in these columns (optional).}
@@ -19,8 +27,10 @@ should be removed when NA values are present in these columns (optional).}
 \item{removeFALSE}{character vector of a column name indicating which records
 should be removed when FALSE values are present in this column (optional).}
 
-\item{reorder}{logical vector indicating whether records should be renumbered after removal
-of NA and/or FALSE records.}
+\item{reorder}{logical vector indicating whether records should be reordered after removal
+of NA and/or FALSE records. Will reorder the \code{variable.name} column.}
+
+\item{fn}{a function that can be used for processing the dataset after melting}
 }
 \value{
 data.table
@@ -39,7 +49,11 @@ output. For example, a character vector named "reoperation" will contain the nam
 "reoperation2", and "reoperation3", indicating these three columns in the original dataset will
 be melted into a single column called "reoperation" in the long format.
 
-The \code{removeFALSE} character vector should only specify a single column.
+The \code{removeFALSE} character vector should only specify a single logical column.
+
+The \code{fn} parameter allows an anonymous function to be passed that operates on the melted
+data frame. It applies this function prior to any NA or FALSE columns have been removed and
+before the \code{variable.name} has been reordered (if desired).
 }
 \seealso{
 make_commas_long

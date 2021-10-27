@@ -147,7 +147,6 @@ anesthes_other <- paste("anesthes_other", 1:8, sep = "")
 proc <- c("prncptx", paste("otherproc", 1:10, sep = ""), paste("concurr", 1:10, sep = ""))
 cpt <- c("cpt", paste("othercpt", 1:10, sep = ""), paste("concpt", 1:10, sep = ""))
 workrvu <- c("workrvu", paste("otherwrvu", 1:10, sep = ""), paste("conwrvu", 1:10, sep = ""))
-cpt_cols <- c(proc, cpt, workrvu)
 
 #### ---- FUNCTIONS ---- ####
 
@@ -301,6 +300,34 @@ make_reop_long <- function(df, removeFALSE = FALSE) {
 #'
 make_anesthes_other_long <- function(df) {
   make_commas_long(df, anesthes_other, levels = anesthes)
+}
+
+#' Conver CPT, Procedure Name, and WRVU from wide to long format
+#'
+#' @param df a data.table
+#'
+#' @details If all of the requisite columns are present in a data.table, this function
+#' will create a long format data table that contains the CPT, procedure name, and WRVU
+#' of each procedure each patient underwent. \code{caseid} is retained in order to allow joining
+#' back to a main table. Each procedure is numbered sequentially beginning at 1. This is stored
+#' in \code{nproc}. The only number that holds significance is "1", as this is the "primary procedure"
+#' as entered into the original data set. If any CPT codes are "NA", these records are removed
+#' and the "nproc" column is renumbered appropriately.
+#'
+#' In order to distinguish between an "other" procedure and a "concurrent" procedure, utilize the
+#' \code{primarysurg} variable: TRUE is equivalent to an "other" procedure and FALSE is equivalent
+#' to a "concurrent" procedure. This variable is so named because the only difference between an
+#' "other" procedure and a "concurrent" procedure is that the latter is a procedure not performed
+#' by the primary surgical team.
+#'
+#' @return a data.table
+#'
+#' @keywords internal
+#'
+make_cpt_long <- function(df) {
+  make_cols_long(df, cpt, proc, workrvu, variable.name = "nproc", na.cols = "cpt", reorder = TRUE, fn = function(x) {
+    data.table::set(x, j = "primarysurg", value = as.integer(x[["nproc"]]) <= 11)
+  })
 }
 
 #' Remove coma, neuro deficit, and graft columns after 2010

@@ -117,6 +117,52 @@ testthat::test_that("make_anesthes_other_long works", {
   testthat::expect_null(make_anesthes_other_long(data.table::data.table()))
 })
 
+testthat::test_that("make_cpt_long works",{
+  x <- data.table::data.table(caseid = 4914509L, cpt = "49650", othercpt1 = "38900",
+                      othercpt2 = "75952", othercpt3 = "36245", othercpt4 = "49020",
+                      othercpt5 = "43999", othercpt6 = "38900", othercpt7 = "44955",
+                      othercpt8 = "22216", othercpt9 = "44005", othercpt10 = "11046",
+                      concpt1 = "58661", concpt2 = "44380", concpt3 = "37236",
+                      concpt4 = "44388", concpt5 = "19361", concpt6 = "19330",
+                      concpt7 = "15274", concpt8 = "35701", concpt9 = "22848",
+                      concpt10 = "35761", prncptx = "FLAP ISLAND PEDICLE ANATOMIC NAMED AXIAL ARTERY",
+                      otherproc1 = "LAPS PROCTECTOMY ABDOMINOPERINEAL W/COLOSTOMY",
+                      otherproc2 = "LAPAROSCOPY RADICAL NEPHRECTOMY", otherproc3 = "CYSTECTOMY PARTIAL SIMPLE",
+                      otherproc4 = NA, otherproc5 = "DERMAL AUTOGRAFT TRUNK/ARM/LEG 1ST 100 CM",
+                      otherproc6 = "CLOSURE RECTOVESICAL FISTULA", otherproc7 = "INTRAOP SENTINEL LYMPH NODE ID W/DYE INJECTION",
+                      otherproc8 = "ALLOGRAFT FOR SPINE SURGERY ONLY MORSELIZED",
+                      otherproc9 = "POSTERIOR SEGMENTAL INSTRUMENTATION 3-6 VRT SEG",
+                      otherproc10 = NA, concurr1 = "RPR UMBILICAL HERNIA AGE 5 YRS/> INCARCERATED",
+                      concurr2 = NA, concurr3 = "REPAIR FIRST ABDOMINAL WALL HERNIA",
+                      concurr4 = "MUSC MYOCUTANEOUS/FASCIOCUTANEOUS FLAP TRUNK",
+                      concurr5 = "MASTOPEXY", concurr6 = "REMOVAL MAMMARY IMPLANT MATERIAL",
+                      concurr7 = "SUTURE NERVE REQ XTNSV MOBIL/TRPOS NERVE", concurr8 = "SPLIT AGRFT F/S/N/H/F/G/M/D GT 1ST 100 CM/</1 %",
+                      concurr9 = "SEVERING TARSORRHAPHY", concurr10 = NA, workrvu = 26.32,
+                      otherwrvu1 = 15.31, otherwrvu2 = 21.15, otherwrvu3 = 4.49,
+                      otherwrvu4 = 12.8, otherwrvu5 = 34.58, otherwrvu6 = 3.02,
+                      otherwrvu7 = 1.9, otherwrvu8 = 3.73, otherwrvu9 = NA,
+                      otherwrvu10 = NA, conwrvu1 = 7.08, conwrvu2 = 15.85,
+                      conwrvu3 = 0.8, conwrvu4 = 12.8, conwrvu5 = 11.35,
+                      conwrvu6 = 0, conwrvu7 = 12.92, conwrvu8 = 16.42, conwrvu9 = 0.8,
+                      conwrvu10 = 1.44)
+
+  y <- data.table::data.table(caseid = c(4914509L, 4914509L, 4914509L, 4914509L,
+                                         4914509L, 4914509L, 4914509L, 4914509L, 4914509L, 4914509L, 4914509L,
+                                         4914509L, 4914509L, 4914509L, 4914509L, 4914509L, 4914509L, 4914509L,
+                                         4914509L, 4914509L, 4914509L),
+                              nproc = 1:21,
+                              cpt = c("49650", "38900", "75952", "36245", "49020", "43999", "38900", "44955",  "22216", "44005", "11046", "58661", "44380", "37236", "44388", "19361", "19330", "15274", "35701", "22848", "35761"),
+                              proc = c("FLAP ISLAND PEDICLE ANATOMIC NAMED AXIAL ARTERY", "LAPS PROCTECTOMY ABDOMINOPERINEAL W/COLOSTOMY", "LAPAROSCOPY RADICAL NEPHRECTOMY", "CYSTECTOMY PARTIAL SIMPLE", NA, "DERMAL AUTOGRAFT TRUNK/ARM/LEG 1ST 100 CM",
+                                       "CLOSURE RECTOVESICAL FISTULA", "INTRAOP SENTINEL LYMPH NODE ID W/DYE INJECTION", "ALLOGRAFT FOR SPINE SURGERY ONLY MORSELIZED", "POSTERIOR SEGMENTAL INSTRUMENTATION 3-6 VRT SEG",
+                                       NA, "RPR UMBILICAL HERNIA AGE 5 YRS/> INCARCERATED", NA, "REPAIR FIRST ABDOMINAL WALL HERNIA", "MUSC MYOCUTANEOUS/FASCIOCUTANEOUS FLAP TRUNK", "MASTOPEXY",
+                                       "REMOVAL MAMMARY IMPLANT MATERIAL", "SUTURE NERVE REQ XTNSV MOBIL/TRPOS NERVE", "SPLIT AGRFT F/S/N/H/F/G/M/D GT 1ST 100 CM/</1 %", "SEVERING TARSORRHAPHY",  NA),
+                              workrvu = c(26.32, 15.31, 21.15, 4.49, 12.8, 34.58, 3.02, 1.9, 3.73, NA, NA, 7.08, 15.85, 0.8, 12.8, 11.35, 0, 12.92, 16.42, 0.8, 1.44),
+                              primarysurg = c(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE))
+
+  testthat::expect_equal(make_cpt_long(x), y)
+  testthat::expect_null(make_cpt_long(data.table::data.table()))
+})
+
 testthat::test_that("make_pan_percdrainage_long works", {
   x <- data.table::data.table(caseid = 1:15,
                               pan_percdrainage = c("Yes-other", "Yes-bile", "Yes-pus",
