@@ -2,7 +2,7 @@
 % Please edit documentation in R/conv_acs.R
 \name{make_cpt_long}
 \alias{make_cpt_long}
-\title{Conver CPT, Procedure Name, and WRVU from wide to long format}
+\title{Convert CPT, Procedure Name, and WRVU from wide to long format}
 \usage{
 make_cpt_long(df)
 }
@@ -13,7 +13,7 @@ make_cpt_long(df)
 a data.table
 }
 \description{
-Conver CPT, Procedure Name, and WRVU from wide to long format
+Convert CPT, Procedure Name, and WRVU from wide to long format
 }
 \details{
 If all of the requisite columns are present in a data.table, this function

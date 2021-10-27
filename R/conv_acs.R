@@ -302,7 +302,7 @@ make_anesthes_other_long <- function(df) {
   make_commas_long(df, anesthes_other, levels = anesthes)
 }
 
-#' Conver CPT, Procedure Name, and WRVU from wide to long format
+#' Convert CPT, Procedure Name, and WRVU from wide to long format
 #'
 #' @param df a data.table
 #'

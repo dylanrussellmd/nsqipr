@@ -15,7 +15,7 @@
 #' should be removed when FALSE values are present in this column (optional).
 #' @param reorder logical vector indicating whether records should be reordered after removal
 #' of NA and/or FALSE records. Will reorder the \code{variable.name} column.
-#' @param fn a function that can be used for processing the dataset after melting
+#' @param fn a function that can be used for processing the dataset after melting (optional).
 #'
 #' @details The \code{...} parameter accepts multiple character vectors that should each contain
 #' the names of columns that will be melted together to create a single column in the long format

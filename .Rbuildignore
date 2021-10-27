@@ -1,16 +1,25 @@
-^nsqipr\.Rproj$
-^\.Rproj\.user$
+# Markdowns
+^CODE_OF_CONDUCT\.md$
 ^LICENSE\.md$
 ^README\.Rmd$
-^tables\.css$
-^\.travis\.yml$
-^\.lintr$
+
+# RStudio Files
+^nsqipr\.Rproj$
+^\.Rproj\.user$
 ^\.Renviron
 ^\.Rprofile
+
+# CI/CD
+^\.lintr$
 ^gcloud-service-key\.json
 ^\.github$
+
+# Misc Folders
+^tables\.css$
 ^data-raw$
-^_pkgdown\.yml$
 ^docs$
+^_pkgdown\.yml$
 ^pkgdown$
-^CODE_OF_CONDUCT\.md$
+
+# Manuscripts
+^joss$
