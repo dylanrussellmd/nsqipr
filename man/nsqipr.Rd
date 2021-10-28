@@ -3,7 +3,7 @@
 \docType{package}
 \name{nsqipr}
 \alias{nsqipr}
-\title{nsqipr: A Cleaner NSQIP \if{html}{\figure{hex.png}{options: align="right" alt='nsqipr logo' width=200}} \if{latex}{\figure{hex.png}{options: width=0.5in}}}
+\title{nsqipr: A cleaner NSQIP. \if{html}{\figure{hex.png}{options: align="right" alt='nsqipr logo' width=200}} \if{latex}{\figure{hex.png}{options: width=0.5in}}}
 \description{
 The purpose of \code{nsqipr} is to streamline the data cleaning process.
 This package is geared towards those surgical interns, residents, and attendings

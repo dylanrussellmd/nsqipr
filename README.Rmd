@@ -9,7 +9,7 @@ always_allow_html: true
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "inst/figures/README-",
+  fig.path = "man/figures/README-",
   out.width = "75%",
   echo = FALSE,
   dev = "svg",

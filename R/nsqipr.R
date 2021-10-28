@@ -1,4 +1,4 @@
-#' nsqipr: A Cleaner NSQIP \if{html}{\figure{hex.png}{options: align="right" alt='nsqipr logo' width=200}} \if{latex}{\figure{hex.png}{options: width=0.5in}}
+#' nsqipr: A cleaner NSQIP. \if{html}{\figure{hex.png}{options: align="right" alt='nsqipr logo' width=200}} \if{latex}{\figure{hex.png}{options: width=0.5in}}
 #'
 #' @author Dylan Russell, M.D.
 #'
