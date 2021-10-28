@@ -1,7 +1,10 @@
 # Markdowns
 ^CODE_OF_CONDUCT\.md$
 ^LICENSE\.md$
+
+# README Files
 ^README\.Rmd$
+^inst\figures
 
 # RStudio Files
 ^nsqipr\.Rproj$
@@ -22,4 +25,4 @@
 ^pkgdown$
 
 # Manuscripts
-^joss$
+^inst/joss$

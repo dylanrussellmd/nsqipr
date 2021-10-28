@@ -18,7 +18,12 @@ Suggests:
     rmarkdown,
     testthat,
     spelling,
-    withr
+    withr,
+    rvest,
+    ggplot2,
+    easyPubMed,
+    dplyr,
+    xml2
 VignetteBuilder: knitr
 URL: https://github.com/dylanrussellmd/nsqipr, https://dylanrussellmd.github.io/nsqipr/
 BugReports: https://github.com/dylanrussellmd/nsqipr/issues

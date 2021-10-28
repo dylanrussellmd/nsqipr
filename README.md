@@ -5,8 +5,6 @@
 
 <!-- badges: start -->
 
-[![Travis build
-status](https://travis-ci.com/dylanrussellmd/nsqipr.svg?token=HoLzyTtjbHZhKQ9MzmcE&branch=master)](https://travis-ci.com/dylanrussellmd/nsqipr)
 [![R build
 status](https://github.com/dylanrussellmd/nsqipr/workflows/R-CMD-check/badge.svg)](https://github.com/dylanrussellmd/nsqipr/actions)
 ![Github All
@@ -28,10 +26,10 @@ ACS NSQIP <sup>©</sup> is a nationally validated, risk-adjusted,
 outcomes-based program to measure and improve the quality of surgical
 care.
 
-As of 2020-09-22, there are currently [706
+As of 27 October, 2021, there are currently [700
 hospitals](https://www.facs.org/search/nsqip-participants?allresults=)
 that participate in and contribute to the program. The entire database
-contains **more than 6.6 million cases** for data analysis.
+contains **more than 8 million cases** for data analysis.
 
 ## Inclusion and Exclusion Criteria
 
@@ -49,32 +47,199 @@ become available. Excluded cases are:
 
 ## Publications
 
-The data from ACS NSQIP<sup>©</sup> is used to produce **approximately
-400 publications per year**. As of 2020-09-22, there are currently
-[2,728 publications](https://pubmed.ncbi.nlm.nih.gov/?term=nsqip)
-analyzing the ACS NSQIP<sup>©</sup> database.
+The data from ACS NSQIP<sup>©</sup> is used to produce an exponentially
+increasing number of publications per year. As of 27 October, 2021,
+there are currently [3308 PubMed search
+results](https://pubmed.ncbi.nlm.nih.gov/?term=NSQIP) for the search
+term “NSQIP”.
+
+<img src="inst/figures/README-pubmed_search-1.svg" width="75%" style="display: block; margin: auto;" />
+These papers are often published in high quality journals. The following
+graph shows the top 10 most common journals in which the above search
+results were published.
+
+<img src="inst/figures/README-journals-1.svg" width="100%" style="display: block; margin: auto;" />
 
 # About `nsqipr`
 
 ## Purpose
 
 ACS NSQIP<sup>©</sup> requires that members request specific datasets
-for use in research. The files are then delivered as `.exe` executables
-available for download for a limited duration of time. The archived
-files can be unzipped and contain a `.txt` tab-delimited file. Some will
-also contain a PDF version of the Participant Use File (**PUF**); these
-define the variables in the dataset. The `.txt` tab-delimited file must
-be read into R as a data frame and meticulously cleaned prior to being
-used for data analysis. Researchers often want to combine data across
-multiple years. This complicates data preparation as variables are
-removed or added every year and sometimes the same variable may be
-recorded differently in two different years.
+for use in research. The files are then delivered as `.exe` executable
+files available for download for a limited duration of time. The
+archived files can be unzipped and contain a `.txt` tab-delimited file.
+Some will also contain a PDF version of the Participant Use File
+(**PUF**); these define the variables in the dataset. The `.txt`
+tab-delimited file must be read into R as a data frame and meticulously
+cleaned prior to being used for data analysis. Researchers often want to
+combine data across multiple years. This complicates data preparation as
+variables are removed or added every year and sometimes the same
+variable may have differently worded outcomes between years.
+
+<table class="table table-striped table-condensed" style="font-size: 14px; width: auto !important; margin-left: auto; margin-right: auto;">
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+race (2005-2006)
+
+</th>
+
+<th style="text-align:left;">
+
+race\_new (2019)
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+American Indian or Alaska Native
+
+</td>
+
+<td style="text-align:left;">
+
+American Indian or Alaska Native
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Asian or Pacific Islander
+
+</td>
+
+<td style="text-align:left;">
+
+Asian
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Black, Not of Hispanic Origin
+
+</td>
+
+<td style="text-align:left;">
+
+Black or African American
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Hispanic, Black
+
+</td>
+
+<td style="text-align:left;">
+
+Native Hawaiian or Pacific Islander
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Hispanic, Color Unknown
+
+</td>
+
+<td style="text-align:left;">
+
+Unknown/Not Reported
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Hispanic, White
+
+</td>
+
+<td style="text-align:left;">
+
+White
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Unknown
+
+</td>
+
+<td style="text-align:left;">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+White, Not of Hispanic Origin
+
+</td>
+
+<td style="text-align:left;">
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
 
 The purpose of `nsqipr` is to streamline this process. This package is
 geared towards those surgical interns, residents, and attendings who
-have limited experience with `R`, `SQL`, or “big data” analysis. It is
-also designed to be a useful tool for that experienced researcher or
-computer scientist making frequent use of ACS NSQIP<sup>©</sup> PUFs.
+have limited experience with R, SQL, or “big data” analysis. It is also
+designed to be a useful tool for that experienced researcher or computer
+scientist making frequent use of ACS NSQIP<sup>©</sup> PUFs.
+
+For a detailed dive into `nsqipr`, please refer to the [companion
+book](www.dylanrussellmd.com/nsqipr_book) or the documentation:
+
+``` r
+help("nsqipr")
+```
 
 ## Installation
 
@@ -95,23 +260,47 @@ We are not (yet) available on CRAN.
 `nsqipr` will take care of the rest. You’re now ready to use the ACS
 NSQIP<sup>©</sup> data for data analysis\!
 
-## Variables
+## Progress
 
-TODO: Build example table of raw variables, clean variables, and type
+Track progress on how the various data sets are being incorporated into
+`nsqipr` here.
 
-## File Size
+  - Main PUF - <span style="color: midnightblue;">Done, Documented,
+    Tested</span>
+  - Vascular - <span style="color: goldenrod;">In progress, use with
+    caution</span>
+      - Abdominal Aortic Aneurysm - <span style="color: goldenrod;">In
+        progress, use with caution</span>
+      - Aortoiliac Endovascular - <span style="color: goldenrod;">In
+        progress, use with caution</span>
+      - Aortoiliac Open - <span style="color: goldenrod;">In progress,
+        use with caution</span>
+      - Carotid Artery Stenting - <span style="color: maroon;">Not
+        started</span>
+      - Carotid Endarterectomy - <span style="color: maroon;">Not
+        started</span>
+      - Endovascular Aneurysm Repair - <span style="color: maroon;">Not
+        started</span>
+      - Lower Extremity Endovascular - <span style="color: maroon;">Not
+        started</span>
+      - Lower Extremity Open - <span style="color: maroon;">Not
+        started</span>
+  - Colectomy - <span style="color: goldenrod;">In progress, use with
+    caution</span>
+  - Pancreatectomy - <span style="color: goldenrod;">In progress, use
+    with caution</span>
+  - Protectomy - <span style="color: maroon;">Not started</span>
+  - Hepatectomy - <span style="color: goldenrod;">In progress, use with
+    caution</span>
+  - Thyroidectomy - <span style="color: maroon;">Not started</span>
+  - Esophagectomy - <span style="color: maroon;">Not started</span>
+  - Appendectomy - <span style="color: goldenrod;">In progress, use with
+    caution</span>
+  - Gynecology - <span style="color: maroon;">Not started</span>
+  - Hysterectomy - <span style="color: maroon;">Not started</span>
+  - Hip Fracture - <span style="color: maroon;">Not started</span>
+  - Cystectomy - <span style="color: maroon;">Not started</span>
+  - Nephrectomy - <span style="color: maroon;">Not started</span>
+  - Prostatectomy - <span style="color: maroon;">Not started</span>
 
-`nsqipr` significantly reduces file sizes after cleaning the data. The
-cumulative file size for the entire NSQIP database (not including
-targeted procedures) is reduced from 12.2 GB to 6.7 GB (a 45% decrease).
-
-<img src="man/figures/README-file_size-1.png" width="100%" />
-
-## Cleaning Time
-
-Compared to manually cleaning and combining data, `nsqipr` is blazing
-fast. The largest single file, acs\_nsqip\_puf17.txt, takes only 103
-seconds to clean. The entire NSQIP database (not including targeted
-procedures) can be cleaned and combined in only 12.3 minutes.
-
-<img src="man/figures/README-clean_time-1.png" width="100%" />
+Check back often for updates\!
