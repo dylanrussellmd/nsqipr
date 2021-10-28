@@ -53,12 +53,13 @@ there are currently [3308 PubMed search
 results](https://pubmed.ncbi.nlm.nih.gov/?term=NSQIP) for the search
 term “NSQIP”.
 
-<img src="inst/figures/README-pubmed_search-1.svg" width="75%" style="display: block; margin: auto;" />
+<img src="man/figures/README-pubmed_search-1.svg" width="75%" style="display: block; margin: auto;" />
+
 These papers are often published in high quality journals. The following
 graph shows the top 10 most common journals in which the above search
 results were published.
 
-<img src="inst/figures/README-journals-1.svg" width="100%" style="display: block; margin: auto;" />
+<img src="man/figures/README-journals-1.svg" width="100%" style="display: block; margin: auto;" />
 
 # About `nsqipr`
 
