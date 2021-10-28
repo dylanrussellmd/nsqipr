@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create a CPT, Procedure Name, and WRVU Long Table — make_cpt_long • nsqipr</title>
+<title>Convert CPT, Procedure Name, and WRVU from wide to long format — make_cpt_long • nsqipr</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Create a CPT, Procedure Name, and WRVU Long Table — make_cpt_long" />
-<meta property="og:description" content="Create a CPT, Procedure Name, and WRVU Long Table" />
+<meta property="og:title" content="Convert CPT, Procedure Name, and WRVU from wide to long format — make_cpt_long" />
+<meta property="og:description" content="Convert CPT, Procedure Name, and WRVU from wide to long format" />
 
 
 
@@ -111,13 +111,13 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create a CPT, Procedure Name, and WRVU Long Table</h1>
-    <small class="dont-index">Source: <a href='https://github.com/dylanrussellmd/nsqipr/blob/master/R/long.R'><code>R/long.R</code></a></small>
+    <h1>Convert CPT, Procedure Name, and WRVU from wide to long format</h1>
+    <small class="dont-index">Source: <a href='https://github.com/dylanrussellmd/nsqipr/blob/master/R/conv_acs.R'><code>R/conv_acs.R</code></a></small>
     <div class="hidden name"><code>make_cpt_long.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Create a CPT, Procedure Name, and WRVU Long Table</p>
+    <p>Convert CPT, Procedure Name, and WRVU from wide to long format</p>
     </div>
 
     <pre class="usage"><span class='fu'>make_cpt_long</span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span></pre>
@@ -141,7 +141,8 @@ will create a long format data table that contains the CPT, procedure name, and 
 of each procedure each patient underwent. <code>caseid</code> is retained in order to allow joining
 back to a main table. Each procedure is numbered sequentially beginning at 1. This is stored
 in <code>nproc</code>. The only number that holds significance is "1", as this is the "primary procedure"
-as entered into the original data set.</p>
+as entered into the original data set. If any CPT codes are "NA", these records are removed
+and the "nproc" column is renumbered appropriately.</p>
 <p>In order to distinguish between an "other" procedure and a "concurrent" procedure, utilize the
 <code>primarysurg</code> variable: TRUE is equivalent to an "other" procedure and FALSE is equivalent
 to a "concurrent" procedure. This variable is so named because the only difference between an

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Convert anesthes_other column from wide to long format — make_anesthes_other_long • nsqipr</title>
+<title>Convert columns to a wide format — make_cols_long • nsqipr</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,12 @@
 
 
 
-<meta property="og:title" content="Convert anesthes_other column from wide to long format — make_anesthes_other_long" />
-<meta property="og:description" content="Convert anesthes_other column from wide to long format" />
+<meta property="og:title" content="Convert columns to a wide format — make_cols_long" />
+<meta property="og:description" content="This is a complex function that accepts specified lists of columns and melts them
+into a long format from a wide format. This is designed for those columns in the original
+NSQIP dataset that are stored in a wide format, such as the CPT, readmission and
+reoperation columns; this is not meant for columns that store data in a comma-separated
+fashion (such as anesthes_other)." />
 
 
 
@@ -111,44 +115,83 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Convert anesthes_other column from wide to long format</h1>
-    <small class="dont-index">Source: <a href='https://github.com/dylanrussellmd/nsqipr/blob/master/R/conv_acs.R'><code>R/conv_acs.R</code></a></small>
-    <div class="hidden name"><code>make_anesthes_other_long.Rd</code></div>
+    <h1>Convert columns to a wide format</h1>
+    <small class="dont-index">Source: <a href='https://github.com/dylanrussellmd/nsqipr/blob/master/R/utils-long.R'><code>R/utils-long.R</code></a></small>
+    <div class="hidden name"><code>make_cols_long.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Convert anesthes_other column from wide to long format</p>
+    <p>This is a complex function that accepts specified lists of columns and melts them
+into a long format from a wide format. This is designed for those columns in the original
+NSQIP dataset that are stored in a wide format, such as the CPT, readmission and
+reoperation columns; this is not meant for columns that store data in a comma-separated
+fashion (such as <code>anesthes_other</code>).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>make_anesthes_other_long</span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>make_cols_long</span><span class='op'>(</span>
+  <span class='va'>df</span>,
+  <span class='va'>...</span>,
+  <span class='va'>variable.name</span>,
+  <span class='va'>na.cols</span>,
+  <span class='va'>removeFALSE</span>,
+  reorder <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  <span class='va'>fn</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>df</th>
-      <td><p>a data.table</p>
-<p>If "anesthes_other" is a column in <code>df</code>, it will be broken into a long format with
-<code>caseid</code> as the ID variable for joining back to the main table. This is because many of the NSQIP
-PUF datasets input multiple values into a single "anesthes_other" column. For example,
-"General, Spinal, MAC/IV Sedation" may be an entry in the raw data set. This makes
-parsing for patients that received "Spinal" anesthesia at any point, for example, very difficult.</p>
-<p>Note that this does not alter the "anesthes" column or include the anesthetic technique stored in the
-"anesthes" column in the resulting "anesthes_other" data table.</p></td>
+      <td><p>a data.table containing the columns in a wide format</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>character vectors of column names that will be melted together into single columns.</p></td>
+    </tr>
+    <tr>
+      <th>variable.name</th>
+      <td><p>desired output variable name; this is typically the numbering variable (optional)</p></td>
+    </tr>
+    <tr>
+      <th>na.cols</th>
+      <td><p>character vector of column names indicating which records
+should be removed when NA values are present in these columns (optional).</p></td>
+    </tr>
+    <tr>
+      <th>removeFALSE</th>
+      <td><p>character vector of a column name indicating which records
+should be removed when FALSE values are present in this column (optional).</p></td>
+    </tr>
+    <tr>
+      <th>reorder</th>
+      <td><p>logical vector indicating whether records should be reordered after removal
+of NA and/or FALSE records. Will reorder the <code>variable.name</code> column.</p></td>
+    </tr>
+    <tr>
+      <th>fn</th>
+      <td><p>a function that can be used for processing the dataset after melting (optional).</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a data.table</p>
+    <p>data.table</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>data.table</span><span class='fu'>::</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span><span class='op'>(</span>
-anesthes_other <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"General"</span>,<span class='st'>"General, Spinal"</span>, <span class='st'>"General, Spinal, MAC/IV Sedation"</span>, <span class='cn'>NA</span><span class='op'>)</span>
-<span class='op'>)</span>
-<span class='fu'>nsqipr</span><span class='fu'>:::</span><span class='fu'>make_anesthes_other_cols</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): object 'make_anesthes_other_cols' not found</span></div><div class='input'>
-</div></pre>
+    <p>The <code>...</code> parameter accepts multiple character vectors that should each contain
+the names of columns that will be melted together to create a single column in the long format
+output. For example, a character vector named "reoperation" will contain the names "reoperation1",
+"reoperation2", and "reoperation3", indicating these three columns in the original dataset will
+be melted into a single column called "reoperation" in the long format.</p>
+<p>The <code>removeFALSE</code> character vector should only specify a single logical column.</p>
+<p>The <code>fn</code> parameter allows an anonymous function to be passed that operates on the melted
+data frame. It applies this function prior to any NA or FALSE columns have been removed and
+before the <code>variable.name</code> has been reordered (if desired).</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>make_commas_long</p></div>
+
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

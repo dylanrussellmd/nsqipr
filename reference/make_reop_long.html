@@ -112,7 +112,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Convert reoperation columns from wide to long format</h1>
-    <small class="dont-index">Source: <a href='https://github.com/dylanrussellmd/nsqipr/blob/master/R/long.R'><code>R/long.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/dylanrussellmd/nsqipr/blob/master/R/conv_acs.R'><code>R/conv_acs.R</code></a></small>
     <div class="hidden name"><code>make_reop_long.Rd</code></div>
     </div>
 
@@ -131,7 +131,7 @@
     </tr>
     <tr>
       <th>removeFALSE</th>
-      <td><p>a logical indicating whether to remove rows where <code>reoperation</code> is FALSE</p></td>
+      <td><p>a logical vector indicating whether or not to remove rows with a FALSE value.</p></td>
     </tr>
     </table>
 
@@ -145,6 +145,9 @@ rejoining to the main table. After melting, rows with missing values are omitted
 Rows where <code>reoperation</code> are false may also be removed with <code>removeFALSE</code> to reduce table size if
 desired, but note this results in an inability to a clarify a known FALSE ("did not have a reoperation") from
 a missing value ("do not know if there was a reoperation").</p>
+<p>Note that this function does not reorder <code>nreoperation</code> after converting to long and removing records with
+NA, FALSE, or both. This is because the third reoperation (<code>reoperation3</code>) has significance as representing
+3 or more reoperations.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>data.table</span><span class='fu'>::</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span><span class='op'>(</span>caseid <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>3</span>,<span class='fl'>4</span><span class='op'>)</span>,

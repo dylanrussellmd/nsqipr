@@ -83,7 +83,7 @@
 <a href="#about-acs-nsqip" class="anchor"></a>About ACS NSQIP<sup>©</sup>
 </h1>
 <p>Welcome to <code>nsqipr</code>! If you’re reading this, you are likely already familiar with the American College of Surgeons National Surgical Quality Improvement Program (<strong>ACS NSQIP</strong><sup>©</sup>). If not, you can read about it <a href="https://www.facs.org/quality-programs/acs-nsqip">here</a>. The ACS NSQIP <sup>©</sup> is a nationally validated, risk-adjusted, outcomes-based program to measure and improve the quality of surgical care.</p>
-<p>As of 2020-09-22, there are currently <a href="https://www.facs.org/search/nsqip-participants?allresults=">706 hospitals</a> that participate in and contribute to the program. The entire database contains <strong>more than 6.6 million cases</strong> for data analysis.</p>
+<p>As of 27 October, 2021, there are currently <a href="https://www.facs.org/search/nsqip-participants?allresults=">700 hospitals</a> that participate in and contribute to the program. The entire database contains <strong>more than 8 million cases</strong> for data analysis.</p>
 <div id="inclusion-and-exclusion-criteria" class="section level2">
 <h2 class="hasAnchor">
 <a href="#inclusion-and-exclusion-criteria" class="anchor"></a>Inclusion and Exclusion Criteria</h2>
@@ -99,7 +99,9 @@
 <div id="publications" class="section level2">
 <h2 class="hasAnchor">
 <a href="#publications" class="anchor"></a>Publications</h2>
-<p>The data from ACS NSQIP<sup>©</sup> is used to produce <strong>approximately 400 publications per year</strong>. As of 2020-09-22, there are currently <a href="https://pubmed.ncbi.nlm.nih.gov/?term=nsqip">2,728 publications</a> analyzing the ACS NSQIP<sup>©</sup> database.</p>
+<p>The data from ACS NSQIP<sup>©</sup> is used to produce an exponentially increasing number of publications per year. As of 27 October, 2021, there are currently <a href="https://pubmed.ncbi.nlm.nih.gov/?term=NSQIP">3308 PubMed search results</a> for the search term “NSQIP”.</p>
+<p><img src="inst/figures/README-pubmed_search-1.svg" width="75%" style="display: block; margin: auto;"> These papers are often published in high quality journals. The following graph shows the top 10 most common journals in which the above search results were published.</p>
+<p><img src="inst/figures/README-journals-1.svg" width="100%" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div id="about-nsqipr" class="section level1">
@@ -109,14 +111,91 @@
 <div id="purpose" class="section level2">
 <h2 class="hasAnchor">
 <a href="#purpose" class="anchor"></a>Purpose</h2>
-<p>ACS NSQIP<sup>©</sup> requires that members request specific datasets for use in research. The files are then delivered as <code>.exe</code> executables available for download for a limited duration of time. The archived files can be unzipped and contain a <code>.txt</code> tab-delimited file. Some will also contain a PDF version of the Participant Use File (<strong>PUF</strong>); these define the variables in the dataset. The <code>.txt</code> tab-delimited file must be read into R as a data frame and meticulously cleaned prior to being used for data analysis. Researchers often want to combine data across multiple years. This complicates data preparation as variables are removed or added every year and sometimes the same variable may be recorded differently in two different years.</p>
-<p>The purpose of <code>nsqipr</code> is to streamline this process. This package is geared towards those surgical interns, residents, and attendings who have limited experience with <code>R</code>, <code>SQL</code>, or “big data” analysis. It is also designed to be a useful tool for that experienced researcher or computer scientist making frequent use of ACS NSQIP<sup>©</sup> PUFs.</p>
+<p>ACS NSQIP<sup>©</sup> requires that members request specific datasets for use in research. The files are then delivered as <code>.exe</code> executable files available for download for a limited duration of time. The archived files can be unzipped and contain a <code>.txt</code> tab-delimited file. Some will also contain a PDF version of the Participant Use File (<strong>PUF</strong>); these define the variables in the dataset. The <code>.txt</code> tab-delimited file must be read into R as a data frame and meticulously cleaned prior to being used for data analysis. Researchers often want to combine data across multiple years. This complicates data preparation as variables are removed or added every year and sometimes the same variable may have differently worded outcomes between years.</p>
+<table class="table table table-striped table-condensed">
+<thead><tr>
+<th style="text-align:left;">
+<p>race (2005-2006)</p>
+</th>
+<th style="text-align:left;">
+<p>race_new (2019)</p>
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<p>American Indian or Alaska Native</p>
+</td>
+<td style="text-align:left;">
+<p>American Indian or Alaska Native</p>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<p>Asian or Pacific Islander</p>
+</td>
+<td style="text-align:left;">
+<p>Asian</p>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<p>Black, Not of Hispanic Origin</p>
+</td>
+<td style="text-align:left;">
+<p>Black or African American</p>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<p>Hispanic, Black</p>
+</td>
+<td style="text-align:left;">
+<p>Native Hawaiian or Pacific Islander</p>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<p>Hispanic, Color Unknown</p>
+</td>
+<td style="text-align:left;">
+<p>Unknown/Not Reported</p>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<p>Hispanic, White</p>
+</td>
+<td style="text-align:left;">
+<p>White</p>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<p>Unknown</p>
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<p>White, Not of Hispanic Origin</p>
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+</tbody>
+</table>
+<p>The purpose of <code>nsqipr</code> is to streamline this process. This package is geared towards those surgical interns, residents, and attendings who have limited experience with R, SQL, or “big data” analysis. It is also designed to be a useful tool for that experienced researcher or computer scientist making frequent use of ACS NSQIP<sup>©</sup> PUFs.</p>
+<p>For a detailed dive into <code>nsqipr</code>, please refer to the <a href="www.dylanrussellmd.com/nsqipr_book">companion book</a> or the documentation:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/help.html">help</a></span><span class="op">(</span><span class="st">"nsqipr"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>You can install or upgrade <code>nsqipr</code> with:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"dylanrussellmd/nsqipr"</span><span class="op">)</span></code></pre></div>
 <p>We are not (yet) available on CRAN.</p>
 </div>
@@ -129,22 +208,61 @@
 </ol>
 <p><code>nsqipr</code> will take care of the rest. You’re now ready to use the ACS NSQIP<sup>©</sup> data for data analysis!</p>
 </div>
-<div id="variables" class="section level2">
+<div id="progress" class="section level2">
 <h2 class="hasAnchor">
-<a href="#variables" class="anchor"></a>Variables</h2>
-<p>TODO: Build example table of raw variables, clean variables, and type</p>
-</div>
-<div id="file-size" class="section level2">
-<h2 class="hasAnchor">
-<a href="#file-size" class="anchor"></a>File Size</h2>
-<p><code>nsqipr</code> significantly reduces file sizes after cleaning the data. The cumulative file size for the entire NSQIP database (not including targeted procedures) is reduced from 12.2 GB to 6.7 GB (a 45% decrease).</p>
-<p><img src="reference/figures/README-file_size-1.png" width="100%"></p>
-</div>
-<div id="cleaning-time" class="section level2">
-<h2 class="hasAnchor">
-<a href="#cleaning-time" class="anchor"></a>Cleaning Time</h2>
-<p>Compared to manually cleaning and combining data, <code>nsqipr</code> is blazing fast. The largest single file, acs_nsqip_puf17.txt, takes only 103 seconds to clean. The entire NSQIP database (not including targeted procedures) can be cleaned and combined in only 12.3 minutes.</p>
-<p><img src="reference/figures/README-clean_time-1.png" width="100%"></p>
+<a href="#progress" class="anchor"></a>Progress</h2>
+<p>Track progress on how the various data sets are being incorporated into <code>nsqipr</code> here.</p>
+<ul>
+<li>Main PUF - <span style="color: midnightblue;">Done, Documented, Tested</span>
+</li>
+<li>Vascular - <span style="color: goldenrod;">In progress, use with caution</span>
+<ul>
+<li>Abdominal Aortic Aneurysm - <span style="color: goldenrod;">In progress, use with caution</span>
+</li>
+<li>Aortoiliac Endovascular - <span style="color: goldenrod;">In progress, use with caution</span>
+</li>
+<li>Aortoiliac Open - <span style="color: goldenrod;">In progress, use with caution</span>
+</li>
+<li>Carotid Artery Stenting - <span style="color: maroon;">Not started</span>
+</li>
+<li>Carotid Endarterectomy - <span style="color: maroon;">Not started</span>
+</li>
+<li>Endovascular Aneurysm Repair - <span style="color: maroon;">Not started</span>
+</li>
+<li>Lower Extremity Endovascular - <span style="color: maroon;">Not started</span>
+</li>
+<li>Lower Extremity Open - <span style="color: maroon;">Not started</span>
+</li>
+</ul>
+</li>
+<li>Colectomy - <span style="color: goldenrod;">In progress, use with caution</span>
+</li>
+<li>Pancreatectomy - <span style="color: goldenrod;">In progress, use with caution</span>
+</li>
+<li>Protectomy - <span style="color: maroon;">Not started</span>
+</li>
+<li>Hepatectomy - <span style="color: goldenrod;">In progress, use with caution</span>
+</li>
+<li>Thyroidectomy - <span style="color: maroon;">Not started</span>
+</li>
+<li>Esophagectomy - <span style="color: maroon;">Not started</span>
+</li>
+<li>Appendectomy - <span style="color: goldenrod;">In progress, use with caution</span>
+</li>
+<li>Gynecology - <span style="color: maroon;">Not started</span>
+</li>
+<li>Hysterectomy - <span style="color: maroon;">Not started</span>
+</li>
+<li>Hip Fracture - <span style="color: maroon;">Not started</span>
+</li>
+<li>Cystectomy - <span style="color: maroon;">Not started</span>
+</li>
+<li>Nephrectomy - <span style="color: maroon;">Not started</span>
+</li>
+<li>Prostatectomy - <span style="color: maroon;">Not started</span>
+</li>
+</ul>
+<p>Check back often for updates!</p>
 </div>
 </div>
 
@@ -189,7 +307,6 @@
   <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://travis-ci.com/dylanrussellmd/nsqipr"><img src="https://travis-ci.com/dylanrussellmd/nsqipr.svg?token=HoLzyTtjbHZhKQ9MzmcE&amp;branch=master" alt="Travis build status"></a></li>
 <li><a href="https://github.com/dylanrussellmd/nsqipr/actions"><img src="https://github.com/dylanrussellmd/nsqipr/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
 </ul>
 </div>
