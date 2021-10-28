@@ -10,10 +10,8 @@
 #' @keywords internal
 #'
 get_file_or_dir <- function(path, pattern = "^(acs_nsqip_puf|puf_tar_[a-z]{1,4})(?:\\d{2})?(?:.*)?\\.txt$"){
-  pattern <- stringr::regex(pattern, ignore_case = TRUE)
   if (fs::is_dir(path)) {
-    result <- fs::dir_ls(path = path, pattern = pattern,
-                         type = "file", recurse = FALSE)
+    result <- list.files(path = path, pattern = pattern, full.names = TRUE, ignore.case = TRUE)
   } else if (fs::is_file(path)) {
     result <- path
   } else {

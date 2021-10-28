@@ -3,10 +3,22 @@
 \docType{package}
 \name{nsqipr}
 \alias{nsqipr}
-\title{\code{nsqipr} package}
+\title{nsqipr: A Cleaner NSQIP \if{html}{\figure{hex.png}{options: align="right" alt='nsqipr logo' width=200}} \if{latex}{\figure{hex.png}{options: width=0.5in}}}
 \description{
-Interface with NSQIP data via R
+The purpose of \code{nsqipr} is to streamline the data cleaning process.
+This package is geared towards those surgical interns, residents, and attendings
+who have limited experience with R, SQL, or "big data" analysis.
+It is also designed to be a useful tool for that experienced researcher or
+computer scientist making frequent use of ACS NSQIP PUFs.
 }
-\details{
-See the README on \href{https://github.com/dylanrussellmd/nsqipr}{Github}
+\seealso{
+\itemize{
+\item{\href{https://github.com/dylanrussellmd/nsqipr}{nsqipr Github}}
+\item{\href{https://www.dylanrussellmd/nsqipr_book}{nsqipr Design and Data Dictionary}}
+\item{\href{https://www.dylanrussellmd/nsqipr}{nsqipr documentation}}
+\item{\href{https://www.facs.org/quality-programs/acs-nsqip}{ACS NSQIP}}
+}
+}
+\author{
+Dylan Russell, M.D.
 }

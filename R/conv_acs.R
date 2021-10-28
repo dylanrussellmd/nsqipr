@@ -14,7 +14,6 @@ conv_acs_cols <- function(df, filename) {
   conv_hispanic(df)
   conv_(df, "race", conv_race)
   conv_(df, "age", conv_age)
-  conv_(df, "sex", conv_sex)
   conv_(df, "inout", conv_inout)
   conv_(df, "diabetes", insulin, newcol = "insulin")
   conv_(df, "diabetes", conv_notno)
@@ -23,12 +22,12 @@ conv_acs_cols <- function(df, filename) {
   conv_(df, "prsepis", type_prsepis, newcol = "type_prsepis")
   conv_(df, "prsepis", conv_notno)
   check_comaneurograft(df)
-  make_readm_cols(df)
-  make_reop_cols(df)
-  make_anesthes_other_cols(df)
 }
 
 #### ---- FACTOR LISTS (THESE DEFINE THE FACTOR LEVELS FOR VARIOUS COLUMNS) ---- ####
+sex <- list(Male = "male",
+            Female = "female",
+            `Non-binary` = "non-binary")
 fnstatus1 <- list(Independent = "Independent",
                  `Partially dependent` = "Partially Dependent",
                  `Totally dependent` = "Totally Dependent")
@@ -75,7 +74,7 @@ readmsuspreason1 <- list(`Superficial incisional SSI` = "Superficial Incisional 
                          `Vein thrombosis requiring therapy` = c("Vein Thrombosis Requiring Therapy","DVT Requiring Therapy"),
                          Sepsis = "Sepsis",
                          `Septic shock` = "Septic Shock",
-                         Other = c("Other (list ICD 9 code)","Other (list icd 10 code)"),
+                         Other = c("Other (list ICD 9 code)","Other (list ICD 10 code)", "Other (list ICD9 code)", "Other (list ICD10 code)"),
                          `C. difficile` = "C. diff",
                          `Graft/prosthesis/flap failure` = "Graft/Prosthesis/Flap Failure",
                          `Peripheral nerve injury` = "Peripheral Nerve Injury")
@@ -101,19 +100,12 @@ dischdest <- list(`Skilled care, not home` = "Skilled Care, Not Home",
 anesthes <- list(`Epidural` = "Epidural",
                  `General` = "General",
                  `Local` = "Local",
-                 `Monitored anesthesia care` = c("MAC/IV Sedation","Monitored Anesthesia Care"),
+                 `Monitored anesthesia care` = c("MAC/IV Sedation","Monitored Anesthesia Care",
+                                                 "Monitored Anesthesia Care/IV Sedation", "Monitored anesthesia care/IV sedation"),
                  `None` = "None",
                  `Other` = "Other",
                  `Regional` = "Regional",
                  `Spinal` = "Spinal")
-anesthes_other1 <- anesthes
-anesthes_other2 <- anesthes
-anesthes_other3 <- anesthes
-anesthes_other4 <- anesthes
-anesthes_other5 <- anesthes
-anesthes_other6 <- anesthes
-anesthes_other7 <- anesthes
-anesthes_other8 <- anesthes
 surgspec <- list(`Cardiac surgery` = "Cardiac Surgery",
                  `General surgery` = "General Surgery",
                  `Gynecology` = "Gynecology",
@@ -128,6 +120,7 @@ surgspec <- list(`Cardiac surgery` = "Cardiac Surgery",
                  `Ophthalmology` = "Ophthalmology",
                  `Podiatry` = "Podiatry",
                  `Oral surgery` = "Oral Surgery",
+                 `Obstetrics` = "Obstetrics",
                  `Other` = "Other")
 
 #### ---- LONG COLUMNS ---- ####
@@ -141,91 +134,205 @@ unplannedreadmission <- paste("unplannedreadmission", 1:5, sep = "")
 readmunrelsusp <- paste("readmunrelsusp", 1:5, sep = "")
 readmunrelicd9 <- paste("readmunrelicd9", 1:5, sep = "")
 readmunrelicd10 <- paste("readmunrelicd10", 1:5, sep = "")
-readm_cols <- c(readmission, readmpodays, readmrelated, readmsuspreason, readmrelicd9, readmrelicd10, unplannedreadmission, readmunrelsusp, readmunrelicd9, readmunrelicd10)
 
-reoperations <- paste("reoperation", 1:3, sep = "")
+reoperation <- paste("reoperation", 1:3, sep = "")
 retorpodays <- c("retorpodays","retor2podays", "retor3podays")
-reoporcpt1 <- c("reoporcpt1","reopor2cpt1","reopor3cpt1")
+reoporcpt <- c("reoporcpt1","reopor2cpt1","reopor3cpt1")
 retorrelated <- c("retorrelated","retor2related","retor3related")
-reoporicd91 <- c("reoporicd91","reopor2icd91","reopor3icd91")
+reoporicd9 <- c("reoporicd91","reopor2icd91","reopor3icd91")
 reoporicd10 <- c("reopor1icd101", "reopor2icd101", "reopor3icd101")
-reop_cols <- c(reoperations, retorpodays, reoporcpt1, retorrelated, reoporicd91, reoporicd10)
 
-anesthes_other_cols = paste("anesthes_other", 1:8, sep = "")
+anesthes_other <- paste("anesthes_other", 1:8, sep = "")
 
 proc <- c("prncptx", paste("otherproc", 1:10, sep = ""), paste("concurr", 1:10, sep = ""))
 cpt <- c("cpt", paste("othercpt", 1:10, sep = ""), paste("concpt", 1:10, sep = ""))
-wrvu <- c("workrvu", paste("otherwrvu", 1:10, sep = ""), paste("conwrvu", 1:10, sep = ""))
-cpt_cols <- c(proc, cpt, wrvu)
+workrvu <- c("workrvu", paste("otherwrvu", 1:10, sep = ""), paste("conwrvu", 1:10, sep = ""))
 
 #### ---- FUNCTIONS ---- ####
 
-#' Create readmission columns for long conversion
+#' Convert readmission columns from wide to long format
 #'
-#' @param df a data table to add the columns to
+#' @param df a data.table
+#' @param removeFALSE a logical vector indicating whether or not to remove rows with a FALSE value.
 #'
-#' @details First checks if the data table contains any of the readmission columns.
-#' If so, the rest are created as needed. New columns are set to a value of NA.
+#' @details The data from the data table is melted into a long format with \code{caseid} as the ID variable to allow
+#' rejoining to the main table. After melting, rows with missing values are omitted to reduce the size of the table.
+#' Rows where \code{readmission} are false may also be removed with \code{removeFALSE} to reduce table size if
+#' desired, but note this results in an inability to a clarify a known FALSE ("did not have a readmission") from
+#' a missing value ("do not know if there was a readmission").
+#'
+#' @return a data.table
 #'
 #' @keywords internal
-#'
 #' @examples
-#' x <- data.table::data.table(readmission1 = TRUE)
-#' nsqipr:::make_readm_cols(x)
-#' x
+#' x <- data.table::data.table(caseid = c(1,2,3,4),
+#' readmission1 = c(TRUE, TRUE, FALSE, NA),
+#' readmpodays1 = c(10, 7, NA, NA),
+#' readmrelated1 = c(TRUE, FALSE, NA, NA),
+#' readmsuspreason1 = c("Reason", "Reason", NA, NA),
+#' readmrelicd91 = c("111", "222", NA, NA),
+#' readmrelicd101 = c("1111","2222", NA, NA),
+#' unplannedreadmission1 = c(TRUE, FALSE, NA, NA),
+#' readmunrelsusp1 = c("Reason", NA, NA, NA),
+#' readmunrelicd91 = c("111", NA, NA, NA),
+#' readmunrelicd101 = c("1111",NA,NA,NA),
+#' readmission2 = c(TRUE, TRUE, FALSE, NA),
+#' readmpodays2 = c(10, 7, NA, NA),
+#' readmrelated2 = c(TRUE, FALSE, NA, NA),
+#' readmsuspreason2 = c("Reason", "Reason", NA, NA),
+#' readmrelicd92 = c("111", "222", NA, NA),
+#' readmrelicd102 = c("1111","2222", NA, NA),
+#' unplannedreadmission2 = c(TRUE, FALSE, NA, NA),
+#' readmunrelsusp2 = c("Reason", NA, NA, NA),
+#' readmunrelicd92 = c("111", NA, NA, NA),
+#' readmunrelicd102 = c("1111",NA,NA,NA),
+#' readmission3 = c(TRUE, TRUE, FALSE, NA),
+#' readmpodays3 = c(10, 7, NA, NA),
+#' readmrelated3 = c(TRUE, FALSE, NA, NA),
+#' readmsuspreason3 = c("Reason", "Reason", NA, NA),
+#' readmrelicd93 = c("111", "222", NA, NA),
+#' readmrelicd103 = c("1111","2222", NA, NA),
+#' unplannedreadmission3 = c(TRUE, FALSE, NA, NA),
+#' readmunrelsusp3 = c("Reason", NA, NA, NA),
+#' readmunrelicd93 = c("111", NA, NA, NA),
+#' readmunrelicd103 = c("1111",NA,NA,NA),
+#' readmission4 = c(TRUE, TRUE, NA, NA),
+#' readmpodays4 = c(10, 7, NA, NA),
+#' readmrelated4 = c(TRUE, FALSE, NA, NA),
+#' readmsuspreason4 = c("Reason", "Reason", NA, NA),
+#' readmrelicd94 = c("111", "222", NA, NA),
+#' readmrelicd104 = c("1111","2222", NA, NA),
+#' unplannedreadmission4 = c(TRUE, FALSE, NA, NA),
+#' readmunrelsusp4 = c("Reason", NA, NA, NA),
+#' readmunrelicd94 = c("111", NA, NA, NA),
+#' readmunrelicd104 = c("1111",NA,NA,NA),
+#' readmission5 = c(TRUE, TRUE, FALSE, NA),
+#' readmpodays5 = c(10, 7, NA, NA),
+#' readmrelated5 = c(TRUE, FALSE, NA, NA),
+#' readmsuspreason5 = c("Reason", "Reason", NA, NA),
+#' readmrelicd95 = c("111", "222", NA, NA),
+#' readmrelicd105 = c("1111","2222", NA, NA),
+#' unplannedreadmission5 = c(TRUE, FALSE, NA, NA),
+#' readmunrelsusp5 = c("Reason", NA, NA, NA),
+#' readmunrelicd95 = c("111", NA, NA, NA),
+#' readmunrelicd105 = c("1111",NA,NA,NA))
 #'
-make_readm_cols <- function(df) {
-  if(length(intersect(readm_cols, names(df))) > 0) {
-    for(j in setdiff(readm_cols, names(df))) data.table::set(df, j = j, value = NA)
-  }
+#' nsqipr:::make_readm_long(x)
+#' nsqipr:::make_readm_long(x, TRUE)
+#'
+make_readm_long <- function(df, removeFALSE = FALSE) {
+  removeFALSE <- ifelse(removeFALSE, "readmission", rlang::missing_arg()) # Allows removeFALSE to be used as a logical switch
+  make_cols_long(df, readmission, readmpodays, unplannedreadmission, readmrelated, readmsuspreason, readmunrelsusp, readmrelicd9, readmrelicd10,  readmunrelicd9, readmunrelicd10,
+                 na.cols = "readmission",
+                 removeFALSE = removeFALSE,
+                 reorder = TRUE)
 }
 
-#' Create reoperation columns for long conversion
+#' Convert reoperation columns from wide to long format
 #'
-#' @param df a data table to add the columns to
+#' @param df a data.table
+#' @param removeFALSE a logical vector indicating whether or not to remove rows with a FALSE value.
 #'
-#' @details First checks if the data table contains any of the reoperation columns.
-#' If so, the rest are created as needed. New columns are set to a value of NA.
+#' @details The data from the data table is then melted into a long format with \code{caseid} as the ID variable to allow
+#' rejoining to the main table. After melting, rows with missing values are omitted to reduce the size of the table.
+#' Rows where \code{reoperation} are false may also be removed with \code{removeFALSE} to reduce table size if
+#' desired, but note this results in an inability to a clarify a known FALSE ("did not have a reoperation") from
+#' a missing value ("do not know if there was a reoperation").
+#'
+#' Note that this function does not reorder \code{nreoperation} after converting to long and removing records with
+#' NA, FALSE, or both. This is because the third reoperation (\code{reoperation3}) has significance as representing
+#' 3 or more reoperations.
+#'
+#' @return a data.table
 #'
 #' @keywords internal
-#'
 #' @examples
-#' x <- data.table::data.table(reoperation1 = TRUE)
-#' nsqipr:::make_reop_cols(x)
-#' x
+#' x <- data.table::data.table(caseid = c(1,2,3,4),
+#' reoperation1 = c(TRUE, TRUE, FALSE, NA),
+#' retorpodays = c(10, 7, NA, NA),
+#' reoporcpt1 = c("44005", "37211", NA, NA),
+#' retorrelated = c(TRUE, TRUE, NA, NA),
+#' reoporicd91 = c("K56.69","T82.868A", NA, NA),
+#' reopor1icd101 = c("K56.59", "T82.868A", NA, NA),
+#' reoperation2 = c(TRUE, TRUE, FALSE, NA),
+#' retor2podays = c(10, 7, NA, NA),
+#' reopor2cpt1 = c("44005", "37211", NA, NA),
+#' retor2related = c(TRUE, TRUE, NA, NA),
+#' reopor2icd91 = c("K56.69","T82.868A", NA, NA),
+#' reopor2icd101 = c("K56.59", "T82.868A", NA, NA),
+#' reoperation3 = c(TRUE, TRUE, FALSE, NA),
+#' retor3podays = c(10, 7, NA, NA),
+#' reopor3cpt1 = c("44005", "37211", NA, NA),
+#' retor3related = c(TRUE, TRUE, NA, NA),
+#' reopor3icd91 = c("K56.69","T82.868A", NA, NA),
+#' reopor3icd101 = c("K56.59", "T82.868A", NA, NA))
 #'
-make_reop_cols <- function(df) {
-  if(length(intersect(reop_cols, names(df))) > 0) {
-    for(j in setdiff(reop_cols, names(df))) data.table::set(df, j = j, value = NA)
-  }
+#' nsqipr:::make_reop_long(x)
+#' nsqipr:::make_reop_long(x, TRUE)
+#'
+make_reop_long <- function(df, removeFALSE = FALSE) {
+  removeFALSE <- ifelse(removeFALSE, "reoperation", rlang::missing_arg()) # Allows removeFALSE to be used as a logical switch
+  make_cols_long(df, reoperation, retorpodays, reoporcpt, retorrelated, reoporicd9, reoporicd10,
+                 na.cols = "reoperation",
+                 removeFALSE = removeFALSE)
 }
 
-#' Create reoperation columns for long conversion
+#' Convert anesthes_other column from wide to long format
 #'
-#' @param df a data table to add the columns to
+#' @param df a data.table
 #'
-#' @details First checks if the data table contains an "anesthes_other" column.
-#' If so, the column is split into 8 columns according to the regex pattern ",\\s?".
+#' If "anesthes_other" is a column in \code{df}, it will be broken into a long format with
+#' \code{caseid} as the ID variable for joining back to the main table. This is because many of the NSQIP
+#' PUF datasets input multiple values into a single "anesthes_other" column. For example,
+#' "General, Spinal, MAC/IV Sedation" may be an entry in the raw data set. This makes
+#' parsing for patients that received "Spinal" anesthesia at any point, for example, very difficult.
 #'
-#' @keywords internal
+#' Note that this does not alter the "anesthes" column or include the anesthetic technique stored in the
+#' "anesthes" column in the resulting "anesthes_other" data table.
+#'
+#' @return a data.table
 #'
 #' @examples
 #' x <- data.table::data.table(
 #' anesthes_other = c("General","General, Spinal", "General, Spinal, MAC/IV Sedation", NA)
 #' )
 #' nsqipr:::make_anesthes_other_cols(x)
-#' x
 #'
-make_anesthes_other_cols <- function(df) {
-  if("anesthes_other" %qsin% names(df)) {
-    mat <- stringi::stri_split_regex(df[["anesthes_other"]], ",\\s?", simplify = NA, n = 8, omit_empty = TRUE, opts_regex = list(case_insensitive = TRUE))
-    for(j in seq_along(anesthes_other_cols)) data.table::set(df, j = anesthes_other_cols[[j]], value = mat[, j])
-  }
+make_anesthes_other_long <- function(df) {
+  make_commas_long(df, anesthes_other, levels = anesthes)
+}
+
+#' Convert CPT, Procedure Name, and WRVU from wide to long format
+#'
+#' @param df a data.table
+#'
+#' @details If all of the requisite columns are present in a data.table, this function
+#' will create a long format data table that contains the CPT, procedure name, and WRVU
+#' of each procedure each patient underwent. \code{caseid} is retained in order to allow joining
+#' back to a main table. Each procedure is numbered sequentially beginning at 1. This is stored
+#' in \code{nproc}. The only number that holds significance is "1", as this is the "primary procedure"
+#' as entered into the original data set. If any CPT codes are "NA", these records are removed
+#' and the "nproc" column is renumbered appropriately.
+#'
+#' In order to distinguish between an "other" procedure and a "concurrent" procedure, utilize the
+#' \code{primarysurg} variable: TRUE is equivalent to an "other" procedure and FALSE is equivalent
+#' to a "concurrent" procedure. This variable is so named because the only difference between an
+#' "other" procedure and a "concurrent" procedure is that the latter is a procedure not performed
+#' by the primary surgical team.
+#'
+#' @return a data.table
+#'
+#' @keywords internal
+#'
+make_cpt_long <- function(df) {
+  make_cols_long(df, cpt, proc, workrvu, variable.name = "nproc", na.cols = "cpt", reorder = TRUE, fn = function(x) {
+    data.table::set(x, j = "primarysurg", value = as.integer(x[["nproc"]]) <= 11)
+  })
 }
 
 #' Remove coma, neuro deficit, and graft columns after 2010
 #'
-#' @param df a data.table from which to remove the coma, neuro deficit, and graft columns
+#' @param df a data.table from which to remove the coma, neuro deficit, and graft outcome columns
 #'
 #' @details According to NSQIP, Graft failure, Coma, and Peripheral Nerve Injury should not be
 #' considered accurate for any PUF after 2010 (see the \link[https://www.facs.org/quality-programs/acs-nsqip/participant-use]{NSQIP} website).
@@ -235,7 +342,6 @@ make_anesthes_other_cols <- function(df) {
 #'
 #' @examples
 #' x <- data.table::data.table(
-#' coma = c(TRUE, TRUE, FALSE),
 #' cnscoma = c(TRUE, TRUE, FALSE),
 #' ncnscoma = c(1,2,3),
 #' dcnscoma = c(1,2,3),
@@ -255,13 +361,13 @@ make_anesthes_other_cols <- function(df) {
 #'
 check_comaneurograft <- function(df) {
   if(unique(df[["pufyear"]]) > 2010) {
-    cols <- c("coma","cnscoma","ncnscoma","dcnscoma","neurodef","nneurodef","dneurodef","othgrafl","nothgrafl","dothgrafl")
+    cols <- c("cnscoma","ncnscoma","dcnscoma","neurodef","nneurodef","dneurodef","othgrafl","nothgrafl","dothgrafl")
     for(j in intersect(cols, names(df))) data.table::set(df, j = j, value = NA)
   }
   invisible(df)
 }
 
-#' Add or update hispanic ethnicity column
+#' Add or update Hispanic ethnicity column
 #'
 #' @param df a data.table to add to or update with an \code{ethnicity_hispanic} column
 #'
@@ -279,18 +385,10 @@ check_comaneurograft <- function(df) {
 #' @examples
 #' x <- data.table::data.table(
 #' race = c("Hispanic, White", "White, Not of Hispanic Origin","Hispanic, Black",
-#' "Black, Not of Hispanic Origin", "American Indian or Alaska Native","Asian",
-#' "Native Hawaiian or Pacific Islander","Asian or Pacific Islander")
-#' )
-#'
-#' nsqipr:::conv_hispanic(x)
-#' x
-#'
-#' x <- data.table::data.table(
-#' race = c("Hispanic, White", "White, Not of Hispanic Origin","White","Hispanic, Black",
-#' "Black, Not of Hispanic Origin","Black or African American", "American Indian or Alaska Native",
-#' "Asian", "Native Hawaiian or Pacific Islander","Asian or Pacific Islander"),
-#' ethnicity_hispanic = c(NA, NA, "yes", NA, NA, NA, NA, NA, NA, NA)
+#' "Black, Not of Hispanic Origin", "Hispanic, Color Unknown", "White", "Black or African American",
+#' "American Indian or Alaska Native", "Asian", "Native Hawaiian or Pacific Islander",
+#' "Asian or Pacific Islander", NA),
+#' ethnicity_hispanic = c(NA, NA, NA, NA, NA, "Yes", "No", "Yes", "No", NA, NA, "Yes")
 #' )
 #'
 #' nsqipr:::conv_hispanic(x)
@@ -298,22 +396,23 @@ check_comaneurograft <- function(df) {
 #'
 conv_hispanic <- function(df) {
   if("ethnicity_hispanic" %chin% names(df)) {
-    vec <- conv_hispanic_helper(df)
+    vec <- ifelse(!is.na(df[["ethnicity_hispanic"]]),
+                  conv_yesno(df[["ethnicity_hispanic"]]),
+                  conv_hispanic_helper(df))
   } else {
-    vec <- stringi::stri_detect_regex(df[["race"]], "^hispanic,", opts_regex = list(case_insensitive = TRUE))
+    vec <- ifelse(stringi::stri_detect_regex(df[["race"]], "hispanic", opts_regex = list(case_insensitive = TRUE)),
+                  stringi::stri_detect_regex(df[["race"]], "^hispanic,", opts_regex = list(case_insensitive = TRUE)),
+                  NA)
   }
   data.table::set(df, j = "ethnicity_hispanic", value = vec)
 }
 
 #' @describeIn conv_hispanic A helper function for updating the \code{ethnicity_hispanic} column
 conv_hispanic_helper <- function(df) {
-  ifelse((df[["race"]] %chin% c("White","Black or African American") | is.na(df[["race"]])), # only PUFs after RACE_NEW was introduced should have these possible races.
-         conv_yesno(df[["ethnicity_hispanic"]]),
-         ifelse(df[["race"]] %chin% c("American Indian or Alaska Native","Asian","Native Hawaiian or Pacific Islander","Asian or Pacific Islander"),
-                FALSE,
-                stringi::stri_detect_regex(df[["race"]], "^hispanic,", opts_regex = list(case_insensitive = TRUE))))
+  ifelse(stringi::stri_detect_regex(df[["race"]], "hispanic", opts_regex = list(case_insensitive = TRUE)),
+         stringi::stri_detect_regex(df[["race"]], "^hispanic,", opts_regex = list(case_insensitive = TRUE)),
+         NA)
 }
-
 
 #' Convert race to factor
 #'
@@ -354,22 +453,6 @@ conv_race <- function(vec, pacific = "asian") {
                     "hawaiian" = hawaiian)
 
   vec %^% levels
-}
-
-#' Convert sex to logical
-#'
-#' @param vec a character vector of values to convert
-#'
-#' @details if "male", will result in TRUE. If given NA, will return NA.
-#'
-#' @return a logical vector
-#' @keywords internal
-#'
-#' @examples
-#'  nsqipr:::conv_sex(c("male","MALE","female","FEMALE",NA))
-#'
-conv_sex <- function(vec) {
-  stringi::stri_detect_regex(vec, "^male", opts_regex = list(case_insensitive = TRUE))
 }
 
 #' Convert inout to logical
@@ -448,7 +531,7 @@ when_dyspnea <- function(vec) {
 #' @details NSQIP encodes the \code{sepsis} column as either "sirs", "sepsis", "septic shock", or "none.
 #' This function factors the vector for the levels "SIRS", "Sepsis", and "Septic shock".
 #'
-#' \bold{NOTE}: \code{prsepis} is spelled illogically (as it is originally spelled in the NSQIP database).
+#' \bold{NOTE}: \code{prsepis} is spelled incorrectly (as it is originally spelled in the NSQIP database).
 #' It is not spelled \code{prsepsis}.
 #'
 #' @return a factor vector

@@ -17,7 +17,13 @@ Suggests:
     knitr,
     rmarkdown,
     testthat,
-    spelling
+    spelling,
+    withr,
+    rvest,
+    ggplot2,
+    easyPubMed,
+    dplyr,
+    xml2
 VignetteBuilder: knitr
 URL: https://github.com/dylanrussellmd/nsqipr, https://dylanrussellmd.github.io/nsqipr/
 BugReports: https://github.com/dylanrussellmd/nsqipr/issues
@@ -33,6 +39,7 @@ Imports:
     stringi,
     rlang,
     purrr,
-    stringr
+    stringr,
+    tibble
 Depends: 
     R (>= 3.5.0)

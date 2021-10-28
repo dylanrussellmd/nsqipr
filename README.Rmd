@@ -1,5 +1,6 @@
 ---
 output: github_document
+always_allow_html: true
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -8,19 +9,26 @@ output: github_document
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "man/figures/README-",
-  out.width = "100%",
+  fig.path = "inst/figures/README-",
+  out.width = "75%",
   echo = FALSE,
-  knitr.table.format = "markdown"
+  dev = "svg",
+  fig.align = "center"
 )
-load("R/sysdata.rda")
 library(magrittr)
+
+today <- format(Sys.Date(), "%d %B, %Y")
+
+print_table <- function(table) {
+  kableExtra::kbl(x = table) %>%
+    kableExtra::kable_styling(full_width = FALSE, position = "center", 
+                              bootstrap_options = c("striped", "condensed"), font_size = 14)
+}
 ```
 
 # nsqipr <img src='man/figures/hex.png' align="right" height="200"/>
 
 <!-- badges: start -->
-[![Travis build status](https://travis-ci.com/dylanrussellmd/nsqipr.svg?token=HoLzyTtjbHZhKQ9MzmcE&branch=master)](https://travis-ci.com/dylanrussellmd/nsqipr)
 [![R build status](https://github.com/dylanrussellmd/nsqipr/workflows/R-CMD-check/badge.svg)](https://github.com/dylanrussellmd/nsqipr/actions)
 ![Github All Releases](https://img.shields.io/github/downloads/dylanrussellmd/nsqipr/total?style=plastic)
 <!-- badges: end -->
@@ -31,7 +39,15 @@ What would you like to see implemented in `nsqipr`? [Open an issue](https://gith
 
 Welcome to `nsqipr`! If you're reading this, you are likely already familiar with the American College of Surgeons National Surgical Quality Improvement Program (**ACS NSQIP**<sup>&copy;</sup>). If not, you can read about it [here](https://www.facs.org/quality-programs/acs-nsqip). The ACS NSQIP <sup>&copy;</sup> is a nationally validated, risk-adjusted, outcomes-based program to measure and improve the quality of surgical care. 
 
-As of `r Sys.Date()`, there are currently [706 hospitals](https://www.facs.org/search/nsqip-participants?allresults=) that participate in and contribute to the program. The entire database contains **more than 6.6 million cases** for data analysis. 
+```{r, scrape_nsqip}
+# Use polite in the future
+nsqip_hospitals <- rvest::read_html("https://www.facs.org/search/nsqip-participants?allresults=") %>%
+  rvest::html_elements('h1') %>%
+  rvest::html_text() %>%
+  stringi::stri_extract_first(regex = "\\d+")
+```
+
+As of `r today`, there are currently [`r nsqip_hospitals` hospitals](https://www.facs.org/search/nsqip-participants?allresults=) that participate in and contribute to the program. The entire database contains **more than 8 million cases** for data analysis. 
 
 ## Inclusion and Exclusion Criteria
 
@@ -45,15 +61,107 @@ ACS NSQIP<sup>&copy;</sup> captures and reports 30-day morbidity and mortality o
 
 ## Publications
 
-The data from ACS NSQIP<sup>&copy;</sup> is used to produce **approximately 400 publications per year**. As of `r Sys.Date()`, there are currently [2,728 publications](https://pubmed.ncbi.nlm.nih.gov/?term=nsqip) analyzing the ACS NSQIP<sup>&copy;</sup> database.
+```{r, scrape_pubmed}
+pubmed <- easyPubMed::get_pubmed_ids('NSQIP') %>%
+  easyPubMed::fetch_pubmed_data(retmax = 5000) %>%
+  easyPubMed::articles_to_list(abstracts) %>%
+  purrr::map_dfr(easyPubMed::article_to_df,
+                 max_chars = -1, getAuthors = FALSE) %>%
+  dplyr::mutate(date = lubridate::make_date(as.integer(year), as.integer(month), as.integer(day)))
+```
+
+The data from ACS NSQIP<sup>&copy;</sup> is used to produce an exponentially increasing number of publications per year. As of `r today`, there are currently [`r nrow(pubmed)` PubMed search results](https://pubmed.ncbi.nlm.nih.gov/?term=NSQIP) for the search term "NSQIP".
+
+```{r, pubmed_search}
+yearsums <- pubmed %>%
+  dplyr::count(year) %>%
+  dplyr::mutate(n = cumsum(n),
+                date = lubridate::make_date(as.integer(year), 12, 15),
+                mod = as.integer(year) %% 5) %>%
+  dplyr::filter(mod == 0 | year == "2021")
+
+pubmed %>%
+  dplyr::count(date) %>%
+  ggplot2::ggplot(ggplot2::aes(x = date, y = n)) +
+  ggplot2::ylab("Pubmed 'NSQIP' Search Hits") +
+  ggplot2::geom_line(ggplot2::aes(y = cumsum(n))) +
+  ggplot2::geom_area(ggplot2::aes(x = date, y = cumsum(n)), fill = "midnightblue", alpha = 0.5) +
+  ggplot2::geom_point(data = yearsums, mapping = ggplot2::aes(x = date, y = n)) +
+  ggrepel::geom_text_repel(data = yearsums, mapping = ggplot2::aes(x = date, y = n, label = n), direction = "both", hjust = 2, vjust = -0.05) +
+  ggplot2::theme_classic() +
+  ggplot2::theme(axis.title.x = ggplot2::element_blank())
+```
+
+These papers are often published in high quality journals. The following graph shows the top 10 most common journals in which the above search results were published.
+
+```{r, journals, out.width="100%"}
+prep_title <- function(str) {
+  stringr::str_remove(str, pattern =":.+|\\..+|\\(.+|=.+") %>%
+    trimws() %>%
+    tools::toTitleCase() %>%
+    unescape_xml()
+}
+
+unescape_xml <- Vectorize(function(str){
+  xml2::xml_text(xml2::read_xml(paste0("<x>", str, "</x>")))
+})
+
+journals <- pubmed %>%
+  dplyr::count(journal) %>%
+  dplyr::slice_max(n, n = 10) %>%
+  dplyr::mutate(journal = prep_title(journal),
+                rank = rank(-n),
+                angle = 90 -360 * (rank-0.5) / nrow(.),
+                hjust = ifelse(angle < -90, 1, 0),
+                angle = ifelse(angle < -90, angle + 180, angle))
+  
+ggplot2::ggplot(journals, ggplot2::aes(x = reorder(journal, -n), y = n, fill = n)) +
+  ggplot2::geom_hline(yintercept = seq(0, 200, by = 50), colour = "grey", size = 0.35) +
+  ggplot2::geom_bar(stat = "identity",  width=1, color = "black") +
+  ggplot2::scale_fill_gradient(low = "white", high = "midnightblue") +
+  ggplot2::theme_minimal() + 
+  ggplot2::theme(
+    panel.background = ggplot2::element_blank(),
+    panel.border = ggplot2::element_blank(),
+    panel.ontop = FALSE,
+    panel.grid = ggplot2::element_blank(),
+    panel.grid.minor = ggplot2::element_blank(),
+    axis.line = ggplot2::element_blank(),
+    axis.text = ggplot2::element_blank(),
+    axis.title = ggplot2::element_blank(),
+    legend.position = "none",
+    plot.margin = ggplot2::unit(c(2.5,2.5,2.5,2.5), "cm")
+  ) +
+  ggplot2::coord_polar(start = 0, clip = "off") +
+  ggplot2::geom_text(data = journals, 
+                     ggplot2::aes(x = rank, y = 215, label = stringr::str_wrap(journal, 25), hjust = hjust), 
+                     color="black", fontface="bold",
+                     alpha=1, size=3, angle=journals$angle, 
+                     inherit.aes = FALSE) +
+  ggplot2::geom_text(x = 9.5, y = 100, size = 2.5, label = "100", alpha = 0.1) + 
+  ggplot2::geom_text(x = 9.5, y = 150, size = 2.5, label = "150", alpha = 0.1) + 
+  ggplot2::geom_text(x = 9.5, y = 200, size = 2.5, label = "200", alpha = 0.1)
+```
 
 # About `nsqipr`
 
 ## Purpose
 
-ACS NSQIP<sup>&copy;</sup> requires that members request specific datasets for use in research. The files are then delivered as `.exe` executables available for download for a limited duration of time. The archived files can be unzipped and contain a `.txt` tab-delimited file. Some will also contain a PDF version of the Participant Use File (**PUF**); these define the variables in the dataset. The `.txt` tab-delimited file must be read into R as a data frame and meticulously cleaned prior to being used for data analysis. Researchers often want to combine data across multiple years. This complicates data preparation as variables are removed or added every year and sometimes the same variable may be recorded differently in two different years.
+ACS NSQIP<sup>&copy;</sup> requires that members request specific datasets for use in research. The files are then delivered as `.exe` executable files available for download for a limited duration of time. The archived files can be unzipped and contain a `.txt` tab-delimited file. Some will also contain a PDF version of the Participant Use File (**PUF**); these define the variables in the dataset. The `.txt` tab-delimited file must be read into R as a data frame and meticulously cleaned prior to being used for data analysis. Researchers often want to combine data across multiple years. This complicates data preparation as variables are removed or added every year and sometimes the same variable may have differently worded outcomes between years.
 
-The purpose of `nsqipr` is to streamline this process. This package is geared towards those surgical interns, residents, and attendings who have limited experience with `R`, `SQL`, or "big data" analysis. It is also designed to be a useful tool for that experienced researcher or computer scientist making frequent use of ACS NSQIP<sup>&copy;</sup> PUFs.
+```{r race_comp, results="asis"}
+options(knitr.kable.NA = '')
+load("inst/figures/race_comp.rda")
+race_comp %>% print_table
+```
+
+The purpose of `nsqipr` is to streamline this process. This package is geared towards those surgical interns, residents, and attendings who have limited experience with R, SQL, or "big data" analysis. It is also designed to be a useful tool for that experienced researcher or computer scientist making frequent use of ACS NSQIP<sup>&copy;</sup> PUFs.
+
+For a detailed dive into `nsqipr`, please refer to the [companion book](www.dylanrussellmd.com/nsqipr_book) or the documentation:
+
+```r
+help("nsqipr")
+```
 
 ## Installation
 
@@ -72,44 +180,50 @@ We are not (yet) available on CRAN.
   
 `nsqipr` will take care of the rest. You're now ready to use the ACS NSQIP<sup>&copy;</sup> data for data analysis!
 
-## Variables
+## Progress
 
-TODO: Build example table of raw variables, clean variables, and type
+Track progress on how the various data sets are being incorporated into `nsqipr` here.
 
-## File Size
-```{r compute_size, echo=FALSE, include=FALSE}
-sizes <- sizedf %>% dplyr::group_by(type) %>% dplyr::summarise(sum(size))
-orig_size <- round(sizes[1, 2]/1000, 1)
-clean_size <- round(sizes[2, 2]/1000, 1)
-percent <- round((orig_size-clean_size)/orig_size*100, 0)
+```{r colorize}
+colorize <- function(x, color) {
+  sprintf("<span style='color: %s;'>%s</span>", color, x)
+}
+
+ready <- function() {
+  colorize("Done, Documented, Tested", "midnightblue")
+}
+
+ip <- function() {
+  colorize("In progress, use with caution", "goldenrod")
+}
+
+stop <- function() {
+  colorize("Not started", "maroon")
+}
 ```
 
+- Main PUF - `r ready()` 
+- Vascular - `r ip()`
+  - Abdominal Aortic Aneurysm - `r ip()`
+  - Aortoiliac Endovascular - `r ip()`
+  - Aortoiliac Open - `r ip()`
+  - Carotid Artery Stenting - `r stop()`
+  - Carotid Endarterectomy - `r stop()`
+  - Endovascular Aneurysm Repair - `r stop()`
+  - Lower Extremity Endovascular - `r stop()`
+  - Lower Extremity Open - `r stop()`
+- Colectomy - `r ip()`
+- Pancreatectomy - `r ip()`
+- Protectomy - `r stop()`
+- Hepatectomy - `r ip()`
+- Thyroidectomy - `r stop()`
+- Esophagectomy - `r stop()`
+- Appendectomy - `r ip()`
+- Gynecology - `r stop()`
+- Hysterectomy - `r stop()`
+- Hip Fracture - `r stop()`
+- Cystectomy - `r stop()`
+- Nephrectomy - `r stop()`
+- Prostatectomy - `r stop()`
 
-`nsqipr` significantly reduces file sizes after cleaning the data. The cumulative file size for the entire NSQIP database (not including targeted procedures) is reduced from `r orig_size` GB to `r clean_size` GB (a `r percent`% decrease).
-
-```{r file_size}
-sizedf %>%
-  ggplot2::ggplot(ggplot2::aes(x = name, y = size, fill = type)) +
-  ggplot2::geom_bar(stat = "identity", position = ggplot2::position_dodge()) +
-  ggplot2::scale_fill_brewer(palette="Paired", labels = c("Before", "After")) +
-  ggplot2::coord_flip() +
-  ggplot2::labs(y = "File size (MB)") +
-  ggplot2::theme_minimal() +
-  ggplot2::theme(axis.title.y = ggplot2::element_blank(),
-                 legend.title = ggplot2::element_blank())
-```
-
-## Cleaning Time
-
-Compared to manually cleaning and combining data, `nsqipr` is blazing fast. The largest single file, `r mb$expr[which(mb$time == max(mb$time))]`, takes only `r max(mb$time)` seconds to clean. The entire NSQIP database (not including targeted procedures) can be cleaned and combined in only `r round(sum(mb$time)/60, 1)` minutes.
-
-```{r clean_time}
-mb %>%
-  ggplot2::ggplot(ggplot2::aes(x = expr, y = time)) +
-  ggplot2::geom_bar(stat = "identity", fill = "#56B4E9") +
-  ggplot2::coord_flip() +
-  ggplot2::labs(y = "Cleaning time (sec)") +
-  ggplot2::theme_minimal() +
-  ggplot2::theme(axis.title.y = ggplot2::element_blank(),
-                 legend.title = ggplot2::element_blank())
-```
+Check back often for updates!

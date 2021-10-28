@@ -3,7 +3,7 @@
 \name{conv_hispanic}
 \alias{conv_hispanic}
 \alias{conv_hispanic_helper}
-\title{Add or update hispanic ethnicity column}
+\title{Add or update Hispanic ethnicity column}
 \usage{
 conv_hispanic(df)
 
@@ -16,7 +16,7 @@ conv_hispanic_helper(df)
 a data table
 }
 \description{
-Add or update hispanic ethnicity column
+Add or update Hispanic ethnicity column
 }
 \details{
 \code{ethnicity_hispanic} was not added until the 2008 NSQIP PUF when \code{race} was revised to
@@ -35,18 +35,10 @@ into a logical vector.
 \examples{
 x <- data.table::data.table(
 race = c("Hispanic, White", "White, Not of Hispanic Origin","Hispanic, Black",
-"Black, Not of Hispanic Origin", "American Indian or Alaska Native","Asian",
-"Native Hawaiian or Pacific Islander","Asian or Pacific Islander")
-)
-
-nsqipr:::conv_hispanic(x)
-x
-
-x <- data.table::data.table(
-race = c("Hispanic, White", "White, Not of Hispanic Origin","White","Hispanic, Black",
-"Black, Not of Hispanic Origin","Black or African American", "American Indian or Alaska Native",
-"Asian", "Native Hawaiian or Pacific Islander","Asian or Pacific Islander"),
-ethnicity_hispanic = c(NA, NA, "yes", NA, NA, NA, NA, NA, NA, NA)
+"Black, Not of Hispanic Origin", "Hispanic, Color Unknown", "White", "Black or African American",
+"American Indian or Alaska Native", "Asian", "Native Hawaiian or Pacific Islander",
+"Asian or Pacific Islander", NA),
+ethnicity_hispanic = c(NA, NA, NA, NA, NA, "Yes", "No", "Yes", "No", NA, NA, "Yes")
 )
 
 nsqipr:::conv_hispanic(x)
