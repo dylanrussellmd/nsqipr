@@ -1,10 +1,8 @@
 #' nsqipr: A cleaner NSQIP. \if{html}{\figure{hex.png}{options: align="right" alt='nsqipr logo' width=200}} \if{latex}{\figure{hex.png}{options: width=0.5in}}
 #'
-#' @author Dylan Russell, M.D.
+#' @author \href{https://www.dylanrussellmd.com}{Dylan Russell, M.D}.
 #'
 #' @description
-
-#'
 #' The purpose of `nsqipr` is to streamline the data cleaning process.
 #' This package is geared towards those surgical interns, residents, and attendings
 #' who have limited experience with R, SQL, or "big data" analysis.

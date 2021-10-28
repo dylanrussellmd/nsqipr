@@ -26,7 +26,7 @@ ACS NSQIP <sup>©</sup> is a nationally validated, risk-adjusted,
 outcomes-based program to measure and improve the quality of surgical
 care.
 
-As of 27 October, 2021, there are currently [700
+As of 28 October, 2021, there are currently [700
 hospitals](https://www.facs.org/search/nsqip-participants?allresults=)
 that participate in and contribute to the program. The entire database
 contains **more than 8 million cases** for data analysis.
@@ -48,7 +48,7 @@ become available. Excluded cases are:
 ## Publications
 
 The data from ACS NSQIP<sup>©</sup> is used to produce an exponentially
-increasing number of publications per year. As of 27 October, 2021,
+increasing number of publications per year. As of 28 October, 2021,
 there are currently [3308 PubMed search
 results](https://pubmed.ncbi.nlm.nih.gov/?term=NSQIP) for the search
 term “NSQIP”.
@@ -236,7 +236,7 @@ designed to be a useful tool for that experienced researcher or computer
 scientist making frequent use of ACS NSQIP<sup>©</sup> PUFs.
 
 For a detailed dive into `nsqipr`, please refer to the [companion
-book](www.dylanrussellmd.com/nsqipr_book) or the documentation:
+book](https://www.dylanrussellmd.com/nsqipr_book) or the documentation:
 
 ``` r
 help("nsqipr")
@@ -290,7 +290,7 @@ Track progress on how the various data sets are being incorporated into
     caution</span>
   - Pancreatectomy - <span style="color: goldenrod;">In progress, use
     with caution</span>
-  - Protectomy - <span style="color: maroon;">Not started</span>
+  - Proctectomy - <span style="color: maroon;">Not started</span>
   - Hepatectomy - <span style="color: goldenrod;">In progress, use with
     caution</span>
   - Thyroidectomy - <span style="color: maroon;">Not started</span>

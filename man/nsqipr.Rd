@@ -20,5 +20,5 @@ computer scientist making frequent use of ACS NSQIP PUFs.
 }
 }
 \author{
-Dylan Russell, M.D.
+\href{https://www.dylanrussellmd.com}{Dylan Russell, M.D}.
 }

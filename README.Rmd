@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
   fig.align = "center"
 )
 library(magrittr)
+source("R/helper-readme.R")
 
 today <- format(Sys.Date(), "%d %B, %Y")
 
@@ -41,10 +42,7 @@ Welcome to `nsqipr`! If you're reading this, you are likely already familiar wit
 
 ```{r, scrape_nsqip}
 # Use polite in the future
-nsqip_hospitals <- rvest::read_html("https://www.facs.org/search/nsqip-participants?allresults=") %>%
-  rvest::html_elements('h1') %>%
-  rvest::html_text() %>%
-  stringi::stri_extract_first(regex = "\\d+")
+nsqip_hospitals <- get_nsqip_hospitals()
 ```
 
 As of `r today`, there are currently [`r nsqip_hospitals` hospitals](https://www.facs.org/search/nsqip-participants?allresults=) that participate in and contribute to the program. The entire database contains **more than 8 million cases** for data analysis. 
@@ -62,85 +60,21 @@ ACS NSQIP<sup>&copy;</sup> captures and reports 30-day morbidity and mortality o
 ## Publications
 
 ```{r, scrape_pubmed}
-pubmed <- easyPubMed::get_pubmed_ids('NSQIP') %>%
-  easyPubMed::fetch_pubmed_data(retmax = 5000) %>%
-  easyPubMed::articles_to_list(abstracts) %>%
-  purrr::map_dfr(easyPubMed::article_to_df,
-                 max_chars = -1, getAuthors = FALSE) %>%
-  dplyr::mutate(date = lubridate::make_date(as.integer(year), as.integer(month), as.integer(day)))
+pubmed <- get_nsqip_pubmed()
 ```
 
 The data from ACS NSQIP<sup>&copy;</sup> is used to produce an exponentially increasing number of publications per year. As of `r today`, there are currently [`r nrow(pubmed)` PubMed search results](https://pubmed.ncbi.nlm.nih.gov/?term=NSQIP) for the search term "NSQIP".
 
 ```{r, pubmed_search}
-yearsums <- pubmed %>%
-  dplyr::count(year) %>%
-  dplyr::mutate(n = cumsum(n),
-                date = lubridate::make_date(as.integer(year), 12, 15),
-                mod = as.integer(year) %% 5) %>%
-  dplyr::filter(mod == 0 | year == "2021")
-
-pubmed %>%
-  dplyr::count(date) %>%
-  ggplot2::ggplot(ggplot2::aes(x = date, y = n)) +
-  ggplot2::ylab("Pubmed 'NSQIP' Search Hits") +
-  ggplot2::geom_line(ggplot2::aes(y = cumsum(n))) +
-  ggplot2::geom_area(ggplot2::aes(x = date, y = cumsum(n)), fill = "midnightblue", alpha = 0.5) +
-  ggplot2::geom_point(data = yearsums, mapping = ggplot2::aes(x = date, y = n)) +
-  ggrepel::geom_text_repel(data = yearsums, mapping = ggplot2::aes(x = date, y = n, label = n), direction = "both", hjust = 2, vjust = -0.05) +
-  ggplot2::theme_classic() +
-  ggplot2::theme(axis.title.x = ggplot2::element_blank())
+yearsums <- get_nsqip_pubmed_yearsums(pubmed)
+make_nsqip_hits_graph(pubmed, yearsums)
 ```
 
 These papers are often published in high quality journals. The following graph shows the top 10 most common journals in which the above search results were published.
 
 ```{r, journals, out.width="100%"}
-prep_title <- function(str) {
-  stringr::str_remove(str, pattern =":.+|\\..+|\\(.+|=.+") %>%
-    trimws() %>%
-    tools::toTitleCase() %>%
-    unescape_xml()
-}
-
-unescape_xml <- Vectorize(function(str){
-  xml2::xml_text(xml2::read_xml(paste0("<x>", str, "</x>")))
-})
-
-journals <- pubmed %>%
-  dplyr::count(journal) %>%
-  dplyr::slice_max(n, n = 10) %>%
-  dplyr::mutate(journal = prep_title(journal),
-                rank = rank(-n),
-                angle = 90 -360 * (rank-0.5) / nrow(.),
-                hjust = ifelse(angle < -90, 1, 0),
-                angle = ifelse(angle < -90, angle + 180, angle))
-  
-ggplot2::ggplot(journals, ggplot2::aes(x = reorder(journal, -n), y = n, fill = n)) +
-  ggplot2::geom_hline(yintercept = seq(0, 200, by = 50), colour = "grey", size = 0.35) +
-  ggplot2::geom_bar(stat = "identity",  width=1, color = "black") +
-  ggplot2::scale_fill_gradient(low = "white", high = "midnightblue") +
-  ggplot2::theme_minimal() + 
-  ggplot2::theme(
-    panel.background = ggplot2::element_blank(),
-    panel.border = ggplot2::element_blank(),
-    panel.ontop = FALSE,
-    panel.grid = ggplot2::element_blank(),
-    panel.grid.minor = ggplot2::element_blank(),
-    axis.line = ggplot2::element_blank(),
-    axis.text = ggplot2::element_blank(),
-    axis.title = ggplot2::element_blank(),
-    legend.position = "none",
-    plot.margin = ggplot2::unit(c(2.5,2.5,2.5,2.5), "cm")
-  ) +
-  ggplot2::coord_polar(start = 0, clip = "off") +
-  ggplot2::geom_text(data = journals, 
-                     ggplot2::aes(x = rank, y = 215, label = stringr::str_wrap(journal, 25), hjust = hjust), 
-                     color="black", fontface="bold",
-                     alpha=1, size=3, angle=journals$angle, 
-                     inherit.aes = FALSE) +
-  ggplot2::geom_text(x = 9.5, y = 100, size = 2.5, label = "100", alpha = 0.1) + 
-  ggplot2::geom_text(x = 9.5, y = 150, size = 2.5, label = "150", alpha = 0.1) + 
-  ggplot2::geom_text(x = 9.5, y = 200, size = 2.5, label = "200", alpha = 0.1)
+journals <- get_nsqip_pubmed_journals(pubmed)
+make_nsqip_journal_circular(journals)
 ```
 
 # About `nsqipr`
@@ -157,7 +91,7 @@ race_comp %>% print_table
 
 The purpose of `nsqipr` is to streamline this process. This package is geared towards those surgical interns, residents, and attendings who have limited experience with R, SQL, or "big data" analysis. It is also designed to be a useful tool for that experienced researcher or computer scientist making frequent use of ACS NSQIP<sup>&copy;</sup> PUFs.
 
-For a detailed dive into `nsqipr`, please refer to the [companion book](www.dylanrussellmd.com/nsqipr_book) or the documentation:
+For a detailed dive into `nsqipr`, please refer to the [companion book](https://www.dylanrussellmd.com/nsqipr_book) or the documentation:
 
 ```r
 help("nsqipr")
@@ -214,7 +148,7 @@ stop <- function() {
   - Lower Extremity Open - `r stop()`
 - Colectomy - `r ip()`
 - Pancreatectomy - `r ip()`
-- Protectomy - `r stop()`
+- Proctectomy - `r stop()`
 - Hepatectomy - `r ip()`
 - Thyroidectomy - `r stop()`
 - Esophagectomy - `r stop()`
