@@ -7,23 +7,27 @@ always_allow_html: true
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
+  echo = FALSE,
   collapse = TRUE,
   comment = "#>",
-  fig.path = "man/figures/README-",
   out.width = "75%",
-  echo = FALSE,
-  dev = "svg",
   fig.align = "center"
 )
 library(magrittr)
-source("R/helper-readme.R")
+load("R/sysdata.rda")
+```
 
-today <- format(Sys.Date(), "%d %B, %Y")
+```{r, setup}
+today <- format(lubridate::date(file.info("R/sysdata.rda")$mtime), "%d %B, %Y")
 
 print_table <- function(table) {
   kableExtra::kbl(x = table) %>%
     kableExtra::kable_styling(full_width = FALSE, position = "center", 
                               bootstrap_options = c("striped", "condensed"), font_size = 14)
+}
+
+include_graphic <- function(file) {
+  knitr::include_graphics(paste0("man/figures/README-", file, ".png"))
 }
 ```
 
@@ -36,16 +40,13 @@ print_table <- function(table) {
 
 What would you like to see implemented in `nsqipr`? [Open an issue](https://github.com/doctortickle/nsqipr/issues)!  Are you interested in using or helping develop `nsqipr`? [Send me an email](dyl.russell@gmail.com)!
 
+> **See the [companion book](https://www.dylanrussellmd.com/nsqipr_book) for a more detailed guide!**
+
 # About ACS NSQIP<sup>&copy;</sup>
 
 Welcome to `nsqipr`! If you're reading this, you are likely already familiar with the American College of Surgeons National Surgical Quality Improvement Program (**ACS NSQIP**<sup>&copy;</sup>). If not, you can read about it [here](https://www.facs.org/quality-programs/acs-nsqip). The ACS NSQIP <sup>&copy;</sup> is a nationally validated, risk-adjusted, outcomes-based program to measure and improve the quality of surgical care. 
 
-```{r, scrape_nsqip}
-# Use polite in the future
-nsqip_hospitals <- get_nsqip_hospitals()
-```
-
-As of `r today`, there are currently [`r nsqip_hospitals` hospitals](https://www.facs.org/search/nsqip-participants?allresults=) that participate in and contribute to the program. The entire database contains **more than 8 million cases** for data analysis. 
+As of `r today`, there are currently [`r .nsqip_hospitals` hospitals](https://www.facs.org/search/nsqip-participants?allresults=) that participate in and contribute to the program. The entire database contains **more than 8 million cases** for data analysis. 
 
 ## Inclusion and Exclusion Criteria
 
@@ -59,22 +60,16 @@ ACS NSQIP<sup>&copy;</sup> captures and reports 30-day morbidity and mortality o
 
 ## Publications
 
-```{r, scrape_pubmed}
-pubmed <- get_nsqip_pubmed()
-```
-
-The data from ACS NSQIP<sup>&copy;</sup> is used to produce an exponentially increasing number of publications per year. As of `r today`, there are currently [`r nrow(pubmed)` PubMed search results](https://pubmed.ncbi.nlm.nih.gov/?term=NSQIP) for the search term "NSQIP".
+The data from ACS NSQIP<sup>&copy;</sup> is used to produce an exponentially increasing number of publications per year. As of `r today`, there are currently [`r .nsqip_publications` PubMed search results](https://pubmed.ncbi.nlm.nih.gov/?term=NSQIP) for the search term "NSQIP".
 
 ```{r, pubmed_search}
-yearsums <- get_nsqip_pubmed_yearsums(pubmed)
-make_nsqip_hits_graph(pubmed, yearsums)
+include_graphic("nsqip_hits_graph")
 ```
 
 These papers are often published in high quality journals. The following graph shows the top 10 most common journals in which the above search results were published.
 
 ```{r, journals, out.width="100%"}
-journals <- get_nsqip_pubmed_journals(pubmed)
-make_nsqip_journal_circular(journals)
+include_graphic("nsqip_journal_circular")
 ```
 
 # About `nsqipr`

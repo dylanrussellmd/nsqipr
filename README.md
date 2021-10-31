@@ -16,6 +16,9 @@ issue](https://github.com/doctortickle/nsqipr/issues)\! Are you
 interested in using or helping develop `nsqipr`? [Send me an
 email](dyl.russell@gmail.com)\!
 
+> **See the [companion book](https://www.dylanrussellmd.com/nsqipr_book)
+> for a more detailed guide\!**
+
 # About ACS NSQIP<sup>©</sup>
 
 Welcome to `nsqipr`\! If you’re reading this, you are likely already
@@ -26,7 +29,7 @@ ACS NSQIP <sup>©</sup> is a nationally validated, risk-adjusted,
 outcomes-based program to measure and improve the quality of surgical
 care.
 
-As of 28 October, 2021, there are currently [700
+As of 30 October, 2021, there are currently [699
 hospitals](https://www.facs.org/search/nsqip-participants?allresults=)
 that participate in and contribute to the program. The entire database
 contains **more than 8 million cases** for data analysis.
@@ -48,18 +51,18 @@ become available. Excluded cases are:
 ## Publications
 
 The data from ACS NSQIP<sup>©</sup> is used to produce an exponentially
-increasing number of publications per year. As of 28 October, 2021,
-there are currently [3308 PubMed search
+increasing number of publications per year. As of 30 October, 2021,
+there are currently [3311 PubMed search
 results](https://pubmed.ncbi.nlm.nih.gov/?term=NSQIP) for the search
 term “NSQIP”.
 
-<img src="man/figures/README-pubmed_search-1.svg" width="75%" style="display: block; margin: auto;" />
+<img src="man/figures/README-nsqip_hits_graph.png" width="75%" style="display: block; margin: auto;" />
 
 These papers are often published in high quality journals. The following
 graph shows the top 10 most common journals in which the above search
 results were published.
 
-<img src="man/figures/README-journals-1.svg" width="100%" style="display: block; margin: auto;" />
+<img src="man/figures/README-nsqip_journal_circular.png" width="100%" style="display: block; margin: auto;" />
 
 # About `nsqipr`
 
