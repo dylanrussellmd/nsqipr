@@ -1,0 +1,31 @@
+caseid	col_steroid	col_steroid_unk	col_mech_bowel_prep	col_mech_bowel_prep_unk	col_oral_antibiotic	col_oral_antibiotic_unk	col_chemo	col_chemo_unk	col_indication	col_icd9_indication	col_emergent	col_icd9_emergent	col_approach	col_margins	col_margins_unk	col_malignancyt	col_malignancyn	col_malignancym	col_anastomotic	col_ileus	col_ileus_unk	col_nodeseval
+10201813	Unknown	1	Unknown	1	NULL	-99	Yes	NA	Enterocolitis (e.g. C. Difficile)	NULL	Other (enter ICD-10 code)	NULL	SILS	NULL	-99	T4	N1b	M0/Mx	No definitive diagnosis of leak/leak related abscess	No	1	18
+10201814	Yes	-99	NULL	-99	No	1	Yes	1	Chronic diverticular disease	NULL	Toxic colitis (Toxic Megacolon, C. diff w/out perforation, Ischemic Colitis)	NULL	Laparoscopic	NULL	-99	T2	Unknown	M0/Mx	Leak, treated w/ reoperation	No	-99	30
+10201898	Yes	-99	Unknown	1	No	NA	Yes	1	Crohn's Disease	NULL	Bleeding	NULL	Open (planned)	NULL	-99	T3	N2a	M1b	Leak, treated w/ interventional means	No	1	1
+10203149	Unknown	-99	NULL	-99	Yes	1	No	1	Other-Enter ICD-10 for diagnosis	NULL	Obstruction	NULL	Robotic w/ open assist	NULL	-99	Tis	Unknown	M1a	No definitive diagnosis of leak/leak related abscess	No	1	19
+10201663	Unknown	-99	Yes	1	No	1	Yes	1	Crohn's Disease	NA	Bleeding	NULL	SILS w/ open assist	NULL	-99	T4a	N/A	N/A	Leak, no treatment intervention documented	Unknown	-99	0
+10201191	Unknown	-99	NULL	1	NULL	-99	Yes	-99	Colon cancer	NULL	Perforation	NULL	Robotic	NULL	-99	T0	Nx	M0/Mx	Leak, no treatment intervention documented	Yes	NA	25
+10204289	Unknown	-99	Yes	-99	Unknown	-99	NA	1	Ulcerative colitis	NULL	Obstruction	NULL	Endoscopic w/ unplanned conversion to open	NULL	-99	T4b	N1c	N/A	Unknown	No	1	20
+10200672	NA	1	No	1	Unknown	1	Unknown	-99	Bleeding	NULL	Bleeding	NULL	Other MIS approach	NA	-99	T1	N1b	M1b	No definitive diagnosis of leak/leak related abscess	No	-99	23
+10201515	No	1	Yes	-99	Yes	1	Unknown	1	Acute diverticulitis	NULL	Other (enter ICD-10 code)	NULL	Laparoscopic w/ unplanned conversion to open	NULL	-99	Unknown	Nx	NA	Leak, treated w/ non-interventional/non-operative means	Yes	-99	45
+10200214	No	-99	Unknown	-99	NA	-99	No	1	NA	NULL	NULL	NULL	SILS w/ unplanned conversion to open	NULL	-99	N/A	N0	N/A	No definitive diagnosis of leak/leak related abscess	Unknown	-99	21
+10200312	Unknown	NA	No	-99	NULL	1	Unknown	-99	Bleeding	NULL	NULL	NULL	Hybrid	NULL	-99	T0	N2a	N/A	Leak, treated w/ interventional means	Unknown	-99	13
+10203774	No	1	NULL	1	Yes	-99	No	-99	Colon cancer	NULL	Toxic colitis (Toxic Megacolon, C. diff w/out perforation, Ischemic Colitis)	NA	Hybrid w/ open assist	NULL	-99	T1	N1	N/A	Leak, treated w/ interventional means	Yes	1	NA
+10201503	Unknown	1	No	-99	Unknown	1	No	1	Ulcerative colitis	NULL	Bleeding	NULL	Other	NULL	-99	Tx	N2a	M1c	Leak, treated w/ non-interventional/non-operative means	Unknown	1	26
+10201319	No	-99	Yes	1	NULL	1	Unknown	1	Other-Enter ICD-10 for diagnosis	NULL	NULL	NULL	Endoscopic w/ open assist	NULL	-99	T0	N1	M1c	Leak, treated w/ non-interventional/non-operative means	Unknown	1	10
+10200653	Yes	1	Unknown	-99	Unknown	1	No	-99	Crohn's Disease	NULL	Other (enter ICD-10 code)	NULL	Laparoscopic	NULL	-99	T3	N2b	M1c	Leak, treated w/ reoperation	Unknown	1	16
+10201961	Yes	1	No	NA	No	1	Unknown	1	Colon cancer w/ obstruction	NULL	Unknown	NULL	NA	NULL	-99	T4	Nx	M1	Leak, treated w/ interventional means	Yes	1	17
+10204613	No	-99	No	1	No	-99	No	1	Enterocolitis (e.g. C. Difficile)	NULL	Obstruction	NULL	Laparoscopic w/ open assist	NULL	-99	T4a	NA	M1	Unknown	Unknown	1	28
+10200642	Yes	-99	No	-99	NULL	-99	No	-99	Non-malignant polyp	NULL	Obstruction	NULL	Other MIS approach w/ unplanned conversion to open	NULL	-99	N/A	N0	M1a	Leak, treated w/ interventional means	No	-99	42
+10202464	No	-99	Yes	1	No	-99	Unknown	1	Unknown	NULL	Unknown	NULL	Open (planned)	NULL	-99	Tis	N2	M1b	Leak, no treatment intervention documented	No	-99	47
+10203758	Unknown	1	No	-99	Unknown	1	Yes	1	Volvulus	NULL	Toxic colitis (Toxic Megacolon, C. diff w/out perforation, Ischemic Colitis)	NULL	SILS	NULL	-99	T4a	N1c	M1b	NA	Yes	-99	27
+10200367	No	-99	Yes	1	Unknown	-99	Unknown	-99	Other-Enter ICD-10 for diagnosis	NULL	Perforation	NULL	Robotic w/ unplanned conversion to open	NULL	-99	Unknown	N1a	M1	No definitive diagnosis of leak/leak related abscess	No	1	34
+NA	Yes	1	NULL	-99	Unknown	1	No	-99	Colon cancer w/ obstruction	NULL	Perforation	NULL	Robotic w/ open assist	NULL	NA	T3	N1	M1	Leak, treated w/ non-interventional/non-operative means	Unknown	-99	3
+10201007	Unknown	1	No	1	Yes	1	Yes	-99	Ulcerative colitis	NULL	NA	NULL	Endoscopic	NULL	-99	T1	N2	Unknown	Unknown	No	-99	24
+10201445	Unknown	1	Unknown	-99	Yes	-99	No	-99	Acute diverticulitis	NULL	Toxic colitis (Toxic Megacolon, C. diff w/out perforation, Ischemic Colitis)	NULL	Laparoscopic w/ open assist	NULL	-99	T2	N/A	M1a	Leak, no treatment intervention documented	Yes	1	12
+10201072	No	1	NULL	-99	Yes	-99	Unknown	-99	Unknown	NULL	Other (enter ICD-10 code)	NULL	Hybrid	NULL	-99	Tx	N1b	M0/Mx	Leak, treated w/ non-interventional/non-operative means	Yes	1	11
+10201016	Yes	1	Yes	-99	No	1	Unknown	-99	Chronic diverticular disease	NULL	NULL	NULL	Other MIS approach w/ open assist	NULL	-99	NA	N0	Unknown	Leak, treated w/ reoperation	Yes	-99	4
+10201469	No	-99	Unknown	1	NULL	-99	Yes	-99	Non-malignant polyp	NULL	Unknown	NULL	Laparoscopic w/ unplanned conversion to open	NULL	-99	T4b	N2b	Unknown	Unknown	NA	-99	14
+10202724	No	-99	Unknown	1	NULL	-99	Yes	-99	Colon cancer	NULL	NULL	NULL	Robotic	NULL	-99	T2	N/A	M0/Mx	Leak, treated w/ reoperation	Yes	1	-99
+10201228	Yes	1	NULL	1	Yes	-99	Unknown	-99	Chronic diverticular disease	NULL	Obstruction	NULL	Robotic w/ unplanned conversion to open	NULL	-99	T4b	N1a	M1c	Leak, no treatment intervention documented	Unknown	-99	35
+10201420	Yes	-99	NA	-99	Unknown	-99	No	1	Volvulus	NULL	Perforation	NULL	Hybrid w/ unplanned conversion to open	NULL	-99	N/A	N1a	M1a	Leak, treated w/ reoperation	Unknown	-99	15
