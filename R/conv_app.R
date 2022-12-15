@@ -45,7 +45,7 @@ app_setting_ct <- list(
 app_img_mri <- list(
   `Consistent with appendicitis` = "Result consistent w/ diagnosis of Appendicitis",
   `Indeterminate` = "Result Indeterminate / Uncertain",
-  `Not consistent with appendicitis` = 'Result Not Consistent w/ Appendicitis; Appendix "Normal"'
+  `Not consistent with appendicitis` = 'Result Not Consistent w/ Appendicitis; Appendix \"\"Normal\"\"'
 )
 app_setting_mri <- list(
   `Operating hospital` = "Performed in Operating Hospital",

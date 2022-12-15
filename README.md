@@ -12,16 +12,16 @@ Releases](https://img.shields.io/github/downloads/dylanrussellmd/nsqipr/total?st
 <!-- badges: end -->
 
 What would you like to see implemented in `nsqipr`? [Open an
-issue](https://github.com/doctortickle/nsqipr/issues)\! Are you
+issue](https://github.com/doctortickle/nsqipr/issues)! Are you
 interested in using or helping develop `nsqipr`? [Send me an
-email](dyl.russell@gmail.com)\!
+email](dyl.russell@gmail.com)!
 
 > **See the [companion book](https://www.dylanrussellmd.com/nsqipr_book)
-> for a more detailed guide\!**
+> for a more detailed guide!**
 
 # About ACS NSQIP<sup>©</sup>
 
-Welcome to `nsqipr`\! If you’re reading this, you are likely already
+Welcome to `nsqipr`! If you’re reading this, you are likely already
 familiar with the American College of Surgeons National Surgical Quality
 Improvement Program (**ACS NSQIP**<sup>©</sup>). If not, you can read
 about it [here](https://www.facs.org/quality-programs/acs-nsqip). The
@@ -29,7 +29,7 @@ ACS NSQIP <sup>©</sup> is a nationally validated, risk-adjusted,
 outcomes-based program to measure and improve the quality of surgical
 care.
 
-As of 30 October, 2021, there are currently [699
+As of 13 May, 2022, there are currently [699
 hospitals](https://www.facs.org/search/nsqip-participants?allresults=)
 that participate in and contribute to the program. The entire database
 contains **more than 8 million cases** for data analysis.
@@ -42,17 +42,17 @@ procedures as determined by Current Procedural Terminology
 (CPT<sup>©</sup>) code. This list is updated annually as new codes
 become available. Excluded cases are:
 
-  - Patients under the age of 18 years.
-  - \>3 inguinal herniorrhaphies in an 8-day period.
-  - \>3 breast lumpectomies in an 8-day period.
-  - \>3 laparoscopic cholecystectomies in an 8-day period.
-  - \>3 TURPs and/or TURBTs in an 8-day period.
+-   Patients under the age of 18 years.
+-   \>3 inguinal herniorrhaphies in an 8-day period.
+-   \>3 breast lumpectomies in an 8-day period.
+-   \>3 laparoscopic cholecystectomies in an 8-day period.
+-   \>3 TURPs and/or TURBTs in an 8-day period.
 
 ## Publications
 
 The data from ACS NSQIP<sup>©</sup> is used to produce an exponentially
-increasing number of publications per year. As of 30 October, 2021,
-there are currently [3311 PubMed search
+increasing number of publications per year. As of 13 May, 2022, there
+are currently [3311 PubMed search
 results](https://pubmed.ncbi.nlm.nih.gov/?term=NSQIP) for the search
 term “NSQIP”.
 
@@ -81,155 +81,80 @@ variables are removed or added every year and sometimes the same
 variable may have differently worded outcomes between years.
 
 <table class="table table-striped table-condensed" style="font-size: 14px; width: auto !important; margin-left: auto; margin-right: auto;">
-
 <thead>
-
 <tr>
-
 <th style="text-align:left;">
-
 race (2005-2006)
-
 </th>
-
 <th style="text-align:left;">
-
-race\_new (2019)
-
+race_new (2019)
 </th>
-
 </tr>
-
 </thead>
-
 <tbody>
-
 <tr>
-
 <td style="text-align:left;">
-
 American Indian or Alaska Native
-
 </td>
-
 <td style="text-align:left;">
-
 American Indian or Alaska Native
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 Asian or Pacific Islander
-
 </td>
-
 <td style="text-align:left;">
-
 Asian
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 Black, Not of Hispanic Origin
-
 </td>
-
 <td style="text-align:left;">
-
 Black or African American
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 Hispanic, Black
-
 </td>
-
 <td style="text-align:left;">
-
 Native Hawaiian or Pacific Islander
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 Hispanic, Color Unknown
-
 </td>
-
 <td style="text-align:left;">
-
 Unknown/Not Reported
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 Hispanic, White
-
 </td>
-
 <td style="text-align:left;">
-
 White
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 Unknown
-
 </td>
-
 <td style="text-align:left;">
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 White, Not of Hispanic Origin
-
 </td>
-
 <td style="text-align:left;">
-
 </td>
-
 </tr>
-
 </tbody>
-
 </table>
 
 The purpose of `nsqipr` is to streamline this process. This package is
@@ -262,49 +187,49 @@ We are not (yet) available on CRAN.
 2.  Now simply run `nsqip(dir)`.
 
 `nsqipr` will take care of the rest. You’re now ready to use the ACS
-NSQIP<sup>©</sup> data for data analysis\!
+NSQIP<sup>©</sup> data for data analysis!
 
 ## Progress
 
 Track progress on how the various data sets are being incorporated into
 `nsqipr` here.
 
-  - Main PUF - <span style="color: midnightblue;">Done, Documented,
+-   Main PUF - <span style="color: midnightblue;">Done, Documented,
     Tested</span>
-  - Vascular - <span style="color: goldenrod;">In progress, use with
+-   Vascular - <span style="color: goldenrod;">In progress, use with
     caution</span>
-      - Abdominal Aortic Aneurysm - <span style="color: goldenrod;">In
+    -   Abdominal Aortic Aneurysm - <span style="color: goldenrod;">In
         progress, use with caution</span>
-      - Aortoiliac Endovascular - <span style="color: goldenrod;">In
+    -   Aortoiliac Endovascular - <span style="color: goldenrod;">In
         progress, use with caution</span>
-      - Aortoiliac Open - <span style="color: goldenrod;">In progress,
+    -   Aortoiliac Open - <span style="color: goldenrod;">In progress,
         use with caution</span>
-      - Carotid Artery Stenting - <span style="color: maroon;">Not
+    -   Carotid Artery Stenting - <span style="color: maroon;">Not
         started</span>
-      - Carotid Endarterectomy - <span style="color: maroon;">Not
+    -   Carotid Endarterectomy - <span style="color: maroon;">Not
         started</span>
-      - Endovascular Aneurysm Repair - <span style="color: maroon;">Not
+    -   Endovascular Aneurysm Repair - <span style="color: maroon;">Not
         started</span>
-      - Lower Extremity Endovascular - <span style="color: maroon;">Not
+    -   Lower Extremity Endovascular - <span style="color: maroon;">Not
         started</span>
-      - Lower Extremity Open - <span style="color: maroon;">Not
+    -   Lower Extremity Open - <span style="color: maroon;">Not
         started</span>
-  - Colectomy - <span style="color: goldenrod;">In progress, use with
-    caution</span>
-  - Pancreatectomy - <span style="color: goldenrod;">In progress, use
+-   Colectomy - <span style="color: midnightblue;">Done, Documented,
+    Tested</span>
+-   Pancreatectomy - <span style="color: goldenrod;">In progress, use
     with caution</span>
-  - Proctectomy - <span style="color: maroon;">Not started</span>
-  - Hepatectomy - <span style="color: goldenrod;">In progress, use with
+-   Proctectomy - <span style="color: maroon;">Not started</span>
+-   Hepatectomy - <span style="color: goldenrod;">In progress, use with
     caution</span>
-  - Thyroidectomy - <span style="color: maroon;">Not started</span>
-  - Esophagectomy - <span style="color: maroon;">Not started</span>
-  - Appendectomy - <span style="color: goldenrod;">In progress, use with
-    caution</span>
-  - Gynecology - <span style="color: maroon;">Not started</span>
-  - Hysterectomy - <span style="color: maroon;">Not started</span>
-  - Hip Fracture - <span style="color: maroon;">Not started</span>
-  - Cystectomy - <span style="color: maroon;">Not started</span>
-  - Nephrectomy - <span style="color: maroon;">Not started</span>
-  - Prostatectomy - <span style="color: maroon;">Not started</span>
+-   Thyroidectomy - <span style="color: maroon;">Not started</span>
+-   Esophagectomy - <span style="color: maroon;">Not started</span>
+-   Appendectomy - <span style="color: midnightblue;">Done, Documented,
+    Tested</span>
+-   Gynecology - <span style="color: maroon;">Not started</span>
+-   Hysterectomy - <span style="color: maroon;">Not started</span>
+-   Hip Fracture - <span style="color: maroon;">Not started</span>
+-   Cystectomy - <span style="color: maroon;">Not started</span>
+-   Nephrectomy - <span style="color: maroon;">Not started</span>
+-   Prostatectomy - <span style="color: maroon;">Not started</span>
 
-Check back often for updates\!
+Check back often for updates!

@@ -141,13 +141,13 @@ stop <- function() {
   - Endovascular Aneurysm Repair - `r stop()`
   - Lower Extremity Endovascular - `r stop()`
   - Lower Extremity Open - `r stop()`
-- Colectomy - `r ip()`
+- Colectomy - `r ready()`
 - Pancreatectomy - `r ip()`
 - Proctectomy - `r stop()`
 - Hepatectomy - `r ip()`
 - Thyroidectomy - `r stop()`
 - Esophagectomy - `r stop()`
-- Appendectomy - `r ip()`
+- Appendectomy - `r ready()`
 - Gynecology - `r stop()`
 - Hysterectomy - `r stop()`
 - Hip Fracture - `r stop()`

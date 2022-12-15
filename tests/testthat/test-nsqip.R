@@ -70,6 +70,22 @@ testthat::test_that("acs nsqip works", {
   test_goldstandard("acs_nsqip_puf", "acs_nsqip_puf20_anesthes_other")
 })
 
+testthat::test_that("puf tar app works", {
+
+  testthat::expect_equal(sort(fs::path_file(fs::dir_ls(file.path("test-data","puf_tar_app", "rds"),
+                                                       type = "file"))),
+                         sort(fs::path_file(fs::dir_ls(file.path("test-data"),
+                                                       type = "file",
+                                                       glob = "*puf_tar_app*",
+                                                       ignore.case = TRUE))))
+
+  test_goldstandard("puf_tar_app", "puf_tar_app_2016_clean")
+  test_goldstandard("puf_tar_app", "puf_tar_app_2017_clean")
+  test_goldstandard("puf_tar_app", "puf_tar_app_2018_clean")
+  test_goldstandard("puf_tar_app", "puf_tar_app_2019_clean")
+  test_goldstandard("puf_tar_app", "puf_tar_app_2020_clean")
+})
+
 testthat::test_that("puf tar col works", {
 
   testthat::expect_equal(sort(fs::path_file(fs::dir_ls(file.path("test-data","puf_tar_col", "rds"),
