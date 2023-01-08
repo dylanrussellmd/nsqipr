@@ -20,6 +20,13 @@ NSQIP encodes the \code{app_intraabscess} column as having one of multiple inter
 This function extracts those values from character vectors and factors them.
 }
 \examples{
+x <- c("No diagnosis of postoperative abscess", "Yes-percutaneous drainage",
+"Yes-no treatment or intervention", "Yes-IV antibiotics w/out procedural intervention",
+"Yes-oral/IM antibiotics w/out procedural intervention",
+"Yes-reoperation for surgical drainage, open", "Yes-reoperation for surgical drainage, minimally invasive",
+"Yes-transrectal/other endoscopic drainage", NA)
+
+nsqipr:::conv_app_intraabscess_intervention(x)
 
 }
 \keyword{internal}

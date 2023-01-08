@@ -1,4 +1,4 @@
-testthat::test_that("acs nsqip works", {
+testthat::test_that("puf nsqip works", {
 
   testthat::expect_equal(sort(fs::path_file(fs::dir_ls(file.path("test-data","acs_nsqip_puf", "rds"),
                                                        type = "file"))),

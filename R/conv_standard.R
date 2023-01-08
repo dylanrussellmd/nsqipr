@@ -76,7 +76,7 @@ conv_type_cols <- function(df, filename, progbar) {
 conv_special_cols <- function(df, filename, progbar) {
   tick(progbar, "converting unique columns of", filename)
   fn <- switch(parse_filename(filename),
-               "acs_nsqip_puf" = `conv_acs_cols`,
+               "acs_nsqip_puf" = `conv_puf_cols`,
                "puf_tar_col" = `conv_col_cols`,
                "puf_tar_aaa" = `conv_aaa_cols`,
                "puf_tar_aie" = `conv_aie_cols`,

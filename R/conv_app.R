@@ -201,13 +201,13 @@ conv_app_intraabscess <- function(vec) {
 #' @keywords internal
 #'
 #' @examples
-# x <- c("No diagnosis of postoperative abscess", "Yes-percutaneous drainage",
-# "Yes-no treatment or intervention", "Yes-IV antibiotics w/out procedural intervention",
-# "Yes-oral/IM antibiotics w/out procedural intervention",
-# "Yes-reoperation for surgical drainage, open", "Yes-reoperation for surgical drainage, minimally invasive",
-# "Yes-transrectal/other endoscopic drainage", NA)
-#
-# nsqipr:::conv_app_intraabscess_intervention(x)
+#' x <- c("No diagnosis of postoperative abscess", "Yes-percutaneous drainage",
+#' "Yes-no treatment or intervention", "Yes-IV antibiotics w/out procedural intervention",
+#' "Yes-oral/IM antibiotics w/out procedural intervention",
+#' "Yes-reoperation for surgical drainage, open", "Yes-reoperation for surgical drainage, minimally invasive",
+#' "Yes-transrectal/other endoscopic drainage", NA)
+#'
+#' nsqipr:::conv_app_intraabscess_intervention(x)
 #'
 conv_app_intraabscess_intervention <- function(vec) {
   vec %^% list(

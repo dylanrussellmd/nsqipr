@@ -9,7 +9,7 @@
 #'
 #' @keywords internal
 #'
-conv_acs_cols <- function(df, filename) {
+conv_puf_cols <- function(df, filename) {
   get_pufyear(df, filename)
   conv_hispanic(df)
   conv_(df, "race", conv_race)
@@ -21,6 +21,10 @@ conv_acs_cols <- function(df, filename) {
   conv_(df, "dyspnea", conv_notno)
   conv_(df, "prsepis", type_prsepis, newcol = "type_prsepis")
   conv_(df, "prsepis", conv_notno)
+  conv_(df, "preop_covid", type_covid, newcol= "type_preop_covid")
+  conv_(df, "preop_covid", conv_notno)
+  conv_(df, "postop_covid", type_covid, newcol= "type_postop_covid")
+  conv_(df, "postop_covid", conv_notno)
   check_comaneurograft(df)
 }
 
@@ -122,6 +126,12 @@ surgspec <- list(`Cardiac surgery` = "Cardiac Surgery",
                  `Oral surgery` = "Oral Surgery",
                  `Obstetrics` = "Obstetrics",
                  `Other` = "Other")
+immuno_cat <- list(`Corticosteroids` = "Corticosteroids",
+                   `Anti-rejection/transplant immunosuppressants` = "Anti-rejection/transplant immunosuppressants",
+                   `Synthetic DMARDs/DMDs` = "Synthetic DMARDs/DMDs",
+                   `Biologic DMARDs/DMDs` = "Biologic DMARDs/DMDs",
+                   `Other` = "Other"
+                   )
 
 #### ---- LONG COLUMNS ---- ####
 readmission <- paste("readmission", 1:5, sep = "")
@@ -542,4 +552,23 @@ when_dyspnea <- function(vec) {
 #'
 type_prsepis <- function(vec) {
   vec %^% list(`SIRS` = "SIRS", `Sepsis` = "Sepsis", `Septic shock` = "Septic Shock")
+}
+
+#' Parse a column for type of COVID diagnosis
+#'
+#' @param vec a character vector of values to convert
+#'
+#' @details NSQIP encodes the \code{preop_covid} and \code{postop_covid} columns as
+#' either "Yes, lab-confirmed diagnosis (or ICD-10 code U07.1)", "Yes, suspected diagnosis (or ICD-10 code U07.2)",
+#' or "No". This function factors the vector for the levels "Lab-confirmed" and "Suspected".
+#'
+#' @return a factor vector
+#' @keywords internal
+#'
+#' @examples
+#'  nsqipr:::type_covid(c("Yes, lab-confirmed diagnosis (or ICD-10 code U07.1)",
+#'  "Yes, suspected diagnosis (or ICD-10 code U07.2)", "No", NA))
+#'
+type_covid <- function(vec) {
+  vec %^% list(`Lab-confirmed` = "Yes, lab-confirmed diagnosis (or ICD-10 code U07.1)", `Suspected` = "Yes, suspected diagnosis (or ICD-10 code U07.2)")
 }
