@@ -410,9 +410,7 @@ conv_hispanic <- function(df) {
                   conv_yesno(df[["ethnicity_hispanic"]]),
                   conv_hispanic_helper(df))
   } else {
-    vec <- ifelse(stringi::stri_detect_regex(df[["race"]], "hispanic", opts_regex = list(case_insensitive = TRUE)),
-                  stringi::stri_detect_regex(df[["race"]], "^hispanic,", opts_regex = list(case_insensitive = TRUE)),
-                  NA)
+    vec <- conv_hispanic_helper(df)
   }
   data.table::set(df, j = "ethnicity_hispanic", value = vec)
 }
@@ -571,4 +569,49 @@ type_prsepis <- function(vec) {
 #'
 type_covid <- function(vec) {
   vec %^% list(`Lab-confirmed` = "Yes, lab-confirmed diagnosis (or ICD-10 code U07.1)", `Suspected` = "Yes, suspected diagnosis (or ICD-10 code U07.2)")
+}
+
+#' Add or update Hispanic ethnicity column
+#'
+#' @param df a data.table to add to or update with an \code{ethnicity_hispanic} column
+#'
+#' @details \code{ethnicity_hispanic} was not added until the 2008 NSQIP PUF when \code{race} was revised to
+#' \code{race_new}. Data regarding hispanic ethnicity was hard coded directly into the old \code{race} variable
+#' (such as "Hispanic, White"). In order to marry early and later datasets, this information must be extracted
+#' from \code{race} and a new \code{ethnicity_hispanic} column created.
+#'
+#' If the data provided already has a \code{ethnicity_hispanic} column present, this column is simply converted
+#' into a logical vector.
+#'
+#' @return a data table
+#' @keywords internal
+#'
+#' @examples
+#' x <- data.table::data.table(
+#' race = c("Hispanic, White", "White, Not of Hispanic Origin","Hispanic, Black",
+#' "Black, Not of Hispanic Origin", "Hispanic, Color Unknown", "White", "Black or African American",
+#' "American Indian or Alaska Native", "Asian", "Native Hawaiian or Pacific Islander",
+#' "Asian or Pacific Islander", NA),
+#' ethnicity_hispanic = c(NA, NA, NA, NA, NA, "Yes", "No", "Yes", "No", NA, NA, "Yes")
+#' )
+#'
+#' nsqipr:::conv_hispanic(x)
+#' x
+#'
+conv_casetype <- function(df) {
+  if("casetype" %chin% names(df)) {
+    vec <- ifelse(!is.na(df[["casetype"]]), # if casetype is NOT NA
+                  conv_yesno(df[["ethnicity_hispanic"]]), # do this
+                  conv_hispanic_helper(df)) # else do this
+  } else {
+    vec <- conv_hispanic_helper(df)
+  }
+  data.table::set(df, j = "ethnicity_hispanic", value = vec)
+}
+
+#' @describeIn conv_hispanic A helper function for updating the \code{ethnicity_hispanic} column
+conv_hispanic_helper <- function(df) {
+  ifelse(stringi::stri_detect_regex(df[["race"]], "hispanic", opts_regex = list(case_insensitive = TRUE)),
+         stringi::stri_detect_regex(df[["race"]], "^hispanic,", opts_regex = list(case_insensitive = TRUE)),
+         NA)
 }
