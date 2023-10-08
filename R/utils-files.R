@@ -20,6 +20,28 @@ get_file_or_dir <- function(path, pattern = "^(acs_nsqip_puf|puf_tar_[a-z]{1,4})
   return(result)
 }
 
+get_files_or_dirs <- function(paths, pattern = "^(acs_nsqip_puf|puf_tar_[a-z]{1,4})(?:\\d{2})?(?:.*)?\\.txt$"){
+  if (!is.character(paths)) {
+    usethis::ui_stop("{usethis::ui_path(paths)} is not a character or character vector.")
+  }
+
+  results <- c()
+
+  for (path in paths) {
+    if (fs::is_dir(path)) {
+      result <- list.files(path = path, pattern = pattern, full.names = TRUE, ignore.case = TRUE)
+      results <- c(results, result)
+    } else if (fs::is_file(path)) {
+      results <- c(results, path)
+    } else {
+      usethis::ui_stop("{usethis::ui_path(path)} is an invalid file or directory path.")
+    }
+  }
+
+  return(results)
+}
+
+
 #' Parses a directory of files and creates the requisite directories. Moves files into their respective directories.
 #'
 #' @param files a character vector of file names.

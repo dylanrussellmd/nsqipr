@@ -29,9 +29,9 @@ conv_puf_cols <- function(df, filename) {
 }
 
 #### ---- FACTOR LISTS (THESE DEFINE THE FACTOR LEVELS FOR VARIOUS COLUMNS) ---- ####
-sex <- list(Male = "male",
-            Female = "female",
-            `Non-binary` = "non-binary")
+sex <- list(Male = c("male", "Male"),
+            Female = c("female", "Female"),
+            `Non-binary` = c("non-binary", "Non-binary","Non-Binary"))
 fnstatus1 <- list(Independent = "Independent",
                  `Partially dependent` = "Partially Dependent",
                  `Totally dependent` = "Totally Dependent")
@@ -447,22 +447,21 @@ conv_hispanic_helper <- function(df) {
 #' nsqipr:::conv_race(x, pacific = "hawaiian")
 #' x
 conv_race <- function(vec, pacific = "asian") {
-  asian <- list(White = c("Hispanic, White", "White, Not of Hispanic Origin","White"),
-                Black = c("Hispanic, Black","Black, Not of Hispanic Origin", "Black or African American"),
-                `American Indian or Alaska native` = "American Indian or Alaska Native",
-                `Asian` = c("Asian", "Asian or Pacific Islander"),
+  common <- list(White = c("Hispanic, White", "White, Not of Hispanic Origin","White"),
+                 Black = c("Hispanic, Black","Black, Not of Hispanic Origin", "Black or African American"),
+                 `American Indian or Alaska native` = "American Indian or Alaska Native",
+                 `Race combinations with low frequency` = "Race combinations with low frequency",
+                 `Some other race` = "Some Other Race")
+  asian <- list(`Asian` = c("Asian", "Asian or Pacific Islander"),
                 `Native Hawaiian or Pacific islander` = "Native Hawaiian or Pacific Islander")
-  hawaiian <- list(White = c("Hispanic, White", "White, Not of Hispanic Origin","White"),
-                   Black = c("Hispanic, Black","Black, Not of Hispanic Origin", "Black or African American"),
-                   `American Indian or Alaska native` = "American Indian or Alaska Native",
-                   `Asian` = "Asian",
+  hawaiian <- list(`Asian` = "Asian",
                    `Native Hawaiian or Pacific islander` = c("Native Hawaiian or Pacific Islander","Asian or Pacific Islander"))
 
   levels <- switch(pacific,
                     "asian" = asian,
                     "hawaiian" = hawaiian)
 
-  vec %^% levels
+  vec %^% c(common, levels)
 }
 
 #' Convert inout to logical

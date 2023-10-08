@@ -1,0 +1,26 @@
+caseid	app_img_ultra	app_setting_ultra	app_img_ct	app_setting_ct	app_mri	app_setting_mri	app_pathres	app_perfabscess	app_approach	app_appendix	app_intraabscess
+11291310	US not performed/not documented	No US performed	CT done-result consistent with diagnosis of appendicitis	CT in operating hospital	MRI / Other Definitive Imaging Modality Not Performed / Not Documented	No MRI/Other Definitive Imaging Modality Performed	Consistent with appendicitis	No mention of perforation or abscess	Laparoscopic	Yes	No diagnosis of postoperative abscess
+11291320	US done-consistent with appendicitis	US in operating hospital	CT not performed/not documented	No CT performed	Result consistent w/ diagnosis of Appendicitis	Performed in Operating Hospital	Other appendiceal pathology	Perforation and abscess	Open (planned)	No	Yes-IV antibiotics w/out procedural intervention
+11291324	US done-indeterminate; result uncertain	US at outside facility	CT done-result not consistent with appendicitis	CT at outside facility	Result Indeterminate / Uncertain	Performed at Outside Facility	Not consistent with appendicitis	Perforation only	Laparoscopic w/ unplanned conversion to open	N/A	Yes-percutaneous drainage
+11291352	US done-not consistent with appendicitis	NA	CT done-result indeterminate; result uncertain	NA	Result Not Consistent w/ Appendicitis; Appendix """"Normal""""	NA	Pathology report not available	Abscess only	Laparoscopic w/ open assist	NA	Yes-reoperation for surgical drainage, open
+11291731	NA	NA	NA	NA	NA	NA	Unknown	NA	Robotic	NA	Yes-no treatment or intervention
+11291735	NA	NA	NA	NA	NA	NA	Tumor/malignancy involving appendix	NA	SILS	NA	Yes-oral/IM antibiotics w/out procedural intervention
+11291943	NA	NA	NA	NA	NA	NA	Result is indeterminate or uncertain	NA	Robotic w/ unplanned conversion to open	NA	Unknown
+11291974	NA	NA	NA	NA	NA	NA	NA	NA	NULL	NA	Yes-reoperation for surgical drainage, minimally invasive
+11292033	NA	NA	NA	NA	NA	NA	NA	NA	Other MIS approach w/ unplanned conversion to open	NA	Yes-transrectal/other endoscopic drainage
+11292134	NA	NA	NA	NA	NA	NA	NA	NA	Other	NA	NA
+11292144	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA
+11292486	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA
+11292636	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA
+11292743	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA
+11292782	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA
+11292832	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA
+11292962	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA
+11292999	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA
+11293061	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA
+11284599	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA
+11284624	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA
+11284637	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA
+11284728	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA
+11284770	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA
+11284794	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA

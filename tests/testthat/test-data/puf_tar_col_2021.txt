@@ -1,0 +1,26 @@
+caseid	col_steroid	col_steroid_unk	col_mech_bowel_prep	col_mech_bowel_prep_unk	col_oral_antibiotic	col_oral_antibiotic_unk	col_chemo	col_chemo_unk	col_indication	col_icd9_indication	col_emergent	col_icd9_emergent	col_approach	col_margins	col_margins_unk	col_malignancyt	col_malignancyn	col_malignancym	col_anastomotic	col_ileus	col_ileus_unk	col_nodeseval
+11288522	No	-99	No	-99	No	-99	No	-99	Colon cancer w/ obstruction	NULL	NULL	NULL	Laparoscopic w/ open assist	NULL	-99	T3	N2a	M1a	No definitive diagnosis of leak/leak related abscess	No	-99	21
+11288551	Yes	1	Yes	1	Yes	1	Yes	1	Colon cancer	NA	Obstruction	NA	Open (planned)	NA	NA	T1	N0	M0/Mx	Leak, treated w/ reoperation	Yes	1	10
+11288554	Unknown	NA	Unknown	NA	Unknown	NA	Unknown	NA	Crohn's Disease	NA	Perforation	NA	Robotic w/ open assist	NA	NA	N/A	N/A	N/A	Leak, treated w/ non-interventional/non-operative means	Unknown	NA	-99
+11288578	NA	NA	NA	NA	NA	NA	NA	NA	Chronic diverticular disease	NA	Other (enter ICD-10 code)	NA	Laparoscopic	NA	NA	T4a	N2b	M1c	Leak, treated w/ interventional means	NA	NA	18
+11288585	NA	NA	NA	NA	NA	NA	NA	NA	Other-Enter ICD-10 for diagnosis	NA	Toxic colitis (Toxic Megacolon, C. diff w/out perforation, Ischemic Colitis)	NA	Laparoscopic w/ unplanned conversion to open	NA	NA	Tx	Nx	Unknown	Leak, no treatment intervention documented	NA	NA	37
+11288605	NA	NA	NA	NA	NA	NA	NA	NA	Volvulus	NA	Bleeding	NA	SILS	NA	NA	T4b	N1a	M1	Unknown	NA	NA	25
+11288641	NA	NA	NA	NA	NA	NA	NA	NA	Acute diverticulitis	NA	Unknown	NA	Robotic	NA	NA	T2	N2	M1b	NA	NA	NA	12
+11288681	NA	NA	NA	NA	NA	NA	NA	NA	Non-malignant polyp	NA	NA	NA	Robotic w/ unplanned conversion to open	NA	NA	Unknown	Unknown	NA	NA	NA	NA	5
+11288706	NA	NA	NA	NA	NA	NA	NA	NA	Ulcerative colitis	NA	NA	NA	Other	NA	NA	T4	N1	NA	NA	NA	NA	4
+11288720	NA	NA	NA	NA	NA	NA	NA	NA	Enterocolitis (e.g. C. Difficile)	NA	NA	NA	Hybrid w/ open assist	NA	NA	T0	N1b	NA	NA	NA	NA	48
+11288738	NA	NA	NA	NA	NA	NA	NA	NA	Bleeding	NA	NA	NA	Hybrid	NA	NA	Tis	N1c	NA	NA	NA	NA	14
+11288819	NA	NA	NA	NA	NA	NA	NA	NA	Unknown	NA	NA	NA	Endoscopic	NA	NA	NA	NA	NA	NA	NA	NA	43
+11288949	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	Endoscopic w/ open assist	NA	NA	NA	NA	NA	NA	NA	NA	1
+11288965	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	Other MIS approach w/ unplanned conversion to open	NA	NA	NA	NA	NA	NA	NA	NA	9
+11288972	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NOTES w/ unplanned conversion to open	NA	NA	NA	NA	NA	NA	NA	NA	16
+11288982	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NOTES w/ open assist	NA	NA	NA	NA	NA	NA	NA	NA	17
+11289048	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NOTES	NA	NA	NA	NA	NA	NA	NA	NA	0
+11289084	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	Other MIS approach w/ open assist	NA	NA	NA	NA	NA	NA	NA	NA	100
+11289143	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	Endoscopic w/ unplanned conversion to open	NA	NA	NA	NA	NA	NA	NA	NA	6
+11289146	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	Unknown	NA	NA	NA	NA	NA	NA	NA	NA	15
+11289180	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	Other MIS approach	NA	NA	NA	NA	NA	NA	NA	NA	30
+11289231	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	SILS w/ open assist	NA	NA	NA	NA	NA	NA	NA	NA	27
+11289235	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	Hybrid w/ unplanned conversion to open	NA	NA	NA	NA	NA	NA	NA	NA	13
+11289275	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	SILS w/ unplanned conversion to open	NA	NA	NA	NA	NA	NA	NA	NA	11
+11289288	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NULL	NA	NA	NA	NA	NA	NA	NA	NA	34

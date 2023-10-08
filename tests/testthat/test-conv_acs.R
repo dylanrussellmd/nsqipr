@@ -61,9 +61,57 @@ testthat::test_that("conv_hispanic and conv_hispanic_helper work", {
 })
 
 testthat::test_that("conv_race works", {
-  x <- c("White","Black or African American","Asian or Pacific Islander")
-  testthat::expect_equal(sort(levels(conv_race(x, pacific = "hawaiian"))), sort(levels(factor(c("White","Black","Native Hawaiian or Pacific islander","American Indian or Alaska native","Asian")))))
-  testthat::expect_equal(as.character(conv_race(x, pacific = "hawaiian")), as.character(factor(c("White","Black","Native Hawaiian or Pacific islander"))))
-  testthat::expect_equal(sort(levels(conv_race(x))), sort(levels(factor(c("White","Black","Native Hawaiian or Pacific islander","American Indian or Alaska native","Asian")))))
-  testthat::expect_equal(as.character(conv_race(x)), as.character(factor(c("White","Black","Asian"))))
+
+  # All possible inputs
+  all_inputs <- c("Hispanic, White",
+                  "White, Not of Hispanic Origin",
+                  "White",
+                  "Hispanic, Black",
+                  "Black, Not of Hispanic Origin",
+                  "Black or African American",
+                  "American Indian or Alaska Native",
+                  "Race combinations with low frequency",
+                  "Some Other Race",
+                  "Asian",
+                  "Asian or Pacific Islander",
+                  "Native Hawaiian or Pacific Islander")
+
+  # Expected outputs for pacific = "asian"
+  expected_output_asian <- factor(c("White",
+                             "White",
+                             "White",
+                             "Black",
+                             "Black",
+                             "Black",
+                             "American Indian or Alaska native",
+                             "Race combinations with low frequency",
+                             "Some other race",
+                             "Asian",
+                             "Asian",
+                             "Native Hawaiian or Pacific islander"))
+
+  result_asian <- conv_race(all_inputs)
+
+  testthat::expect_equal(as.character(result_asian), as.character(expected_output_asian))
+  testthat::expect_equal(sort(levels((result_asian))), sort(levels(expected_output_asian)))
+
+  # Expected outputs for pacific = "hawaiian"
+  expected_output_hawaiian <- factor(c("White",
+                                "White",
+                                "White",
+                                "Black",
+                                "Black",
+                                "Black",
+                                "American Indian or Alaska native",
+                                "Race combinations with low frequency",
+                                "Some other race",
+                                "Asian",
+                                "Native Hawaiian or Pacific islander",
+                                "Native Hawaiian or Pacific islander"))
+
+  result_hawaiian <- conv_race(all_inputs, pacific = "hawaiian")
+
+  testthat::expect_equal(as.character(result_hawaiian), as.character(expected_output_hawaiian))
+  testthat::expect_equal(sort(levels((result_hawaiian))), sort(levels(expected_output_hawaiian)))
+
 })

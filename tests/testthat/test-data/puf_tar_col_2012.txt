@@ -1,31 +1,26 @@
 caseid	col_steroid	col_steroid_unk	col_mech_bowel_prep	col_mech_bowel_prep_unk	col_oral_antibiotic	col_oral_antibiotic_unk	col_chemo	col_chemo_unk	col_indication	col_icd9_indication	col_emergent	col_icd9_emergent	col_approach	col_margins	col_margins_unk	col_malignancyt	col_malignancyn	col_malignancym	col_anastomotic	col_ileus	col_ileus_unk
-1797166	Yes	-99	No	-99	NULL	1	Yes	-99	Acute diverticulitis	153.4	Other (enter ICD-9 code)	NA	Robotic w/ unplanned conversion to open	NULL	-99	N/A	N2	N/A	No	NA	-99
-1797103	NULL	1	NULL	-99	NULL	-99	NULL	1	Crohn's Disease	540.9	Toxic colitis (Toxic Megacolon, C. diff w/out perforation, Ischemic Colitis)	568.0	Laparoscopic	No	1	NA	N1a	M1	Yes-reoperation	NULL	-99
-1796604	Yes	NA	Yes	1	Yes	-99	NULL	-99	Enterocolitis (e.g. C. Difficile)	617.5	Obstruction	276.2	Laparoscopic Hand Assisted	N/A	-99	N/A	N0	Unknown	Unknown	No	1
-1795952	No	1	Yes	-99	NULL	1	No	1	Other-Enter ICD-9 for diagnosis	562.11	Unknown	569.9	Laparoscopic w/ unplanned conversion to open	Yes	1	Unknown	N1b	M1	Yes-no intervention required	Yes	-99
-1797215	Yes	-99	NULL	1	No	1	No	-99	Ulcerative colitis	196.2	Bleeding	569.83	Laparoscopic Hand Assisted	NULL	1	T4	N/A	Unknown	No	NULL	-99
-1796253	NULL	-99	No	1	NULL	1	NULL	-99	Non-malignant polyp	NULL	Toxic colitis (Toxic Megacolon, C. diff w/out perforation, Ischemic Colitis)	648.93	Robotic w/ unplanned conversion to open	Yes	-99	T3	N1b	M1	Yes-no intervention required	No	-99
-1797124	NULL	-99	No	-99	Yes	-99	Yes	1	Colon cancer w/ obstruction	997.49	Obstruction	038.9	NA	N/A	-99	T4b	N2	N/A	Unknown	NULL	1
-1797169	NULL	1	Yes	-99	Yes	1	NULL	1	Non-malignant polyp	564.00	Bleeding	619.0	Laparoscopic	NULL	1	N/A	N2	M0	No	Yes	-99
-1797168	NA	-99	NULL	-99	Yes	1	NA	-99	Colon cancer	558.9	NULL	998.2	Laparoscopic w/ unplanned conversion to Open	No	-99	T2	Unknown	M0	Yes-reoperation	NULL	-99
-NA	Yes	-99	Yes	-99	No	-99	No	-99	Acute diverticulitis	038.9	Perforation	153.4	Laparoscopic w/ unplanned conversion to open	N/A	-99	T1	N0	M1	Unknown	NULL	1
-1797091	Yes	1	No	1	NULL	-99	NULL	1	Crohn's Disease	596.1	NULL	540.0	Laparoscopic	Yes	-99	T4b	Unknown	M0/Mx	Yes-no intervention required	NULL	1
-1797218	No	1	NULL	-99	NA	-99	No	1	Chronic diverticular disease	998.6	Obstruction	540.1	Open (planned)	Yes	-99	T1	N1a	N/A	Unknown	No	-99
-1797090	No	1	No	-99	NULL	-99	No	1	Unknown	531.10	Unknown	568.89	Unknown	NA	1	N/A	NA	Unknown	Yes-no intervention required	NULL	1
-1797121	NULL	-99	NULL	1	Yes	-99	NULL	1	Colon cancer w/ obstruction	182.0	Perforation	567.29	Laparoscopic w/ unplanned conversion to Open	No	1	T2	N/A	M0	Yes-percutaneous intervention	Yes	1
-1795960	NULL	1	Yes	1	NULL	1	Yes	-99	Unknown	569.83	Other (enter ICD-9 code)	540.9	Unknown	N/A	-99	Unknown	N2	M0/Mx	Yes-percutaneous intervention	Yes	1
-1797216	No	-99	Yes	1	NULL	1	NULL	1	Chronic diverticular disease	209.51	Other (enter ICD-9 code)	557.9	Laparoscopic w/ unplanned conversion to open	No	1	T1	N0	M0/Mx	No	Yes	1
-1797248	NULL	1	Yes	1	No	1	NULL	-99	Enterocolitis (e.g. C. Difficile)	569.81	NULL	562.11	Open (planned)	No	-99	T4	Unknown	M0/Mx	Yes-no intervention required	NULL	1
-1797170	No	1	No	1	No	-99	Yes	1	Bleeding	154.1	Obstruction	557.1	Laparoscopic w/ open assist	NULL	NA	T2	N/A	M1	Unknown	No	-99
-1797220	Yes	-99	NULL	-99	No	-99	NULL	-99	Ulcerative colitis	787.60	Perforation	550.00	Open	No	1	T4b	N0	M0/Mx	No	No	-99
-1796258	No	-99	No	1	No	1	No	-99	Colon cancer	543.9	Other (enter ICD-9 code)	560.2	Robotic w/ unplanned conversion to open	NULL	-99	T4	N1a	M0	Unknown	No	-99
-1796259	NULL	-99	No	1	NULL	1	No	NA	Volvulus	567.21	Bleeding	556.6	Open (planned)	Yes	1	T1	N1	M0	Yes-reoperation	No	-99
-1796273	Yes	-99	No	1	Yes	-99	Yes	-99	Other-Enter ICD-9 for diagnosis	211.3	Other (enter ICD-9 code)	596.1	Laparoscopic Hand Assisted	N/A	-99	T3	N/A	M0/Mx	Yes-no intervention required	NULL	-99
-1797125	NULL	-99	NULL	-99	No	-99	No	1	Colon cancer	NA	Perforation	569.82	Laparoscopic w/ unplanned conversion to Open	N/A	-99	N/A	N1a	N/A	NA	Yes	1
-1797142	Yes	1	Yes	1	No	1	Yes	1	Bleeding	560.9	NULL	557.0	Laparoscopic w/ unplanned conversion to Open	N/A	1	T4	N1	M0	Yes-reoperation	Yes	-99
-1797126	No	-99	NULL	NA	Yes	1	No	1	Chronic diverticular disease	557.0	Toxic colitis (Toxic Megacolon, C. diff w/out perforation, Ischemic Colitis)	560.0	Laparoscopic	N/A	1	Unknown	N1b	Unknown	Yes-percutaneous intervention	No	1
-1797222	No	1	No	-99	No	1	Yes	-99	NA	235.5	Toxic colitis (Toxic Megacolon, C. diff w/out perforation, Ischemic Colitis)	235.2	Open	Yes	-99	T3	N1	M1	Yes-percutaneous intervention	Yes	-99
-1797117	Yes	-99	Yes	-99	Yes	-99	Yes	-99	Colon cancer w/ obstruction	550.00	Unknown	567.22	Open	NULL	-99	T2	N1b	NA	Yes-percutaneous intervention	NULL	1
-1797242	NULL	1	NULL	-99	NULL	NA	Yes	-99	Non-malignant polyp	038.49	NULL	569.89	Open	No	1	T3	N/A	N/A	Yes-percutaneous intervention	No	1
-1796463	No	1	NA	-99	Yes	-99	NULL	-99	Other-Enter ICD-9 for diagnosis	569.2	NA	556.9	Laparoscopic w/ open assist	No	1	T4b	N1	N/A	Yes-reoperation	Yes	NA
-1796532	No	1	NULL	1	No	-99	No	1	Ulcerative colitis	209.43	Bleeding	787.0	Laparoscopic w/ open assist	NULL	1	T3	N1	Unknown	No	No	1
+1795952	No	-99	Yes	-99	NULL	1	No	-99	Colon cancer w/ obstruction	NULL	NULL	NULL	Laparoscopic	No	-99	T3	N1	M0	No	No	-99
+1795960	NULL	1	No	1	No	-99	Yes	1	Other-Enter ICD-9 for diagnosis	557.0	Other (enter ICD-9 code)	557.0	Open	N/A	1	N/A	N/A	N/A	Yes-reoperation	Yes	1
+1796253	Yes	NA	NULL	NA	Yes	NA	NULL	NA	Chronic diverticular disease	562.11	Perforation	038.9	Laparoscopic w/ unplanned conversion to Open	Yes	NA	T1	N0	Unknown	Yes-percutaneous intervention	NULL	NA
+1796258	NA	NA	NA	NA	NA	NA	NA	NA	Ulcerative colitis	596.1	Toxic colitis (Toxic Megacolon, C. diff w/out perforation, Ischemic Colitis)	560.2	Laparoscopic Hand Assisted	NULL	NA	T4	N2	M1	Yes-no intervention required	NA	NA
+1796259	NA	NA	NA	NA	NA	NA	NA	NA	Non-malignant polyp	182.0	Obstruction	550.00	Unknown	NA	NA	Unknown	Unknown	M0/Mx	Unknown	NA	NA
+1796273	NA	NA	NA	NA	NA	NA	NA	NA	Colon cancer	567.21	Bleeding	556.9	Laparoscopic w/ unplanned conversion to open	NA	NA	T2	N1a	NA	NA	NA	NA
+1796463	NA	NA	NA	NA	NA	NA	NA	NA	Crohn's Disease	038.9	Unknown	619.0	Laparoscopic w/ open assist	NA	NA	T4b	N1b	NA	NA	NA	NA
+1796532	NA	NA	NA	NA	NA	NA	NA	NA	Volvulus	560.9	NA	568.0	Robotic w/ unplanned conversion to open	NA	NA	NA	NA	NA	NA	NA	NA
+1796604	NA	NA	NA	NA	NA	NA	NA	NA	Acute diverticulitis	038.49	NA	567.22	Open (planned)	NA	NA	NA	NA	NA	NA	NA	NA
+1797090	NA	NA	NA	NA	NA	NA	NA	NA	Bleeding	558.9	NA	569.9	NA	NA	NA	NA	NA	NA	NA	NA	NA
+1797091	NA	NA	NA	NA	NA	NA	NA	NA	Enterocolitis (e.g. C. Difficile)	196.2	NA	557.1	NA	NA	NA	NA	NA	NA	NA	NA	NA
+1797103	NA	NA	NA	NA	NA	NA	NA	NA	Unknown	569.81	NA	562.11	NA	NA	NA	NA	NA	NA	NA	NA	NA
+1797117	NA	NA	NA	NA	NA	NA	NA	NA	NA	V55.3	NA	153.4	NA	NA	NA	NA	NA	NA	NA	NA	NA
+1797121	NA	NA	NA	NA	NA	NA	NA	NA	NA	569.2	NA	540.9	NA	NA	NA	NA	NA	NA	NA	NA	NA
+1797124	NA	NA	NA	NA	NA	NA	NA	NA	NA	154.1	NA	569.82	NA	NA	NA	NA	NA	NA	NA	NA	NA
+1797125	NA	NA	NA	NA	NA	NA	NA	NA	NA	569.83	NA	568.89	NA	NA	NA	NA	NA	NA	NA	NA	NA
+1797126	NA	NA	NA	NA	NA	NA	NA	NA	NA	997.49	NA	557.9	NA	NA	NA	NA	NA	NA	NA	NA	NA
+1797142	NA	NA	NA	NA	NA	NA	NA	NA	NA	564.00	NA	569.89	NA	NA	NA	NA	NA	NA	NA	NA	NA
+1797166	NA	NA	NA	NA	NA	NA	NA	NA	NA	235.5	NA	556.6	NA	NA	NA	NA	NA	NA	NA	NA	NA
+1797168	NA	NA	NA	NA	NA	NA	NA	NA	NA	617.5	NA	540.1	NA	NA	NA	NA	NA	NA	NA	NA	NA
+1797169	NA	NA	NA	NA	NA	NA	NA	NA	NA	787.60	NA	567.29	NA	NA	NA	NA	NA	NA	NA	NA	NA
+1797170	NA	NA	NA	NA	NA	NA	NA	NA	NA	998.6	NA	540.0	NA	NA	NA	NA	NA	NA	NA	NA	NA
+1797215	NA	NA	NA	NA	NA	NA	NA	NA	NA	211.3	NA	560.0	NA	NA	NA	NA	NA	NA	NA	NA	NA
+1797216	NA	NA	NA	NA	NA	NA	NA	NA	NA	550.00	NA	648.93	NA	NA	NA	NA	NA	NA	NA	NA	NA
+1797218	NA	NA	NA	NA	NA	NA	NA	NA	NA	531.10	NA	276.2	NA	NA	NA	NA	NA	NA	NA	NA	NA

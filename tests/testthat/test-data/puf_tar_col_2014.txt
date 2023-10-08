@@ -1,31 +1,26 @@
 caseid	col_steroid	col_steroid_unk	col_mech_bowel_prep	col_mech_bowel_prep_unk	col_oral_antibiotic	col_oral_antibiotic_unk	col_chemo	col_chemo_unk	col_indication	col_icd9_indication	col_emergent	col_icd9_emergent	col_approach	col_margins	col_margins_unk	col_malignancyt	col_malignancyn	col_malignancym	col_anastomotic	col_ileus	col_ileus_unk	col_nodeseval
-3113118	Yes	-99	No	-99	Yes	1	No	1	Ulcerative colitis	540.0	Other (enter ICD-10 code)	751.0	Hybrid w/ open assist	NULL	-99	T4b	N1a	M1b	Leak, no treatment intervention documented	NULL	-99	28
-3113269	No	1	Yes	1	Yes	-99	No	1	Colon cancer	540.9	Other (enter ICD-10 code)	NA	SILS w/ open assist	NULL	-99	T2	N2a	Unknown	Leak, treated w/ reoperation	Yes	1	17
-3113228	No	-99	Yes	-99	NULL	-99	No	-99	Colon cancer	209.20	NA	008.45	Laparoscopic w/ open assist	NULL	-99	N/A	Unknown	M0/Mx	Unknown	No	-99	19
-3113177	Yes	1	No	1	No	1	NULL	1	Enterocolitis (e.g. C. Difficile)	153.0	Other (enter ICD-9 code)	038.9	Hybrid	NULL	-99	T4	Unknown	N/A	Leak, treated w/ reoperation	No	NA	18
-3113093	Yes	NA	NULL	-99	NULL	-99	NULL	-99	Colon cancer w/ obstruction	560.9	Perforation	729.73	Other	NULL	-99	Tis	N1b	M1	Leak, treated w/ non-interventional/non-operative means	Yes	1	11
-3113280	No	1	NULL	-99	NULL	1	Yes	-99	Other-Enter ICD-10 for diagnosis	532.50	Bleeding	560.89	NA	NULL	-99	Unknown	N1c	M1	Leak, treated w/ reoperation	No	1	34
-3113052	NULL	-99	No	-99	Yes	-99	NULL	1	NA	569.69	Bleeding	567.22	Open (planned)	NA	-99	Tx	N2a	M1	No definitive diagnosis of leak/leak related abscess	Yes	1	24
-NA	NULL	1	NULL	-99	No	-99	NULL	-99	Crohn's Disease	171.5	Perforation	785.4	Robotic w/ open assist	NULL	-99	T1	N/A	M1	Leak, treated w/ interventional means	NULL	1	10
-3113254	Yes	-99	NULL	1	Yes	1	Yes	NA	Acute diverticulitis	557.0	Obstruction	617.5	Other	NULL	-99	T0	N2	N/A	Leak, no treatment intervention documented	NA	-99	4
-3113260	No	1	NULL	1	No	-99	NULL	-99	Ulcerative colitis	596.1	Toxic colitis (Toxic Megacolon, C. diff w/out perforation, Ischemic Colitis)	568.89	Laparoscopic	NULL	-99	T4	N0	N/A	No definitive diagnosis of leak/leak related abscess	Yes	1	26
-3113065	NULL	-99	Yes	1	No	1	NULL	-99	Chronic diverticular disease	560.89	Other (enter ICD-9 code)	540.1	Hybrid w/ open assist	NULL	-99	T4b	N2b	M1	Leak, treated w/ non-interventional/non-operative means	NULL	1	14
-3113116	NULL	1	No	-99	Yes	1	Yes	1	Ulcerative colitis	564.89	NULL	540.9	Unknown	NULL	-99	T4a	N2b	M1a	Leak, treated w/ reoperation	Yes	1	6
-3113164	No	1	NULL	-99	NA	1	Yes	1	Other-Enter ICD-9 for diagnosis	557.9	NULL	038.40	NOTES	NULL	-99	Tis	N/A	M1b	No definitive diagnosis of leak/leak related abscess	NULL	-99	23
-3113271	Yes	-99	NULL	1	Yes	NA	Yes	-99	Other-Enter ICD-10 for diagnosis	569.1	Perforation	556.8	Other MIS approach	NULL	-99	Tx	N2	N/A	Leak, no treatment intervention documented	Yes	-99	13
-3113214	Yes	-99	NULL	1	NULL	1	No	1	Non-malignant polyp	751.3	Obstruction	540.0	Other MIS approach w/ open assist	NULL	-99	T4	N1	M1a	NA	NULL	1	32
-3113145	No	1	NULL	-99	No	-99	No	-99	Other-Enter ICD-9 for diagnosis	214.3	Toxic colitis (Toxic Megacolon, C. diff w/out perforation, Ischemic Colitis)	560.2	Laparoscopic w/ unplanned conversion to open	NULL	-99	N/A	N0	M0/Mx	Leak, treated w/ interventional means	NULL	-99	15
-3113288	NULL	-99	No	-99	NULL	1	NULL	1	Bleeding	565.1	Bleeding	557.9	Laparoscopic w/ open assist	NULL	-99	T4b	N1b	Unknown	Leak, treated w/ non-interventional/non-operative means	No	1	8
-3113217	No	-99	NULL	1	Yes	-99	No	-99	Enterocolitis (e.g. C. Difficile)	569.81	Obstruction	153.4	Laparoscopic	NULL	-99	T4a	NA	M1b	Leak, treated w/ interventional means	NULL	-99	25
-3113154	No	1	No	-99	Yes	1	NULL	1	Volvulus	619.1	Unknown	557.0	NOTES w/ open assist	NULL	-99	T1	N1	M1a	No definitive diagnosis of leak/leak related abscess	No	-99	36
-3113092	NULL	-99	No	-99	NULL	1	Yes	1	Unknown	751.2	NULL	560.9	Robotic w/ open assist	NULL	-99	T3	N1	NA	Leak, no treatment intervention documented	No	-99	5
-3113160	NULL	-99	No	1	No	-99	NULL	1	Colon cancer w/ obstruction	568.0	Toxic colitis (Toxic Megacolon, C. diff w/out perforation, Ischemic Colitis)	569.83	SILS	NULL	-99	T0	N2b	M0/Mx	Leak, treated w/ non-interventional/non-operative means	NULL	-99	20
-3113043	NULL	1	No	1	NULL	1	Yes	1	Crohn's Disease	567.9	Other (enter ICD-9 code)	569.5	Hybrid	NULL	-99	N/A	N1b	N/A	Leak, treated w/ interventional means	NULL	1	12
-3113219	No	1	Yes	-99	NULL	1	NULL	-99	Unknown	211.3	Other (enter ICD-10 code)	789.00	SILS w/ unplanned conversion to open	NULL	-99	T4a	Nx	M1b	Unknown	Yes	1	-99
-3113081	Yes	1	No	1	No	-99	No	-99	Colon cancer	569.5	Obstruction	564.89	Open (planned)	NULL	-99	T1	Nx	M0/Mx	Leak, no treatment intervention documented	Yes	-99	33
-3113193	Yes	1	Yes	-99	No	-99	Yes	1	Other-Enter ICD-9 for diagnosis	560.0	Bleeding	556.6	NOTES	NULL	-99	NA	N1c	M0/Mx	Leak, treated w/ non-interventional/non-operative means	NULL	-99	22
-3113115	NULL	-99	Yes	1	NULL	-99	No	-99	Chronic diverticular disease	154.0	Unknown	562.11	Laparoscopic w/ unplanned conversion to open	NULL	-99	T3	N/A	M1a	Unknown	No	-99	16
-3113149	NA	1	Yes	1	NULL	-99	NA	-99	Bleeding	569.83	Perforation	560.0	Robotic w/ unplanned conversion to open	NULL	-99	T2	N1a	Unknown	No definitive diagnosis of leak/leak related abscess	No	-99	27
-3113056	Yes	-99	NA	1	No	-99	No	-99	Non-malignant polyp	560.2	Toxic colitis (Toxic Megacolon, C. diff w/out perforation, Ischemic Colitis)	785.52	Robotic	NULL	-99	Unknown	N2a	M1b	Unknown	No	1	3
-3113094	No	-99	Yes	-99	No	-99	Yes	-99	Acute diverticulitis	552.29	Other (enter ICD-9 code)	569.82	Hybrid w/ unplanned conversion to open	NULL	-99	T3	N1a	M1a	Leak, treated w/ reoperation	No	-99	NA
-3113126	NULL	-99	Yes	NA	Yes	1	No	1	Acute diverticulitis	NA	NULL	567.89	Robotic	NULL	NA	T2	N0	Unknown	Leak, treated w/ interventional means	Yes	1	39
+3113043	No	-99	NULL	1	No	-99	No	-99	Acute diverticulitis	NULL	Perforation	NULL	Open (planned)	NULL	-99	N/A	N/A	N/A	No definitive diagnosis of leak/leak related abscess	No	-99	-99
+3113052	Yes	1	Yes	-99	Yes	1	Yes	1	Other-Enter ICD-9 for diagnosis	596.1	NULL	557.0	Laparoscopic	NA	NA	T4a	N0	M0/Mx	Unknown	Yes	1	18
+3113056	NULL	NA	No	NA	NULL	NA	NULL	NA	Ulcerative colitis	153.0	Obstruction	557.9	Laparoscopic w/ unplanned conversion to open	NA	NA	T4	N2b	M1b	Leak, treated w/ interventional means	NULL	NA	15
+3113065	NA	NA	NA	NA	NA	NA	NA	NA	Colon cancer	560.89	Other (enter ICD-9 code)	560.2	NOTES	NA	NA	T3	N1	Unknown	Leak, treated w/ reoperation	NA	NA	17
+3113081	NA	NA	NA	NA	NA	NA	NA	NA	Colon cancer w/ obstruction	552.29	Toxic colitis (Toxic Megacolon, C. diff w/out perforation, Ischemic Colitis)	560.0	Laparoscopic w/ open assist	NA	NA	T2	N1a	M1a	Leak, treated w/ non-interventional/non-operative means	NA	NA	12
+3113092	NA	NA	NA	NA	NA	NA	NA	NA	Chronic diverticular disease	557.0	Bleeding	785.4	Robotic w/ open assist	NA	NA	T4b	N1b	M1	Leak, no treatment intervention documented	NA	NA	27
+3113093	NA	NA	NA	NA	NA	NA	NA	NA	Crohn's Disease	569.81	Unknown	560.89	Hybrid w/ open assist	NA	NA	T1	N2a	NA	NA	NA	NA	14
+3113094	NA	NA	NA	NA	NA	NA	NA	NA	Volvulus	214.3	Other (enter ICD-10 code)	560.9	Other	NA	NA	Unknown	Unknown	NA	NA	NA	NA	16
+3113115	NA	NA	NA	NA	NA	NA	NA	NA	Non-malignant polyp	557.9	NA	540.9	Unknown	NA	NA	Tx	Nx	NA	NA	NA	NA	24
+3113116	NA	NA	NA	NA	NA	NA	NA	NA	Enterocolitis (e.g. C. Difficile)	751.3	NA	785.52	Robotic	NA	NA	T0	N1c	NA	NA	NA	NA	13
+3113118	NA	NA	NA	NA	NA	NA	NA	NA	Bleeding	565.1	NA	540.0	Hybrid	NA	NA	Tis	N2	NA	NA	NA	NA	26
+3113126	NA	NA	NA	NA	NA	NA	NA	NA	Unknown	560.9	NA	562.11	Robotic w/ unplanned conversion to open	NA	NA	NA	NA	NA	NA	NA	NA	8
+3113145	NA	NA	NA	NA	NA	NA	NA	NA	Other-Enter ICD-10 for diagnosis	569.5	NA	729.73	SILS w/ open assist	NA	NA	NA	NA	NA	NA	NA	NA	22
+3113149	NA	NA	NA	NA	NA	NA	NA	NA	NA	569.1	NA	038.9	SILS	NA	NA	NA	NA	NA	NA	NA	NA	3
+3113154	NA	NA	NA	NA	NA	NA	NA	NA	NA	568.0	NA	568.89	Other MIS approach w/ open assist	NA	NA	NA	NA	NA	NA	NA	NA	39
+3113160	NA	NA	NA	NA	NA	NA	NA	NA	NA	154.0	NA	567.22	Other MIS approach	NA	NA	NA	NA	NA	NA	NA	NA	19
+3113164	NA	NA	NA	NA	NA	NA	NA	NA	NA	540.9	NA	038.40	NOTES w/ open assist	NA	NA	NA	NA	NA	NA	NA	NA	11
+3113177	NA	NA	NA	NA	NA	NA	NA	NA	NA	560.2	NA	567.89	SILS w/ unplanned conversion to open	NA	NA	NA	NA	NA	NA	NA	NA	20
+3113193	NA	NA	NA	NA	NA	NA	NA	NA	NA	540.0	NA	153.4	Hybrid w/ unplanned conversion to open	NA	NA	NA	NA	NA	NA	NA	NA	23
+3113214	NA	NA	NA	NA	NA	NA	NA	NA	NA	569.83	NA	008.45	NA	NA	NA	NA	NA	NA	NA	NA	NA	25
+3113217	NA	NA	NA	NA	NA	NA	NA	NA	NA	211.3	NA	617.5	NA	NA	NA	NA	NA	NA	NA	NA	NA	36
+3113219	NA	NA	NA	NA	NA	NA	NA	NA	NA	619.1	NA	569.83	NA	NA	NA	NA	NA	NA	NA	NA	NA	28
+3113228	NA	NA	NA	NA	NA	NA	NA	NA	NA	560.0	NA	540.1	NA	NA	NA	NA	NA	NA	NA	NA	NA	10
+3113254	NA	NA	NA	NA	NA	NA	NA	NA	NA	564.89	NA	564.89	NA	NA	NA	NA	NA	NA	NA	NA	NA	32
+3113260	NA	NA	NA	NA	NA	NA	NA	NA	NA	532.50	NA	556.6	NA	NA	NA	NA	NA	NA	NA	NA	NA	9

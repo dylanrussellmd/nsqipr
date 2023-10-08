@@ -18,10 +18,10 @@
 #'
 nsqip <- function(path, csv = "both", rds = TRUE) {
   usethis::ui_info("Relax! Don't worry, its working...")
-  files <- get_file_or_dir(path) # returns a character vector of matching file(s)
+  files <- get_files_or_dirs(path) # returns a character vector of matching file(s)
   dirs <- parse_files(files) # Creates directories and moves files into them
   df <- lapply(dirs, nsqip_dir, csv, rds) # Runs nsqip_dir over each directory
-  usethis::ui_done("All files in {usethis::ui_path(path)} cleaned and converted!")
+  usethis::ui_done("All files cleaned and converted!")
   usethis::ui_todo("If you had any problems, please open an issue at {usethis::ui_value('github.com/dylanrussellmd/nsqipr')}!")
 }
 
