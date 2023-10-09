@@ -1,25 +1,15 @@
-#' Check if a path is a directory or a file
+#' Check if a path is a directory or a file path (or vector of file paths)
 #'
 #' Checks if a provided path is a directory or a file. This allows a user to pass either a directory
-#' of files matching a provided \code{pattern} or a single file matching a provided \code{pattern}.
+#' of files matching a provided \code{pattern} or a vector of file paths matching a provided \code{pattern}.
+#' May also accept a combination of directory and file paths. Will expand the file paths in a directory.
 #'
-#' @inheritParams base::list.files
+#' @param paths a character vector of file paths or a single file path or directory path.
 #'
 #' @return either a list of file paths or a single file path.
 #'
 #' @keywords internal
 #'
-get_file_or_dir <- function(path, pattern = "^(acs_nsqip_puf|puf_tar_[a-z]{1,4})(?:\\d{2})?(?:.*)?\\.txt$"){
-  if (fs::is_dir(path)) {
-    result <- list.files(path = path, pattern = pattern, full.names = TRUE, ignore.case = TRUE)
-  } else if (fs::is_file(path)) {
-    result <- path
-  } else {
-    usethis::ui_stop("{usethis::ui_path(path)} is an invalid file or directory path.")
-  }
-  return(result)
-}
-
 get_files_or_dirs <- function(paths, pattern = "^(acs_nsqip_puf|puf_tar_[a-z]{1,4})(?:\\d{2})?(?:.*)?\\.txt$"){
   if (!is.character(paths)) {
     usethis::ui_stop("{usethis::ui_path(paths)} is not a character or character vector.")
