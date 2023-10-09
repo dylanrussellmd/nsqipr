@@ -14,7 +14,7 @@ conv_puf_cols <- function(df, filename) {
   conv_hispanic(df)
   conv_(df, "race", conv_race)
   conv_(df, "age", conv_age)
-  conv_(df, "inout", conv_inout)
+  conv_(df, "inout", conv_logical, "Inpatient")
   conv_(df, "diabetes", insulin, newcol = "insulin")
   conv_(df, "diabetes", conv_notno)
   conv_(df, "dyspnea", when_dyspnea, newcol = "when_dyspnea")
@@ -25,6 +25,9 @@ conv_puf_cols <- function(df, filename) {
   conv_(df, "preop_covid", conv_notno)
   conv_(df, "postop_covid", type_covid, newcol= "type_postop_covid")
   conv_(df, "postop_covid", conv_notno)
+  conv_(df, "homesup", conv_logical, "Lives at home with other individuals")
+  conv_(df, "delirium", conv_delirium)
+  conv_(df, "dishomesvc", conv_logical, "Discharged to home with services")
   check_comaneurograft(df)
 }
 
@@ -126,12 +129,13 @@ surgspec <- list(`Cardiac surgery` = "Cardiac Surgery",
                  `Oral surgery` = "Oral Surgery",
                  `Obstetrics` = "Obstetrics",
                  `Other` = "Other")
-immuno_cat <- list(`Corticosteroids` = "Corticosteroids",
-                   `Anti-rejection/transplant immunosuppressants` = "Anti-rejection/transplant immunosuppressants",
-                   `Synthetic DMARDs/DMDs` = "Synthetic DMARDs/DMDs",
-                   `Biologic DMARDs/DMDs` = "Biologic DMARDs/DMDs",
-                   `Other` = "Other"
-                   )
+casetype <- list(`Elective` = "Elective",
+                 `Urgent` = "Urgent",
+                 `Emergent` = "Emergent")
+disfxnstat <- list(`Independent` = "Independent",
+                   `Partially dependent` = "Partially Dependent",
+                   `Totally dependent` = "Totally Dependent",
+                   `Expired` = "Expired")
 
 #### ---- LONG COLUMNS ---- ####
 readmission <- paste("readmission", 1:5, sep = "")
@@ -462,22 +466,6 @@ conv_race <- function(vec, pacific = "asian") {
   vec %^% c(common, levels)
 }
 
-#' Convert inout to logical
-#'
-#' @param vec a character vector of values to convert
-#'
-#' @details If "Inpatient", will result in true. If given NA, will return NA.
-#'
-#' @return an integer vector
-#' @keywords internal
-#'
-#' @examples
-#'  nsqipr:::conv_inout(c("Inpatient", "Outpatient", NA))
-#'
-conv_inout <- function(vec) {
-  stringi::stri_detect_fixed(vec, "Inpatient", opts_fixed = list(case_insensitive = TRUE))
-}
-
 #' Convert age to integer
 #'
 #' @param vec a character vector of values to convert
@@ -570,47 +558,20 @@ type_covid <- function(vec) {
   vec %^% list(`Lab-confirmed` = "Yes, lab-confirmed diagnosis (or ICD-10 code U07.1)", `Suspected` = "Yes, suspected diagnosis (or ICD-10 code U07.2)")
 }
 
-#' Add or update Hispanic ethnicity column
+#' Parse a column for delirium screening
 #'
-#' @param df a data.table to add to or update with an \code{ethnicity_hispanic} column
+#' Note that this first converts all instances of "Not screened for delirium" to NA.
 #'
-#' @details \code{ethnicity_hispanic} was not added until the 2008 NSQIP PUF when \code{race} was revised to
-#' \code{race_new}. Data regarding hispanic ethnicity was hard coded directly into the old \code{race} variable
-#' (such as "Hispanic, White"). In order to marry early and later datasets, this information must be extracted
-#' from \code{race} and a new \code{ethnicity_hispanic} column created.
+#' @param vec a character vector of values to convert
 #'
-#' If the data provided already has a \code{ethnicity_hispanic} column present, this column is simply converted
-#' into a logical vector.
-#'
-#' @return a data table
+#' @return a logical vector
 #' @keywords internal
 #'
 #' @examples
-#' x <- data.table::data.table(
-#' race = c("Hispanic, White", "White, Not of Hispanic Origin","Hispanic, Black",
-#' "Black, Not of Hispanic Origin", "Hispanic, Color Unknown", "White", "Black or African American",
-#' "American Indian or Alaska Native", "Asian", "Native Hawaiian or Pacific Islander",
-#' "Asian or Pacific Islander", NA),
-#' ethnicity_hispanic = c(NA, NA, NA, NA, NA, "Yes", "No", "Yes", "No", NA, NA, "Yes")
-#' )
+#' nsqipr:::conv_delirium(c("Not screened for delirium", "Delirium present on screening", "No delirium present on screening", NA,
+#'                         "not screened for delirium", "delirium present on screening", "no delirium present on screening", NA))
 #'
-#' nsqipr:::conv_hispanic(x)
-#' x
-#'
-conv_casetype <- function(df) {
-  if("casetype" %chin% names(df)) {
-    vec <- ifelse(!is.na(df[["casetype"]]), # if casetype is NOT NA
-                  conv_yesno(df[["ethnicity_hispanic"]]), # do this
-                  conv_hispanic_helper(df)) # else do this
-  } else {
-    vec <- conv_hispanic_helper(df)
-  }
-  data.table::set(df, j = "ethnicity_hispanic", value = vec)
-}
-
-#' @describeIn conv_hispanic A helper function for updating the \code{ethnicity_hispanic} column
-conv_hispanic_helper <- function(df) {
-  ifelse(stringi::stri_detect_regex(df[["race"]], "hispanic", opts_regex = list(case_insensitive = TRUE)),
-         stringi::stri_detect_regex(df[["race"]], "^hispanic,", opts_regex = list(case_insensitive = TRUE)),
-         NA)
+conv_delirium <- function(vec) {
+  stringi::stri_replace_all_fixed(vec, "Not screened for delirium", NA, opts_fixed = list(case_insensitive = TRUE)) %>%
+    stringi::stri_detect_regex("^Delirium present on screening", opts_regex = list(case_insensitive = TRUE))
 }

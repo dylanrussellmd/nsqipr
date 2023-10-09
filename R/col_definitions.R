@@ -5,7 +5,7 @@ na_strings <- c("","NULL","NA","N/A","-99","Unknown","Unknown/Not Reported","Not
 ## ---- GENERIC COLUMNS TO BE PROCESSED ----
 yes_no_cols <- c(
   # ACS_NSQIP_PUF
-  "electsurg","smoke","ventilat","hxcopd","ascites","hxchf","hypermed","renafail","dialysis","discancr","wndinf","steroid","wtloss","bleeddis","transfus","emergncy","sssipatos","dssipatos","ossipatos","pnapatos","ventpatos","utipatos","sepsispatos","sepshockpatos","returnor","stillinhosp","reoperation1","retorrelated","reoperation2","retor2related","reoperation3","readmission1","unplannedreadmission1","readmrelated1","readmission2","unplannedreadmission2","readmrelated2","readmission3","unplannedreadmission3","readmrelated3", "readmission4","unplannedreadmission4","readmrelated4","readmission5","unplannedreadmission5","readmrelated5", "etoh", "dnr", "cpneumon", "esovar","hxmi","prvpci","prvpcs","hxangina","hxpvd","restpain","impsens", "coma", "hemi", "hxtia","cva","cvano","tumorcns","para","quad","chemo","radio","pregnancy","proper30", "readmission","unplanreadmission","reoperation", "eol_wdcare","oxygen_support",
+  "electsurg","smoke","ventilat","hxcopd","ascites","hxchf","hypermed","renafail","dialysis","discancr","wndinf","steroid","wtloss","bleeddis","transfus","emergncy","sssipatos","dssipatos","ossipatos","pnapatos","ventpatos","utipatos","sepsispatos","sepshockpatos","returnor","stillinhosp","reoperation1","retorrelated","reoperation2","retor2related","reoperation3","readmission1","unplannedreadmission1","readmrelated1","readmission2","unplannedreadmission2","readmrelated2","readmission3","unplannedreadmission3","readmrelated3", "readmission4","unplannedreadmission4","readmrelated4","readmission5","unplannedreadmission5","readmrelated5", "etoh", "dnr", "cpneumon", "esovar","hxmi","prvpci","prvpcs","hxangina","hxpvd","restpain","impsens", "coma", "hemi", "hxtia","cva","cvano","tumorcns","para","quad","chemo","radio","pregnancy","proper30", "readmission","unplanreadmission","reoperation", "eol_wdcare","oxygen_support","hxfall","hxdementia",
   # PUF_TAR_AAA
   "aaa_paas", "aaa_cp_renrevasc","aaa_cp_viscrevasc","aaa_cp_ler","aaa_cp_are","aaa_colitis","aaa_lei","aaa_roa",
   # PUF_TAR_AIE
@@ -56,7 +56,7 @@ numeric_cols <- c(
 
 factor_cols <- c(
   # ACS_NSQIP_PUF
-  "sex","fnstatus1","fnstatus2","typeintoc","airtra","opnote","attend","wound_closure","transt","readmsuspreason1","readmunrelsusp1","readmsuspreason2","readmunrelsusp2","readmsuspreason3","readmunrelsusp3","readmsuspreason4","readmunrelsusp4","readmsuspreason5","readmunrelsusp5","dischdest","anesthes", "surgspec","immuno_cat",
+  "sex","fnstatus1","fnstatus2","typeintoc","airtra","opnote","attend","wound_closure","transt","readmsuspreason1","readmunrelsusp1","readmsuspreason2","readmunrelsusp2","readmsuspreason3","readmunrelsusp3","readmsuspreason4","readmunrelsusp4","readmsuspreason5","readmunrelsusp5","dischdest","anesthes", "surgspec","immuno_cat","casetype","disfxnstat",
   # PUF_TAR_PAN
   "pan_drainsys_type","pan_oincis_type","pan_intra_antibiotics","pan_benign_tumorsize","pan_benign_histologic","pan_mstage","pan_tstage","pan_nstage","pan_malig_histologic","pan_resection","pan_drains_type","pan_gastduo","pan_reconstruction","pan_glandtext","pan_ductsize","pan_approach","pan_biliarystent","pan_lapthor","pan_percdrainage1", "pan_percdrainage2","pan_percdrainage3","pan_percdrainage4",
   # PUF_TAR_COL

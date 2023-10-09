@@ -88,6 +88,12 @@ testthat::test_that("conv_date works", {
   testthat::expect_equal(conv_date("2000"), as.Date("2000-1-1", "%Y-%m-%d"))
 })
 
+testthat::test_that("conv_logical works", {
+  x <- c("sky is blue", "sky is red", "grass is blue", NA)
+  truth <- c("sky is blue")
+  testthat::expect_equal(conv_logical(x, truth), c(TRUE, FALSE, FALSE, NA))
+})
+
 testthat::test_that("get_pufyear works", {
   x <- data.table::data.table(x = rep("name", 10))
   get_pufyear(x, "acs_nsqip_puf12.txt")

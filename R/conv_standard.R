@@ -29,11 +29,11 @@ nsqip_dir <- function(dir, csv, rds) {
 #'
 conv_to_standard <- function(file, cols, csv, rds) {
   progbar <- pb(csv, rds) # Creates a progress bar
-  filename <- fs::path_file(file) # Extracts the filename portion of the file path
+  filename <- fs::path_file(file) # Extracts the file name portion of the file path
   tick(progbar, "reading", filename, 0)
 
   # Call all cleaning functions
-  df <- data.table::fread(file, sep = "\t", colClasses = "character", showProgress = FALSE, na.strings = na_strings)
+  df <- data.table::fread(file, sep = "\t", colClasses = "character", showProgress = FALSE, na.strings = na_strings) # This is where the NA strings are converted.
   setup(df, filename, progbar, cols)
   conv_type_cols(df, filename, progbar)
   conv_special_cols(df, filename, progbar)

@@ -115,3 +115,9 @@ testthat::test_that("conv_race works", {
   testthat::expect_equal(sort(levels((result_hawaiian))), sort(levels(expected_output_hawaiian)))
 
 })
+
+testthat::test_that("conv_delirium works", {
+  results <- nsqipr:::conv_delirium(c("Not screened for delirium", "Delirium present on screening", "No delirium present on screening", NA,
+                                      "not screened for delirium", "delirium present on screening", "no delirium present on screening", NA))
+  testthat::expect_equal(results, c(NA, TRUE, FALSE, NA, NA, TRUE, FALSE, NA))
+})

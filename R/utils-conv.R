@@ -171,6 +171,22 @@ conv_date <- function(vec) {
          NA))
 }
 
+#' Convert character vector to logical vector
+#'
+#' @param vec a character vector to convert to logical
+#' @param truth the character vector to match to TRUE. This is a fixed case insensitive match.
+#'
+#' @keywords internal
+#' @examples
+#'
+#' x <- c("sky is blue", "sky is red", "grass is blue", NA)
+#' truth <- c("sky is blue")
+#' nsqipr:::conv_logical(x, truth)
+#'
+conv_logical <- function(vec, truth) {
+  stringi::stri_detect_fixed(vec, truth, opts_fixed = list(case_insensitive = TRUE))
+}
+
 #' Add a PUF year column
 #'
 #' This column notes the file from which the record came.
