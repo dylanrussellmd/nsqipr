@@ -458,6 +458,7 @@ conv_race <- function(vec, pacific = "asian") {
                 `Native Hawaiian or Pacific islander` = "Native Hawaiian or Pacific Islander")
   hawaiian <- list(`Asian` = "Asian",
                    `Native Hawaiian or Pacific islander` = c("Native Hawaiian or Pacific Islander","Asian or Pacific Islander"))
+  #TODO include an option to merge all three groups.
 
   levels <- switch(pacific,
                     "asian" = asian,

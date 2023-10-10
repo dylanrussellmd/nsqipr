@@ -56,7 +56,7 @@ numeric_cols <- c(
 
 factor_cols <- c(
   # ACS_NSQIP_PUF
-  "sex","fnstatus1","fnstatus2","typeintoc","airtra","opnote","attend","wound_closure","transt","readmsuspreason1","readmunrelsusp1","readmsuspreason2","readmunrelsusp2","readmsuspreason3","readmunrelsusp3","readmsuspreason4","readmunrelsusp4","readmsuspreason5","readmunrelsusp5","dischdest","anesthes", "surgspec","immuno_cat","casetype","disfxnstat",
+  "sex","fnstatus1","fnstatus2","typeintoc","airtra","opnote","attend","wound_closure","transt","readmsuspreason1","readmunrelsusp1","readmsuspreason2","readmunrelsusp2","readmsuspreason3","readmunrelsusp3","readmsuspreason4","readmunrelsusp4","readmsuspreason5","readmunrelsusp5","dischdest","anesthes", "surgspec","casetype","disfxnstat",
   # PUF_TAR_PAN
   "pan_drainsys_type","pan_oincis_type","pan_intra_antibiotics","pan_benign_tumorsize","pan_benign_histologic","pan_mstage","pan_tstage","pan_nstage","pan_malig_histologic","pan_resection","pan_drains_type","pan_gastduo","pan_reconstruction","pan_glandtext","pan_ductsize","pan_approach","pan_biliarystent","pan_lapthor","pan_percdrainage1", "pan_percdrainage2","pan_percdrainage3","pan_percdrainage4",
   # PUF_TAR_COL

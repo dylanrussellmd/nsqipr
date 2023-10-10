@@ -72,7 +72,6 @@ conv_type_cols <- function(df, filename, progbar) {
   conv_(df, date_cols, conv_date)
 }
 
-
 conv_special_cols <- function(df, filename, progbar) {
   tick(progbar, "converting unique columns of", filename)
   fn <- switch(parse_filename(filename),
