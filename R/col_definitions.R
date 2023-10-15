@@ -12,6 +12,8 @@ yes_no_cols <- c(
   "aie_hrf_phys","aie_premed_aspirin","aie_premed_statin","aie_premed_betab","aie_ulp","aie_bleeding","aie_mi_stroke","aie_wound","aie_amputation","aie_mrtas",
   # PUF_TAR_AIO
   "aio_hrf_phys","aio_premed_aspirin","aio_premed_statin","aio_premed_betab","aio_ulp","aio_bleeding","aio_mi_stroke","aio_wound","aio_mrtas","aio_amputation",
+  # PUF_TAR_LEE
+  "lee_hrf_phys","lee_premed_aspirin","lee_premed_statin","lee_premed_betab","lee_ulp","lee_bleeding","lee_mi_stroke","lee_wound","lee_mrtas","lee_amputation",
   # PUF_TAR_COL
   "col_steroid", "col_mech_bowel_prep","col_oral_antibiotic", "col_chemo", "col_margins","col_ileus",
   # PUF_TAR_PAN
@@ -37,6 +39,8 @@ integer_cols <- c(
   "aie_dulp","aie_dbleeding","aie_dmi_stroke","aie_dwound",
   # PUF_TAR_AIO
   "aio_dulp","aio_dbleeding","aio_dmi_stroke","aio_dwound",
+  # PUF_TAR_LEE
+  "lee_dulp","lee_dbleeding","lee_dmi_stroke","lee_dwound", "lee_dmostsevoutcome",
   # PUF_TAR_COL
   "col_nodeseval",
   # PUF_TAR_PAN
@@ -61,12 +65,14 @@ factor_cols <- c(
   "pan_drainsys_type","pan_oincis_type","pan_intra_antibiotics","pan_benign_tumorsize","pan_benign_histologic","pan_mstage","pan_tstage","pan_nstage","pan_malig_histologic","pan_resection","pan_drains_type","pan_gastduo","pan_reconstruction","pan_glandtext","pan_ductsize","pan_approach","pan_biliarystent","pan_lapthor","pan_percdrainage1", "pan_percdrainage2","pan_percdrainage3","pan_percdrainage4",
   # PUF_TAR_COL
   "col_malignancym","col_malignancyt","col_malignancyn","col_approach","col_emergent","col_indication",
-  # PUF_TAR_AIE
-  "aie_mostsevoutcome","aie_prehemo","aie_posthemo","aie_hrf_anat","aie_sympt","aie_proc",
   # PUF_TAR_AAA
   "aaa_surgind","aaa_surgap","aaa_pcl","aaa_pae","aaa_distext","aaa_mima","aaa_colitis_treat",
+  # PUF_TAR_AIE
+  "aie_mostsevoutcome","aie_prehemo","aie_posthemo","aie_hrf_anat","aie_sympt","aie_proc",
   # PUF_TAR_AIO
-  "aio_sympt","aio_hrf_anat","aio_prehemo","aio_posthemo","aio_mostsevoutcome","aio_proc",
+  "aio_mostsevoutcome","aio_prehemo","aio_posthemo","aio_hrf_anat","aio_sympt","aio_proc",
+  # PUF_TAR_LEE
+  "lee_mostsevoutcome","lee_prehemo","lee_posthemo","lee_hrf_anat","lee_sympt","lee_proc",
   # PUF_TAR_HEP
   "hep_lapthor","hep_biliarystent","hep_approach", "hep_livertext", "hep_liverfail_grade", "hep_neotherapy1", "hep_neotherapy2", "hep_neotherapy3", "hep_neotherapy4", "hep_neotherapy5", "hep_con_ablation1", "hep_con_ablation2", "hep_con_ablation3", "hep_con_ablation4", "hep_con_ablation5", "hep_invasive_type1", "hep_invasive_type2", "hep_invasive_type3", "hep_invasive_type4", "hep_invasive_type5", "hep_pathres", "hep_histologic", "hep_tstage", "hep_nstage", "hep_mstage", "hep_sec_histologic", "hep_sec_tumorsize", "hep_benign_histologic", "hep_benign_lesion",
   # PUF_TAR_APP
@@ -102,6 +108,8 @@ aie_cols <- c("aie_proc", "aie_sympt", "aie_hrf_phys", "aie_hrf_anat", "aie_prem
 
 aio_cols <- c("aio_proc", "aio_sympt", "aio_hrf_phys", "aio_hrf_anat", "aio_premed_aspirin", "aio_premed_statin", "aio_premed_betab", "aio_prehemo", "aio_ulp", "aio_dulp", "aio_bleeding", "aio_dbleeding", "aio_mi_stroke", "aio_dmi_stroke", "aio_wound", "aio_dwound", "aio_posthemo", "aio_mostsevoutcome", "aio_mrtas", "aio_amputation")
 
+lee_cols <- c("lee_proc", "lee_sympt", "lee_hrf_phys", "lee_hrf_anat", "lee_premed_aspirin", "lee_premed_statin", "lee_premed_betab", "lee_prehemo", "lee_ulp", "lee_dulp", "lee_bleeding", "lee_dbleeding", "lee_mi_stroke", "lee_dmi_stroke", "lee_wound", "lee_dwound", "lee_posthemo", "lee_mostsevoutcome", "lee_dmostsevoutcome", "lee_mrtas", "lee_amputation")
+
 col_cols <- c("col_steroid","col_steroid_unk","col_mech_bowel_prep","col_mech_bowel_prep_unk","col_oral_antibiotic","col_oral_antibiotic_unk","col_chemo","col_chemo_unk","col_indication","col_indication_icd","col_icd9_indication","col_icd10_indication","col_emergent","col_emergent_icd","col_icd9_emergent","col_icd10_emergent","col_approach","col_open_assist","col_unplanned_conversion","col_margins","col_margins_unk","col_malignancyt","col_malignancyn","col_malignancym","col_anastomotic","col_leak_treatment","col_ileus","col_ileus_unk","col_nodeseval")
 
 pan_cols <- c("pan_lapthor", "pan_jaundice", "pan_jaundice_unk", "pan_biliarystent", "pan_chemo", "pan_chemo_unk", "pan_radio", "pan_radio_unk", "pan_intra_antibiotics", "pan_approach","pan_open_assist","pan_unplanned_conversion", "pan_oincis_type", "pan_woundprot", "pan_ductsize", "pan_glandtext", "pan_reconstruction", "pan_gastduo", "pan_drains", "pan_drains_unk", "pan_drains_type","pan_drainsys_type", "pan_drainsys_suctn", "pan_resection", "pan_amylase_pod1", "pan_amylase_pod1_unk", "pan_amylase_pod230", "pan_amylase_pod230_unk", "damylase", "pan_amylase_unk", "ddrainremoval", "pan_drain_removal_unk", "pan_drain_pod30", "pan_fistula","pan_fistula_type","pan_fistula_intervention", "pan_delgastric_20140315","pan_delgastric","pan_delgastric_tx","pan_percdrain_20140315", "pan_percdrain", "pan_percdrainage","pan_percdrainage1", "pan_percdrainage2","pan_percdrainage3","pan_percdrainage4", "pan_malig_histologic", "pan_tstage", "pan_nstage", "pan_mstage", "pan_benign_histologic", "pan_benign_tumorsize")
@@ -114,4 +122,4 @@ add_cols <- c("dindo")
 
 ## ---- COLUMN ORDERS ----
 
-col_order <- c(puf_cols, aaa_cols, aie_cols, aio_cols, col_cols, pan_cols, hep_cols, app_cols)
+col_order <- c(puf_cols, aaa_cols, aie_cols, aio_cols, lee_cols, col_cols, pan_cols, hep_cols, app_cols)
