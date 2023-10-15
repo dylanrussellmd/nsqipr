@@ -82,6 +82,7 @@ conv_special_cols <- function(df, filename, progbar) {
                "puf_tar_aie" = `conv_aie_cols`,
                "puf_tar_aio" = `conv_aio_cols`,
                "puf_tar_lee" = `conv_lee_cols`,
+               "puf_tar_leo" = `conv_leo_cols`,
                "puf_tar_app" = `conv_app_cols`,
                "puf_tar_pan" = `conv_pan_cols`,
                "puf_tar_hep" = `conv_hep_cols`)
